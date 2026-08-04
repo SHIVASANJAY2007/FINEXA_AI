@@ -1,0 +1,522 @@
+{
+  "name": "Finexa AI - Email",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "months",
+              "monthsInterval": 6,
+              "triggerAtMinute": 59
+            }
+          ]
+        }
+      },
+      "id": "e6c2ef87-7d5d-4966-b72e-c3e7fd031ce9",
+      "name": "Every Hour",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -320,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://finance.yahoo.com/news/rssindex",
+        "options": {
+          "ignoreSSL": false
+        }
+      },
+      "id": "bf07e5bc-4192-4202-9108-15f64542451b",
+      "name": "Yahoo Finance",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        32,
+        -48
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=100003114",
+        "options": {
+          "ignoreSSL": false
+        }
+      },
+      "id": "b1111111-1111-4111-8111-111111111111",
+      "name": "CNBC",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        208,
+        -48
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://feeds.content.dowjones.io/public/rss/mw_topstories",
+        "options": {
+          "ignoreSSL": false
+        }
+      },
+      "id": "b2222222-2222-4222-8222-222222222222",
+      "name": "MarketWatch",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        32,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://www.investing.com/rss/news_25.rss",
+        "options": {
+          "ignoreSSL": false
+        }
+      },
+      "id": "b3333333-3333-4333-8333-333333333333",
+      "name": "Investing.com",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        208,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "numberInputs": 10
+      },
+      "id": "c4444444-4444-4444-8444-444444444444",
+      "name": "Merge Feeds",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        544,
+        128
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "function pull(nodeName, label) {\n  try {\n    return $(nodeName).all().map(i => i.json).filter(j => j && j.title).map(j => ({\n      title: (j.title || '').toString().trim(),\n      link: (j.link || j.url || '').toString().trim(),\n      snippet: (j.contentSnippet || j.content || j.description || '').toString().replace(/<[^>]*>/g, '').trim(),\n      source: label,\n      date: j.isoDate || j.pubDate || '',\n    }));\n  } catch (e) { return []; }\n}\n\nconst normalized = [\n  ...pull('Yahoo Finance', 'Yahoo Finance'),\n  ...pull('CNBC', 'CNBC'),\n  ...pull('MarketWatch', 'MarketWatch'),\n  ...pull('Investing.com', 'Investing.com'),\n];\n\n// Deduplicate by normalized title\nconst seen = new Set();\nconst unique = [];\nfor (const n of normalized) {\n  const key = n.title.toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 60);\n  if (key && !seen.has(key)) { seen.add(key); unique.push(n); }\n}\n\n// Sort newest first\nunique.sort((a, b) => (Date.parse(b.date) || 0) - (Date.parse(a.date) || 0));\n\nconst top = unique.slice(0, 8);\n\nconst headlines = top.length\n  ? top.map((n, idx) => `${idx + 1}. ${n.title} (${n.source})${n.snippet ? ' — ' + n.snippet : ''}`).join('\\n')\n  : 'No live headlines were available this hour.';\n\nreturn [{ json: { headlines, newsItems: top } }];"
+      },
+      "id": "667b5b1a-c70e-4809-9473-2079b7c934a8",
+      "name": "Summarize Headlines",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        768,
+        256
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Write a fresh, engaging personal-finance newsletter edition for a general audience. Current time: {{ $now.toFormat(\"cccc, LLLL d, yyyy - t\") }}.\n\nHere are the latest REAL financial news headlines, aggregated moments ago from Yahoo Finance, CNBC, MarketWatch and Investing.com:\n{{ $json.headlines }}\n\nReturn ONLY the body content (no email headers, no HTML). Structure it in plain text with these clearly labeled sections:\n\nTITLE: a short catchy title for this edition (one line)\nMARKET: a 3-4 sentence \"Market Pulse\" — summarize in plain English what today's headlines above mean for an everyday person. Reference the actual themes from the headlines across the different sources. Keep it general and educational, NOT individualized investment advice.\nTIP: one actionable money tip of the hour (2-3 sentences)\nCONCEPT: explain one financial concept simply (budgeting, investing, debt, saving, taxes, insurance, or credit) in 3-4 sentences\nQUOTE: one motivating money/finance quote with its author\nACTION: one small concrete action the reader can take today (1 sentence)\n\nKeep it upbeat, practical, and beginner-friendly. Do not give individualized investment advice; keep it general and educational.",
+        "batching": {}
+      },
+      "id": "2d832b46-609a-464d-a8d5-639b0c657e3f",
+      "name": "Generate Financial Content",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        992,
+        256
+      ]
+    },
+    {
+      "parameters": {
+        "model": "meta-llama/llama-3.3-70b-instruct",
+        "options": {
+          "temperature": 0.8
+        }
+      },
+      "id": "4c614120-f1c5-44f5-a56c-6b0f2d162499",
+      "name": "Llama 3.3 (OpenRouter)",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        1072,
+        480
+      ],
+      "credentials": {
+        "openRouterApi": {
+          "id": "pZ79vIEoUescwLTH",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw = ($input.first().json.text || '').toString();\n\n// ---------- Parse labeled sections from the model output ----------\nfunction grab(label) {\n  const re = new RegExp(label + '\\\\s*:?\\\\s*([\\\\s\\\\S]*?)(?=\\\\n\\\\s*(?:TITLE|MARKET|TIP|CONCEPT|QUOTE|ACTION)\\\\s*:|$)', 'i');\n  const m = raw.match(re);\n  return m ? m[1].trim() : '';\n}\n\nconst title   = grab('TITLE')   || 'Your Hourly Money Boost';\nconst market  = grab('MARKET');\nconst tip     = grab('TIP')     || raw;\nconst concept = grab('CONCEPT');\nconst quote   = grab('QUOTE');\nconst action  = grab('ACTION');\n\n// ---------- Live news items from the RSS summary node ----------\nlet news = [];\ntry { news = $('Summarize Headlines').first().json.newsItems || []; } catch (e) { news = []; }\nnews = news.slice(0, 4);\n\n// Glass-chip numbered news rows\nconst newsHtml = news.map((n, i) => `\n  <tr>\n    <td style=\"padding:0 0 ${i === news.length - 1 ? '0' : '16px'} 0;${i === news.length - 1 ? '' : 'border-bottom:1px solid rgba(255,255,255,0.10);'}padding-bottom:16px;\">\n      <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\">\n        <tr>\n          <td width=\"40\" valign=\"top\">\n            <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\">\n              <tr><td width=\"30\" height=\"30\" align=\"center\" valign=\"middle\" style=\"background:rgba(52,211,153,0.14);border:1px solid rgba(52,211,153,0.45);border-radius:50%;color:#34d399;font-size:13px;font-weight:700;font-family:'Inter',Arial,sans-serif;\">\n                ${i + 1}\n              </td></tr>\n            </table>\n          </td>\n          <td valign=\"top\">\n            <a href=\"${n.link}\" style=\"color:#f1f5f9;text-decoration:none;font-size:15.5px;font-weight:600;line-height:1.45;display:block;font-family:'Inter',Arial,sans-serif;\">${n.title}</a>\n            ${n.snippet ? `<div style=\"color:#94a3b8;font-size:13.5px;line-height:1.55;margin-top:5px;font-family:'Inter',Arial,sans-serif;\">${n.snippet}</div>` : ''}\n            <div style=\"margin-top:8px;font-family:'Inter',Arial,sans-serif;font-size:12px;\">\n              <span style=\"color:#5eead4;font-weight:600;\">${n.source}</span>\n              <span style=\"color:#475569;\"> &nbsp;•&nbsp; </span>\n              <a href=\"${n.link}\" style=\"color:#fbbf24;font-weight:600;text-decoration:none;\">Read Full Story →</a>\n            </div>\n          </td>\n        </tr>\n      </table>\n    </td>\n  </tr>`).join('');\n\n// ---------- Date / greeting ----------\nconst now = new Date();\nconst dateStr = now.toLocaleString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit' });\n\n// ---------- Reusable glass primitives ----------\n// Frosted \"glass\" card: translucent fill + soft border + sheen line on top.\n// backdrop-filter blurs whatever sits behind it in clients that support it (Apple Mail, iOS/macOS Mail, newer webmail);\n// everywhere else it degrades gracefully to a flat tinted panel over the dark gradient — still reads as \"glass\".\nfunction glassCard(contentHtml, accent = 'rgba(255,255,255,0.14)') {\n  return `<table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\">\n    <tr><td style=\"background:rgba(255,255,255,0.055);border:1px solid ${accent};border-radius:20px;padding:22px 24px;box-shadow:0 8px 30px rgba(0,0,0,0.35);\">\n      <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"margin-bottom:14px;\"><tr><td style=\"height:1px;background:linear-gradient(90deg,rgba(255,255,255,0.5),rgba(255,255,255,0));font-size:0;line-height:0;\">&nbsp;</td></tr></table>\n      ${contentHtml}\n    </td></tr>\n  </table>`;\n}\n\n// Glass pill section label\nfunction glassTag(color, glow, emoji, label) {\n  return `<table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" style=\"margin:0 0 14px 0;\"><tr>\n    <td style=\"background:rgba(255,255,255,0.06);border:1px solid ${color};border-radius:999px;padding:6px 16px;box-shadow:0 0 14px ${glow};\">\n      <span style=\"font-family:'Inter',Arial,sans-serif;font-weight:700;font-size:11.5px;letter-spacing:1.4px;text-transform:uppercase;color:${color};\">${emoji}&nbsp; ${label}</span>\n    </td>\n  </tr></table>`;\n}\n\nconst html = `<!DOCTYPE html>\n<html lang=\"en\" xmlns=\"http://www.w3.org/1999/xhtml\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<meta name=\"color-scheme\" content=\"dark\">\n<meta name=\"supported-color-schemes\" content=\"dark\">\n<title>${title}</title>\n<!--[if mso]>\n<noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript>\n<![endif]-->\n<link href=\"https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap\" rel=\"stylesheet\">\n</head>\n<body style=\"margin:0;padding:0;background:#070d19;font-family:'Inter',Arial,sans-serif;\">\n  <!-- Preheader -->\n  <div style=\"display:none;max-height:0;overflow:hidden;opacity:0;mso-hide:all;\">\n    ${tip.slice(0, 110)}\n  </div>\n\n  <!--[if mso]><table role=\"presentation\" width=\"100%\" bgcolor=\"#0b1220\"><tr><td><![endif]-->\n  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"background-color:#0b1220;background-image:radial-gradient(circle at 15% 8%, rgba(52,211,153,0.16) 0%, transparent 40%),radial-gradient(circle at 88% 18%, rgba(96,165,250,0.14) 0%, transparent 42%),linear-gradient(160deg,#070d19 0%,#0d1b30 45%,#0a2420 100%);padding:32px 12px;\">\n    <tr><td align=\"center\">\n      <table role=\"presentation\" width=\"600\" cellpadding=\"0\" cellspacing=\"0\" style=\"max-width:600px;width:100%;\">\n\n        <!-- Header: glass panel with a faint uptrend chart line -->\n        <tr><td style=\"padding-bottom:22px;\">\n          <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\">\n            <tr><td style=\"background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.16);border-radius:24px;padding:0;box-shadow:0 12px 40px rgba(0,0,0,0.4);overflow:hidden;\">\n\n              <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\"><tr><td style=\"height:1px;background:linear-gradient(90deg,rgba(255,255,255,0.55),rgba(255,255,255,0));font-size:0;line-height:0;\">&nbsp;</td></tr></table>\n\n              <!-- decorative chart line -->\n              <div style=\"line-height:0;font-size:0;\">\n                <svg viewBox=\"0 0 600 70\" width=\"100%\" height=\"70\" preserveAspectRatio=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                  <defs>\n                    <linearGradient id=\"g1\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"0\">\n                      <stop offset=\"0%\" stop-color=\"#34d399\" stop-opacity=\"0.05\"/>\n                      <stop offset=\"100%\" stop-color=\"#34d399\" stop-opacity=\"0.55\"/>\n                    </linearGradient>\n                  </defs>\n                  <polyline points=\"0,55 60,50 120,58 180,40 240,44 300,26 360,32 420,18 480,22 540,10 600,14\" fill=\"none\" stroke=\"url(#g1)\" stroke-width=\"3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n                </svg>\n              </div>\n\n              <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\"><tr><td style=\"padding:8px 32px 34px 32px;text-align:center;\">\n                <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" style=\"margin:0 auto 16px auto;\"><tr>\n                  <td style=\"background:rgba(52,211,153,0.12);border:1px solid rgba(52,211,153,0.4);border-radius:999px;padding:6px 18px;\">\n                    <span style=\"color:#5eead4;font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;font-family:'Inter',Arial,sans-serif;\">◆ Finexa AI</span>\n                  </td>\n                </tr></table>\n                <div style=\"font-size:27px;color:#f8fafc;font-weight:800;line-height:1.3;font-family:'Inter',Arial,sans-serif;letter-spacing:-0.3px;\">${title}</div>\n                <div style=\"font-size:12.5px;color:#94a3b8;margin-top:12px;font-family:'Inter',Arial,sans-serif;\">🕐 &nbsp;${dateStr}</div>\n              </td></tr></table>\n\n            </td></tr>\n          </table>\n        </td></tr>\n\n        ${market ? `<tr><td style=\"padding-bottom:20px;\">\n          ${glassTag('#34d399', 'rgba(52,211,153,0.35)', '📈', 'Market Pulse')}\n          ${glassCard(`<p style=\"color:#e2e8f0;font-size:15.5px;line-height:1.7;margin:0;font-family:'Inter',Arial,sans-serif;\">${market}</p>`, 'rgba(52,211,153,0.22)')}\n        </td></tr>` : ''}\n\n        ${newsHtml ? `<tr><td style=\"padding-bottom:20px;\">\n          ${glassTag('#60a5fa', 'rgba(96,165,250,0.35)', '📰', 'In The News')}\n          ${glassCard(`<table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\">${newsHtml}</table>`, 'rgba(96,165,250,0.22)')}\n        </td></tr>` : ''}\n\n        <!-- Tip of the hour -->\n        <tr><td style=\"padding-bottom:20px;\">\n          ${glassTag('#fbbf24', 'rgba(251,191,36,0.35)', '💡', 'Tip Of The Hour')}\n          ${glassCard(`<p style=\"color:#e2e8f0;font-size:15.5px;line-height:1.7;margin:0;font-family:'Inter',Arial,sans-serif;\">${tip}</p>`, 'rgba(251,191,36,0.22)')}\n        </td></tr>\n\n        ${concept ? `<tr><td style=\"padding-bottom:20px;\">\n          ${glassTag('#a78bfa', 'rgba(167,139,250,0.35)', '📘', 'Concept Corner')}\n          ${glassCard(`<p style=\"color:#e2e8f0;font-size:15.5px;line-height:1.7;margin:0;font-family:'Inter',Arial,sans-serif;\">${concept}</p>`, 'rgba(167,139,250,0.22)')}\n        </td></tr>` : ''}\n\n        ${quote ? `<tr><td style=\"padding-bottom:20px;\">\n          <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\">\n            <tr><td style=\"background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.14);border-left:3px solid #5eead4;border-radius:4px 20px 20px 4px;padding:20px 24px;box-shadow:0 8px 30px rgba(0,0,0,0.3);\">\n              <div style=\"font-size:26px;color:#5eead4;line-height:1;margin-bottom:6px;font-family:Georgia,serif;\">&ldquo;</div>\n              <p style=\"color:#cbd5e1;font-size:15.5px;font-style:italic;line-height:1.65;margin:0;font-family:'Inter',Arial,sans-serif;\">${quote}</p>\n            </td></tr>\n          </table>\n        </td></tr>` : ''}\n\n        ${action ? `<tr><td style=\"padding-bottom:24px;\">\n          ${glassTag('#fb7185', 'rgba(251,113,133,0.35)', '✅', 'Do It Today')}\n          ${glassCard(`<p style=\"color:#f8fafc;font-size:15.5px;line-height:1.7;margin:0;font-weight:600;font-family:'Inter',Arial,sans-serif;\">${action}</p>`, 'rgba(251,113,133,0.22)')}\n        </td></tr>` : ''}\n\n        <!-- Gradient-bordered glass CTA button -->\n        <tr><td align=\"center\" style=\"padding-bottom:30px;\">\n          <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:linear-gradient(120deg,#34d399,#60a5fa);border-radius:999px;\">\n            <tr><td style=\"padding:2px;\">\n              <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:#0b1220;border-radius:999px;\">\n                <tr><td style=\"padding:13px 36px;\">\n                  <a href=\"#\" style=\"display:inline-block;color:#f8fafc;font-size:14.5px;font-weight:700;text-decoration:none;letter-spacing:0.3px;font-family:'Inter',Arial,sans-serif;\">\n                    Open Finexa App →\n                  </a>\n                </td></tr>\n              </table>\n            </td></tr>\n          </table>\n        </td></tr>\n\n        <!-- Footer glass panel -->\n        <tr><td style=\"padding-bottom:30px;\">\n          <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\">\n            <tr><td style=\"background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.10);border-radius:18px;padding:20px 24px;text-align:center;\">\n              <p style=\"color:#64748b;font-size:12px;line-height:1.7;margin:0;font-family:'Inter',Arial,sans-serif;\">\n                You're receiving this because you subscribed to Finexa AI money tips.<br>\n                News headlines via public RSS feeds. General educational information, not personalized financial advice.\n              </p>\n              <p style=\"margin:14px 0 0 0;\">\n                <a href=\"#\" style=\"color:#fb7185;text-decoration:none;font-size:12px;font-weight:600;font-family:'Inter',Arial,sans-serif;\">Unsubscribe</a>\n                <span style=\"color:#334155;\"> &nbsp;·&nbsp; </span>\n                <a href=\"#\" style=\"color:#60a5fa;text-decoration:none;font-size:12px;font-weight:600;font-family:'Inter',Arial,sans-serif;\">Preferences</a>\n              </p>\n            </td></tr>\n          </table>\n        </td></tr>\n\n      </table>\n    </td></tr>\n  </table>\n  <!--[if mso]></td></tr></table><![endif]-->\n</body>\n</html>`;\n\nreturn [{ json: { subject: title, html } }];"
+      },
+      "id": "35b6fb30-3115-4c4f-a801-deccfbf31d8a",
+      "name": "Build Email HTML",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1344,
+        256
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "shivasanjay9255@gmail.com",
+        "toEmail": "shivasanjaynd.24bir@kongu.edu",
+        "subject": "={{ $json.subject }}",
+        "html": "={{ $json.html }}",
+        "options": {}
+      },
+      "id": "a44e00d6-1429-4315-b63b-b69efe0c65d2",
+      "name": "Send Newsletter",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1568,
+        256
+      ],
+      "webhookId": "05a39524-c6d7-4b1a-99b9-0651f542f595",
+      "credentials": {
+        "smtp": {
+          "id": "ZeGkZdRwQqg8gdzd",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=15839069",
+        "options": {
+          "ignoreSSL": false
+        }
+      },
+      "id": "301c1513-918c-4bfb-bdd4-8b142f96d430",
+      "name": "CNBC – Investing",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        32,
+        272
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=20409666",
+        "options": {
+          "ignoreSSL": false
+        }
+      },
+      "id": "6d28a6dc-73fc-4ee9-9552-ccd1902e90ff",
+      "name": "CNBC – Market Insider",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        208,
+        272
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=21324812",
+        "options": {
+          "ignoreSSL": false
+        }
+      },
+      "id": "1a65a02b-3151-4bf9-9bad-0968fd69e92f",
+      "name": "CNBC – Personal Finance",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        32,
+        416
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=20910258",
+        "options": {
+          "ignoreSSL": false
+        }
+      },
+      "id": "935065c5-bc10-45e8-afc0-812738614c88",
+      "name": "CNBC – Economy",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        208,
+        416
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://news.google.com/rss/search?q=Forbes+India+Business&hl=en-IN&gl=IN&ceid=IN:en",
+        "options": {
+          "ignoreSSL": false
+        }
+      },
+      "id": "4fb0bb79-8455-463f-a89a-1169dfb94de1",
+      "name": "Forbes India",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        32,
+        560
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://www.investing.com/rss/news_95.rss",
+        "options": {
+          "ignoreSSL": false
+        }
+      },
+      "id": "a4f2768a-1cfe-40b8-a6c7-20326f8592e4",
+      "name": "Investing",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        208,
+        560
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Every Hour": {
+      "main": [
+        [
+          {
+            "node": "Yahoo Finance",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "CNBC",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "MarketWatch",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Investing.com",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "CNBC – Investing",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "CNBC – Market Insider",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "CNBC – Economy",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "CNBC – Personal Finance",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Investing",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Forbes India",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Yahoo Finance": {
+      "main": [
+        [
+          {
+            "node": "Merge Feeds",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CNBC": {
+      "main": [
+        [
+          {
+            "node": "Merge Feeds",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "MarketWatch": {
+      "main": [
+        [
+          {
+            "node": "Merge Feeds",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Investing.com": {
+      "main": [
+        [
+          {
+            "node": "Merge Feeds",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "Merge Feeds": {
+      "main": [
+        [
+          {
+            "node": "Summarize Headlines",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Summarize Headlines": {
+      "main": [
+        [
+          {
+            "node": "Generate Financial Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Financial Content": {
+      "main": [
+        [
+          {
+            "node": "Build Email HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Llama 3.3 (OpenRouter)": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Generate Financial Content",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Email HTML": {
+      "main": [
+        [
+          {
+            "node": "Send Newsletter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CNBC – Investing": {
+      "main": [
+        [
+          {
+            "node": "Merge Feeds",
+            "type": "main",
+            "index": 4
+          }
+        ]
+      ]
+    },
+    "CNBC – Market Insider": {
+      "main": [
+        [
+          {
+            "node": "Merge Feeds",
+            "type": "main",
+            "index": 5
+          }
+        ]
+      ]
+    },
+    "CNBC – Personal Finance": {
+      "main": [
+        [
+          {
+            "node": "Merge Feeds",
+            "type": "main",
+            "index": 6
+          }
+        ]
+      ]
+    },
+    "CNBC – Economy": {
+      "main": [
+        [
+          {
+            "node": "Merge Feeds",
+            "type": "main",
+            "index": 7
+          }
+        ]
+      ]
+    },
+    "Forbes India": {
+      "main": [
+        [
+          {
+            "node": "Merge Feeds",
+            "type": "main",
+            "index": 8
+          }
+        ]
+      ]
+    },
+    "Investing": {
+      "main": [
+        [
+          {
+            "node": "Merge Feeds",
+            "type": "main",
+            "index": 9
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "a5e74c64-990e-419a-b51d-9f85e6d6079d",
+  "meta": {
+    "instanceId": "931c158a6ae826761bde301b48946909dd9528e9952f6460181bcf46c8efd1c5"
+  },
+  "nodeGroups": [],
+  "id": "VWgrwkPw5aYe8Wp5",
+  "tags": []
+}

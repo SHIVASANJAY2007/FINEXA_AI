@@ -5,6 +5,7 @@ import {
     Send, Bot, Phone, Video, MoreVertical, ExternalLink, ShieldCheck, 
     Zap, ArrowLeft, RefreshCw, Sparkles, Lock, Loader2, AlertCircle
 } from 'lucide-react';
+import AnimatedIconBackground from './AnimatedIconBackground';
 
 const N8N_WEBHOOK_URL = 'https://shivasanjay.app.n8n.cloud/webhook/afceca5f-77af-4406-b1c8-8382608031c5';
 
@@ -27,6 +28,84 @@ const extractResponseText = (data) => {
     }
 
     return String(data);
+};
+
+// Interactive 3D Phone Component with backward depth tilt & smooth hover physics
+const Interactive3DPhone = () => {
+    const [rotate, setRotate] = useState({ x: 0, y: 0 });
+    const [isHovered, setIsHovered] = useState(false);
+
+    const handleMouseMove = (e) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        // Smooth 3D tilt calculation
+        setRotate({
+            x: -(y / (rect.height / 2)) * 14,
+            y: (x / (rect.width / 2)) * 14,
+        });
+    };
+
+    const handleMouseLeave = () => {
+        setIsHovered(false);
+        setRotate({ x: 0, y: 0 });
+    };
+
+    return (
+        <div 
+            className="mb-8 -ml-6"
+            style={{ perspective: '1200px' }}
+        >
+            <motion.div
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseMove={handleMouseMove}
+                onMouseLeave={handleMouseLeave}
+                animate={{
+                    rotateX: isHovered ? rotate.x + 8 : 0,
+                    rotateY: isHovered ? rotate.y - 8 : 0,
+                    translateZ: isHovered ? -50 : 0, // Smooth backward 3D movement on hover
+                    scale: isHovered ? 1.05 : 1,
+                }}
+                transition={{
+                    type: 'spring',
+                    stiffness: 140,
+                    damping: 20,
+                    mass: 0.8
+                }}
+                style={{
+                    transformStyle: 'preserve-3d'
+                }}
+                className="w-32 h-32 xl:w-36 xl:h-36 bg-[#25D366] rounded-[34px] flex items-center justify-center shadow-[0_18px_45px_rgba(37,211,102,0.32)] cursor-pointer relative group"
+            >
+                {/* Dynamic 3D depth shadow layer */}
+                <div 
+                    className="absolute inset-0 rounded-[34px] bg-black/20 blur-lg transition-all duration-300 pointer-events-none"
+                    style={{
+                        transform: isHovered ? 'translateZ(-40px) scale(0.92)' : 'translateZ(-10px) scale(1)',
+                        opacity: isHovered ? 0.4 : 0.2
+                    }}
+                />
+
+                {/* Ambient 3D surface sheen */}
+                <div className="absolute inset-0 rounded-[34px] bg-gradient-to-tr from-white/0 via-white/20 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+
+                {/* Floating 3D Phone Icon popping forward */}
+                <motion.div
+                    animate={{
+                        translateZ: isHovered ? 40 : 0, // Floating forward pop while phone box moves backward
+                    }}
+                    transition={{
+                        type: 'spring',
+                        stiffness: 180,
+                        damping: 18
+                    }}
+                    style={{ transformStyle: 'preserve-3d' }}
+                >
+                    <Phone size={56} className="text-white drop-shadow-lg" fill="white" />
+                </motion.div>
+            </motion.div>
+        </div>
+    );
 };
 
 const ChatMessage = ({ text, isBot, time, isError }) => {
@@ -214,7 +293,7 @@ const Chatbot = () => {
                 <div className="absolute bottom-10 right-10 w-96 h-96 bg-gold/5 rounded-full blur-[100px] pointer-events-none" />
 
                 {/* Left Side - Chat Window */}
-                <div className="w-full lg:w-[62%] flex flex-col bg-white/70 border-r border-beige/40 backdrop-blur-sm z-10">
+                <div className="w-full lg:w-[62%] flex flex-col bg-[#FDF8F3] border-r border-beige/40 z-10">
                     {/* Chat Header */}
                     <div className="p-4 sm:p-5 border-b border-beige/40 bg-white/90 flex items-center justify-between">
                         <div className="flex items-center gap-3.5">
@@ -240,35 +319,40 @@ const Chatbot = () => {
                         </div>
                     </div>
 
-                    {/* Messages Area */}
-                    <div className="flex-1 overflow-y-auto p-4 sm:p-6 no-scrollbar bg-ivory/40">
-                        <AnimatePresence>
-                            {messages.map((msg) => (
-                                <ChatMessage key={msg.id} {...msg} />
-                            ))}
-                        </AnimatePresence>
+                    {/* Messages Area with Finance Animated Icons Wallpaper */}
+                    <div className="flex-1 overflow-y-auto p-4 sm:p-6 no-scrollbar bg-[#FDF8F3] relative overflow-hidden">
+                        {/* High Quality Animated Finance Icons Background */}
+                        <AnimatedIconBackground />
 
-                        {/* Animated Thinking Indicator when loading */}
-                        {isLoading && (
-                            <motion.div
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                className="flex w-full mb-5 justify-start"
-                            >
-                                <div className="bg-white text-ink rounded-2xl rounded-tl-sm border border-beige/40 p-4 shadow-sm flex items-center gap-3">
-                                    <div className="w-7 h-7 bg-burgundy/10 rounded-lg flex items-center justify-center text-burgundy">
-                                        <Loader2 size={16} className="animate-spin" />
+                        <div className="relative z-10">
+                            <AnimatePresence>
+                                {messages.map((msg) => (
+                                    <ChatMessage key={msg.id} {...msg} />
+                                ))}
+                            </AnimatePresence>
+
+                            {/* Animated Thinking Indicator when loading */}
+                            {isLoading && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="flex w-full mb-5 justify-start"
+                                >
+                                    <div className="bg-white text-ink rounded-2xl rounded-tl-sm border border-beige/40 p-4 shadow-sm flex items-center gap-3">
+                                        <div className="w-7 h-7 bg-burgundy/10 rounded-lg flex items-center justify-center text-burgundy">
+                                            <Loader2 size={16} className="animate-spin" />
+                                        </div>
+                                        <div className="flex items-center gap-1.5">
+                                            <span className="w-2 h-2 rounded-full bg-burgundy animate-bounce [animation-delay:-0.3s]" />
+                                            <span className="w-2 h-2 rounded-full bg-burgundy animate-bounce [animation-delay:-0.15s]" />
+                                            <span className="w-2 h-2 rounded-full bg-burgundy animate-bounce" />
+                                            <span className="text-xs font-semibold text-taupe ml-2">Finexa AI is thinking...</span>
+                                        </div>
                                     </div>
-                                    <div className="flex items-center gap-1.5">
-                                        <span className="w-2 h-2 rounded-full bg-burgundy animate-bounce [animation-delay:-0.3s]" />
-                                        <span className="w-2 h-2 rounded-full bg-burgundy animate-bounce [animation-delay:-0.15s]" />
-                                        <span className="w-2 h-2 rounded-full bg-burgundy animate-bounce" />
-                                        <span className="text-xs font-semibold text-taupe ml-2">Finexa AI is thinking...</span>
-                                    </div>
-                                </div>
-                            </motion.div>
-                        )}
-                        <div ref={chatEndRef} />
+                                </motion.div>
+                            )}
+                            <div ref={chatEndRef} />
+                        </div>
                     </div>
 
                     {/* Input Bar */}
@@ -298,18 +382,11 @@ const Chatbot = () => {
                     </form>
                 </div>
 
-                {/* Right Side - WhatsApp Concierge Banner matching attached inspiration image */}
+                {/* Right Side - WhatsApp Concierge Banner with 3D Phone Effect */}
                 <div className="hidden lg:flex w-[38%] flex-col items-center justify-between p-8 xl:p-12 bg-cream/60 relative z-10 text-center">
                     <div className="my-auto max-w-sm flex flex-col items-center">
-                        {/* WhatsApp Icon Box matching attached image */}
-                        <motion.div
-                            initial={{ scale: 0.9, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            transition={{ duration: 0.3 }}
-                            className="w-24 h-24 bg-[#25D366] rounded-[28px] flex items-center justify-center mb-8 shadow-[0_12px_36px_rgba(37,211,102,0.25)] hover:scale-105 transition-transform"
-                        >
-                            <Phone size={42} className="text-white" fill="white" />
-                        </motion.div>
+                        {/* Interactive 3D Phone Icon Box */}
+                        <Interactive3DPhone />
 
                         {/* Title matching attached image */}
                         <h2 className="font-serif text-3xl xl:text-4xl font-extrabold text-ink leading-none tracking-tight mb-4 select-none">

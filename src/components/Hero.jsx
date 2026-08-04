@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { EncryptedText } from './EncryptedText';
@@ -13,6 +13,25 @@ const Hero = () => {
     const contentRef = useRef(null);
 
     const [chatStep, setChatStep] = useState(0);
+
+    // 3D Phone interactive state
+    const [phoneRotate, setPhoneRotate] = useState({ x: 0, y: 0 });
+    const [phoneHovered, setPhoneHovered] = useState(false);
+
+    const handlePhoneMouseMove = useCallback((e) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        setPhoneRotate({
+            x: -(y / (rect.height / 2)) * 12,
+            y:  (x / (rect.width  / 2)) * 12,
+        });
+    }, []);
+
+    const handlePhoneMouseLeave = useCallback(() => {
+        setPhoneHovered(false);
+        setPhoneRotate({ x: 0, y: 0 });
+    }, []);
 
     const cards = [
         {
@@ -179,9 +198,28 @@ const Hero = () => {
                     </div>
                 </div>
 
-                {/* Right Column: Phone Mockup */}
-                <div className="lg:col-span-5 flex justify-center lg:justify-end">
-                    <div className="w-[330px] h-[580px] bg-ink rounded-[48px] p-3 shadow-[0_24px_64px_rgba(58,46,37,0.15)] border-4 border-beige/60 relative overflow-hidden flex flex-col">
+                {/* Right Column: Phone Mockup — interactive 3D tilt */}
+                <div className="lg:col-span-5 flex justify-center lg:justify-start lg:-ml-4" style={{ perspective: '1400px' }}>
+                    <motion.div
+                        onMouseEnter={() => setPhoneHovered(true)}
+                        onMouseMove={handlePhoneMouseMove}
+                        onMouseLeave={handlePhoneMouseLeave}
+                        animate={{
+                            rotateX: phoneHovered ? phoneRotate.x + 6 : 0,
+                            rotateY: phoneHovered ? phoneRotate.y - 6 : 0,
+                            translateZ: phoneHovered ? -60 : 0,
+                            scale: phoneHovered ? 1.03 : 1,
+                        }}
+                        transition={{
+                            type: 'spring',
+                            stiffness: 130,
+                            damping: 22,
+                            mass: 0.9
+                        }}
+                        style={{ transformStyle: 'preserve-3d' }}
+                        className="cursor-pointer"
+                    >
+                    <div className="w-[355px] h-[620px] bg-ink rounded-[48px] p-3 shadow-[0_24px_64px_rgba(58,46,37,0.18)] border-4 border-beige/60 relative overflow-hidden flex flex-col">
                         {/* Status bar */}
                         <div className="flex justify-between items-center px-6 pt-2 pb-3 z-20 text-[9px] font-semibold text-cream/70 select-none">
                             <span>9:41</span>
@@ -284,6 +322,7 @@ const Hero = () => {
                             </div>
                         </div>
                     </div>
+                    </motion.div>
                 </div>
             </div>
 

@@ -1,48 +1,39 @@
-import { useSignIn, useUser } from '@clerk/clerk-react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import React from 'react';
-import { ShieldCheck, TrendingUp, Cpu } from 'lucide-react';
+import { ShieldCheck, TrendingUp, Cpu, ArrowLeft } from 'lucide-react';
 
 const SignUp = () => {
-    const { isLoaded, signIn } = useSignIn();
-    const { isSignedIn } = useUser();
     const navigate = useNavigate();
-    const [isLoading, setIsLoading] = React.useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
-    React.useEffect(() => {
-        if (isLoaded && isSignedIn) {
-            navigate('/dashboard');
-        }
-    }, [isLoaded, isSignedIn, navigate]);
-
-    const signUpWithGoogle = async () => {
-        if (!isLoaded || isLoading) return;
-
+    const signUpWithGoogle = () => {
+        if (isLoading) return;
         setIsLoading(true);
-        try {
-            await signIn.authenticateWithRedirect({
-                strategy: 'oauth_google',
-                redirectUrl: '/sso-callback',
-                redirectUrlComplete: '/dashboard',
-            });
-        } catch (err) {
-            if (err.errors?.[0]?.code === 'session_exists' || err.message?.includes('already signed in')) {
-                navigate('/dashboard');
-            } else {
-                console.error('Error signing in with Google:', err);
-                setIsLoading(false);
-            }
-        }
+        // Temporarily bypass Clerk login/register and navigate directly to chatbot page
+        setTimeout(() => {
+            navigate('/chatbot');
+        }, 400);
     };
 
     return (
-        <div className="flex h-screen w-full bg-ivory items-center justify-center p-4 dot-grid">
-            {/* Background blooms */}
+        <div className="flex flex-col min-h-screen w-full bg-ivory items-center justify-center p-4 sm:p-6 dot-grid relative">
+            {/* Top link to return home */}
+            <div className="absolute top-6 left-6 z-20">
+                <button
+                    onClick={() => navigate('/')}
+                    className="flex items-center gap-2 text-xs font-semibold text-taupe hover:text-ink transition-colors cursor-pointer bg-white/80 backdrop-blur-md px-4 py-2 rounded-full border border-beige/40 shadow-sm"
+                >
+                    <ArrowLeft size={16} />
+                    <span>Back to Home</span>
+                </button>
+            </div>
+
+            {/* Background ambient blooms */}
             <div className="absolute top-0 left-0 w-80 h-80 bg-burgundy/5 rounded-full blur-[96px] pointer-events-none" />
             <div className="absolute bottom-0 right-0 w-96 h-96 bg-gold/5 rounded-full blur-[120px] pointer-events-none" />
 
-            <div className="flex w-full max-w-5xl bg-white/70 border border-beige/40 rounded-3xl overflow-hidden shadow-[0_12px_40px_rgba(58,46,37,0.08)] backdrop-blur-md z-10">
-                {/* Left Column - Styled Asset Visual */}
+            <div className="flex w-full max-w-5xl bg-white/80 border border-beige/40 rounded-3xl overflow-hidden shadow-[0_12px_40px_rgba(58,46,37,0.08)] backdrop-blur-md z-10 my-auto">
+                {/* Left Column - Styled Visual */}
                 <div className="hidden md:flex w-1/2 p-6 items-center justify-center bg-cream border-r border-beige/40 relative group">
                     <div className="relative w-full h-[520px] rounded-2xl overflow-hidden bg-ink flex flex-col justify-between p-8 text-left shadow-inner">
                         {/* Gold bloom */}
@@ -82,7 +73,7 @@ const SignUp = () => {
                             <span className="text-burgundy">FinexaAI</span>
                         </h1>
                         <p className="text-sm font-semibold text-taupe">
-                            Securely sign in to access your private wealth concierge.
+                            Access your private wealth concierge & autonomous AI assistant.
                         </p>
                     </div>
 
@@ -90,12 +81,12 @@ const SignUp = () => {
                         <button
                             onClick={signUpWithGoogle}
                             disabled={isLoading}
-                            className={`w-full bg-white text-ink font-bold text-xs uppercase tracking-widest py-4 rounded-full border border-beige hover:border-burgundy/30 flex items-center justify-center gap-3 shadow-[0_2px_8px_rgba(58,46,37,0.04)] active:scale-98 transition-all cursor-pointer ${
-                                isLoading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-ivory/40'
+                            className={`w-full bg-white text-ink font-extrabold text-xs uppercase tracking-widest py-4 rounded-full border border-beige hover:border-burgundy/40 flex items-center justify-center gap-3 shadow-[0_4px_16px_rgba(58,46,37,0.06)] active:scale-98 transition-all cursor-pointer ${
+                                isLoading ? 'opacity-60 cursor-not-allowed' : 'hover:bg-ivory/60'
                             }`}
                         >
                             <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-5 h-5" />
-                            {isLoading ? 'Connecting...' : 'Continue with Google'}
+                            {isLoading ? 'Navigating to Chatbot...' : 'Continue with Google'}
                         </button>
                     </div>
 

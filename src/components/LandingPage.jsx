@@ -1,4 +1,3 @@
-import { useUser } from '@clerk/clerk-react'
 import React from 'react'
 import { useLocation } from 'react-router-dom'
 import Hero from './Hero'
@@ -10,7 +9,6 @@ import PricingSection from './PricingSection'
 import Footer from './Footer'
 
 const LandingPage = () => {
-    const { isSignedIn } = useUser()
     const location = useLocation()
 
     const navItems = [
@@ -18,9 +16,8 @@ const LandingPage = () => {
         { label: 'How It Works', href: '#how-it-works' },
         { label: 'Why Finexa', href: '#why-finexa' },
         { label: 'Pricing', href: '#pricing' },
-        isSignedIn
-            ? { label: 'Dashboard', href: '/dashboard' }
-            : { label: 'Start Free', href: '/signup' },
+        { label: 'Chatbot', href: '/chatbot' },
+        { label: 'Start Free', href: '/signup' },
     ]
 
     return (

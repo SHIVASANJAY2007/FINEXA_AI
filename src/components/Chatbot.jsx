@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import AnimatedIconBackground from './AnimatedIconBackground';
 
-const N8N_WEBHOOK_URL = 'http://localhost:1111/webhook/afceca5f-77af-4406-b1c8-8382608031c5';
+const N8N_WEBHOOK_URL = 'http://localhost:5678/webhook/afceca5f-77af-4406-b1c8-8382608031c5';
 
 // Helper to extract plain text string from n8n response payloads
 const extractResponseText = (data) => {

@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate, Link } from 'react-router-dom';
-import { 
-    Send, Bot, Phone, Video, MoreVertical, ExternalLink, ShieldCheck, 
+import {
+    Send, Bot, Phone, Video, MoreVertical, ExternalLink, ShieldCheck,
     Zap, ArrowLeft, RefreshCw, Sparkles, Lock, Loader2, AlertCircle
 } from 'lucide-react';
 import AnimatedIconBackground from './AnimatedIconBackground';
 
-const N8N_WEBHOOK_URL = 'https://shivasanjay.app.n8n.cloud/webhook/afceca5f-77af-4406-b1c8-8382608031c5';
+const N8N_WEBHOOK_URL = 'http://localhost:1111/webhook/afceca5f-77af-4406-b1c8-8382608031c5';
 
 // Helper to extract plain text string from n8n response payloads
 const extractResponseText = (data) => {
@@ -52,7 +52,7 @@ const Interactive3DPhone = () => {
     };
 
     return (
-        <div 
+        <div
             className="mb-8 -ml-6"
             style={{ perspective: '1200px' }}
         >
@@ -78,7 +78,7 @@ const Interactive3DPhone = () => {
                 className="w-32 h-32 xl:w-36 xl:h-36 bg-[#25D366] rounded-[34px] flex items-center justify-center shadow-[0_18px_45px_rgba(37,211,102,0.32)] cursor-pointer relative group"
             >
                 {/* Dynamic 3D depth shadow layer */}
-                <div 
+                <div
                     className="absolute inset-0 rounded-[34px] bg-black/20 blur-lg transition-all duration-300 pointer-events-none"
                     style={{
                         transform: isHovered ? 'translateZ(-40px) scale(0.92)' : 'translateZ(-10px) scale(1)',
@@ -117,13 +117,12 @@ const ChatMessage = ({ text, isBot, time, isError }) => {
             className={`flex w-full mb-5 ${isBot ? 'justify-start' : 'justify-end'}`}
         >
             <div
-                className={`max-w-[90%] md:max-w-[80%] relative ${
-                    isBot
-                        ? isError 
+                className={`max-w-[90%] md:max-w-[80%] relative ${isBot
+                        ? isError
                             ? 'bg-red-50 text-red-900 border border-red-200 rounded-2xl rounded-tl-sm shadow-sm'
                             : 'bg-white text-ink rounded-2xl rounded-tl-sm border border-beige/40 shadow-[0_4px_16px_rgba(58,46,37,0.06)]'
                         : 'bg-burgundy text-ivory rounded-2xl rounded-tr-sm shadow-[0_4px_14px_rgba(107,30,43,0.25)]'
-                } p-5`}
+                    } p-5`}
             >
                 {isError && (
                     <div className="flex items-center gap-2 mb-2 text-red-600 font-bold text-xs uppercase tracking-wider">
@@ -363,18 +362,16 @@ const Chatbot = () => {
                             onChange={(e) => setInputValue(e.target.value)}
                             disabled={isLoading}
                             placeholder={isLoading ? "Finexa AI is processing..." : "Ask Finexa AI anything..."}
-                            className={`flex-1 bg-cream/90 border border-beige/50 focus:border-burgundy focus:ring-1 focus:ring-burgundy rounded-full px-6 py-3.5 font-semibold text-xs sm:text-sm text-ink placeholder:text-taupe/60 outline-none transition-all ${
-                                isLoading ? 'opacity-50 cursor-not-allowed' : ''
-                            }`}
+                            className={`flex-1 bg-cream/90 border border-beige/50 focus:border-burgundy focus:ring-1 focus:ring-burgundy rounded-full px-6 py-3.5 font-semibold text-xs sm:text-sm text-ink placeholder:text-taupe/60 outline-none transition-all ${isLoading ? 'opacity-50 cursor-not-allowed' : ''
+                                }`}
                         />
                         <button
                             type="submit"
                             disabled={isLoading || !inputValue.trim()}
-                            className={`w-12 h-12 rounded-full flex items-center justify-center shadow-md transition-all shrink-0 ${
-                                isLoading || !inputValue.trim()
+                            className={`w-12 h-12 rounded-full flex items-center justify-center shadow-md transition-all shrink-0 ${isLoading || !inputValue.trim()
                                     ? 'bg-beige/40 text-taupe cursor-not-allowed'
                                     : 'bg-ink hover:bg-burgundy text-white active:scale-95 cursor-pointer'
-                            }`}
+                                }`}
                             title="Send message"
                         >
                             {isLoading ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} className="translate-x-0.5" />}

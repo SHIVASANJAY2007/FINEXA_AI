@@ -278,10 +278,7 @@ const Chatbot = () => {
                         <RefreshCw size={14} />
                         <span className="hidden sm:inline">Reset Session</span>
                     </button>
-                    <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal/10 text-teal text-[10px] font-bold">
-                        <Lock size={12} />
-                        <span className="hidden sm:inline">DPDP SECURED</span>
-                    </div>
+                    
                 </div>
             </header>
 
@@ -408,23 +405,7 @@ const Chatbot = () => {
                         </a>
 
                         {/* Sub-actions matching attached image */}
-                        <div className="flex items-center justify-center gap-8 pt-2">
-                            <button
-                                onClick={() => alert("Connecting to Finexa Live Video Support...")}
-                                className="flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-widest text-taupe/80 hover:text-ink transition-colors cursor-pointer"
-                            >
-                                <Video size={14} />
-                                <span>VIDEO CALL</span>
-                            </button>
-                            <div className="w-1 h-1 rounded-full bg-taupe/40" />
-                            <button
-                                onClick={() => alert("Additional tools: Portfolio Export, Tax Calculator, Risk Profiler.")}
-                                className="flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-widest text-taupe/80 hover:text-ink transition-colors cursor-pointer"
-                            >
-                                <MoreVertical size={14} />
-                                <span>MORE TOOLS</span>
-                            </button>
-                        </div>
+                        
                     </div>
 
                     {/* Bottom Footer Caption matching attached image */}

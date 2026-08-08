@@ -153,7 +153,7 @@ const Chatbot = () => {
     const initialGreeting = {
         id: 'init-1',
         isBot: true,
-        text: "Welcome to Finexa Concierge! 🌍\n\nI am your dynamic AI Agent powered by Finexa AI. How can I assist you with your investments, portfolio planning, tax optimization, or financial questions today?",
+        text: "Message Here ! ☄️",
         time: nowTime()
     };
 

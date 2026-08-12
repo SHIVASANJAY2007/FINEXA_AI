@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState, memo } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const NavButton = ({ item, isActive, onClick, className, children }) => {
+const NavButton = memo(({ item, onClick, className, children }) => {
     const isHash = item.href.startsWith('#');
 
     const handleClick = (e) => {
@@ -31,7 +31,7 @@ const NavButton = ({ item, isActive, onClick, className, children }) => {
             {children}
         </Link>
     );
-};
+});
 
 const PillNav = ({
     items = []
@@ -101,8 +101,6 @@ const PillNav = ({
                     className="flex items-center gap-1 overflow-hidden whitespace-nowrap"
                 >
                     {navItems.map((item) => {
-                        const isActive = activeHref => activeHref === item.href;
-                        // For simplicity let's compare with window.location.hash or fallback
                         const currentHash = window.location.hash;
                         const isCurrentActive = currentHash === item.href || (item.href === '/signup' && window.location.pathname === '/signup') || (item.href === '/dashboard' && window.location.pathname === '/dashboard');
                         
@@ -190,4 +188,4 @@ const PillNav = ({
     );
 };
 
-export default PillNav;
+export default memo(PillNav);

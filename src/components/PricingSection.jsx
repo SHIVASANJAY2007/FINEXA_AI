@@ -1,7 +1,11 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect, memo } from 'react';
 import { motion, useInView } from 'framer-motion';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-const PricingCard = ({ title, price, billingCycle, features, buttonText, isPopular, delay, bounce }) => {
+gsap.registerPlugin(ScrollTrigger);
+
+const PricingCard = memo(({ title, price, billingCycle, features, buttonText, isPopular, delay, bounce }) => {
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true, margin: "-10%" });
 
@@ -57,55 +61,71 @@ const PricingCard = ({ title, price, billingCycle, features, buttonText, isPopul
             </motion.a>
         </motion.div>
     );
-};
+});
+
+const PRICING_DATA = [
+    {
+        title: "Free",
+        monthlyPrice: 0,
+        yearlyPrice: 0,
+        features: [
+            "Basic WhatsApp chat support",
+            "Limited agent memory",
+            "Monthly market insights",
+            "Up to 2 linked bank accounts"
+        ],
+        buttonText: "Start Free",
+        isPopular: false,
+        delay: 0,
+        bounce: 0.2
+    },
+    {
+        title: "Pro",
+        monthlyPrice: 499,
+        yearlyPrice: 1499,
+        features: [
+            "Full Agentic AI workflow automation",
+            "Goal-based financial planning",
+            "Proactive WhatsApp alerts",
+            "Unlimited account integration",
+            "Unlimited conversation memory",
+            "DPDP-compliant privacy dashboard"
+        ],
+        buttonText: "Upgrade to Pro",
+        isPopular: true,
+        delay: 0.15,
+        bounce: 0.4
+    }
+];
 
 const PricingSection = () => {
     const [billingCycle, setBillingCycle] = useState('monthly');
     const sectionRef = useRef(null);
 
-    const pricingData = [
-        {
-            title: "Free",
-            monthlyPrice: 0,
-            yearlyPrice: 0,
-            features: [
-                "Basic WhatsApp chat support",
-                "Limited agent memory",
-                "Monthly market insights",
-                "Up to 2 linked bank accounts"
-            ],
-            buttonText: "Start Free",
-            isPopular: false,
-            delay: 0,
-            bounce: 0.2
-        },
-        {
-            title: "Pro",
-            monthlyPrice: 499,
-            yearlyPrice: 1499, // Pro price/yr
-            features: [
-                "Full Agentic AI workflow automation",
-                "Goal-based financial planning",
-                "Proactive WhatsApp alerts",
-                "Unlimited account integration",
-                "Unlimited conversation memory",
-                "DPDP-compliant privacy dashboard"
-            ],
-            buttonText: "Upgrade to Pro",
-            isPopular: true,
-            delay: 0.15, // Pro card enters 0.15s later
-            bounce: 0.4  // Pro card larger bounce
-        }
-    ];
+    useEffect(() => {
+        const ctx = gsap.context(() => {
+            // Subtle Section Pinning with Release After Scroll
+            ScrollTrigger.create({
+                trigger: sectionRef.current,
+                start: "top top",
+                end: "+=1200",
+                pin: true,
+                anticipatePin: 1,
+                scrub: 0.8
+            });
+        }, sectionRef);
+
+        return () => ctx.revert();
+    }, []);
 
     return (
         <section
             id="pricing"
             ref={sectionRef}
-            className="relative z-20 bg-cream py-24 px-6 border-t border-beige text-ink font-sans overflow-hidden"
+            className="relative z-20 bg-cream min-h-screen flex flex-col justify-center items-center py-20 px-6 border-t border-beige text-ink font-sans overflow-hidden"
         >
-            <div className="max-w-4xl mx-auto flex flex-col items-center">
-                <div className="flex flex-col items-center mb-16 text-center">
+            <div className="max-w-4xl mx-auto flex flex-col items-center w-full">
+                <div className="flex flex-col items-center mb-12 text-center">
                     <h2 className="text-4xl md:text-5xl font-serif font-bold text-ink leading-tight mb-8">
                         Simple, honest <span className="text-burgundy">Pricing</span>
                     </h2>
@@ -136,7 +156,7 @@ const PricingSection = () => {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-2xl">
-                    {pricingData.map((plan) => (
+                    {PRICING_DATA.map((plan) => (
                         <PricingCard
                             key={plan.title}
                             title={plan.title}
@@ -155,4 +175,4 @@ const PricingSection = () => {
     );
 };
 
-export default PricingSection;
+export default memo(PricingSection);

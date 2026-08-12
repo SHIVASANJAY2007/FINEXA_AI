@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, memo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
-    Send, Bot, Phone, Video, MoreVertical, ExternalLink, ShieldCheck,
-    Zap, ArrowLeft, RefreshCw, Sparkles, Lock, Loader2, AlertCircle
+    Send, Bot, Phone, ExternalLink,
+    ArrowLeft, RefreshCw, Sparkles, Loader2, AlertCircle
 } from 'lucide-react';
 import AnimatedIconBackground from './AnimatedIconBackground';
 
@@ -31,25 +31,24 @@ const extractResponseText = (data) => {
 };
 
 // Interactive 3D Phone Component with backward depth tilt & smooth hover physics
-const Interactive3DPhone = () => {
+const Interactive3DPhone = memo(() => {
     const [rotate, setRotate] = useState({ x: 0, y: 0 });
     const [isHovered, setIsHovered] = useState(false);
 
-    const handleMouseMove = (e) => {
+    const handleMouseMove = useCallback((e) => {
         const rect = e.currentTarget.getBoundingClientRect();
         const x = e.clientX - rect.left - rect.width / 2;
         const y = e.clientY - rect.top - rect.height / 2;
-        // Smooth 3D tilt calculation
         setRotate({
             x: -(y / (rect.height / 2)) * 14,
             y: (x / (rect.width / 2)) * 14,
         });
-    };
+    }, []);
 
-    const handleMouseLeave = () => {
+    const handleMouseLeave = useCallback(() => {
         setIsHovered(false);
         setRotate({ x: 0, y: 0 });
-    };
+    }, []);
 
     return (
         <div
@@ -63,7 +62,7 @@ const Interactive3DPhone = () => {
                 animate={{
                     rotateX: isHovered ? rotate.x + 8 : 0,
                     rotateY: isHovered ? rotate.y - 8 : 0,
-                    translateZ: isHovered ? -50 : 0, // Smooth backward 3D movement on hover
+                    translateZ: isHovered ? -50 : 0,
                     scale: isHovered ? 1.05 : 1,
                 }}
                 transition={{
@@ -77,7 +76,6 @@ const Interactive3DPhone = () => {
                 }}
                 className="w-32 h-32 xl:w-36 xl:h-36 bg-[#25D366] rounded-[34px] flex items-center justify-center shadow-[0_18px_45px_rgba(37,211,102,0.32)] cursor-pointer relative group"
             >
-                {/* Dynamic 3D depth shadow layer */}
                 <div
                     className="absolute inset-0 rounded-[34px] bg-black/20 blur-lg transition-all duration-300 pointer-events-none"
                     style={{
@@ -86,13 +84,11 @@ const Interactive3DPhone = () => {
                     }}
                 />
 
-                {/* Ambient 3D surface sheen */}
                 <div className="absolute inset-0 rounded-[34px] bg-gradient-to-tr from-white/0 via-white/20 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
 
-                {/* Floating 3D Phone Icon popping forward */}
                 <motion.div
                     animate={{
-                        translateZ: isHovered ? 40 : 0, // Floating forward pop while phone box moves backward
+                        translateZ: isHovered ? 40 : 0,
                     }}
                     transition={{
                         type: 'spring',
@@ -106,9 +102,9 @@ const Interactive3DPhone = () => {
             </motion.div>
         </div>
     );
-};
+});
 
-const ChatMessage = ({ text, isBot, time, isError }) => {
+const ChatMessage = memo(({ text, isBot, time, isError }) => {
     return (
         <motion.div
             initial={{ opacity: 0, y: 12, scale: 0.98 }}
@@ -141,23 +137,22 @@ const ChatMessage = ({ text, isBot, time, isError }) => {
             </div>
         </motion.div>
     );
-};
+});
 
 const Chatbot = () => {
-    const navigate = useNavigate();
     const nowTime = () => new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
     // Session ID maintained across requests
     const sessionIdRef = useRef(`session_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`);
 
-    const initialGreeting = {
-        id: 'init-1',
-        isBot: true,
-        text: "Message Here ! ☄️",
-        time: nowTime()
-    };
-
-    const [messages, setMessages] = useState([initialGreeting]);
+    const [messages, setMessages] = useState(() => [
+        {
+            id: 'init-1',
+            isBot: true,
+            text: "Message Here ! ☄️",
+            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        }
+    ]);
     const [inputValue, setInputValue] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const chatEndRef = useRef(null);
@@ -259,6 +254,15 @@ const Chatbot = () => {
                         <span className="hidden sm:inline">Home</span>
                     </Link>
                     <div className="h-4 w-[1px] bg-beige/60 hidden sm:block" />
+                    <Link
+                        to="/explore"
+                        className="px-3 py-1.5 rounded-full hover:bg-beige/30 transition-colors text-taupe hover:text-ink flex items-center gap-1.5 text-xs font-semibold"
+                        title="Explore Market News"
+                    >
+                        <Sparkles size={14} />
+                        <span className="hidden sm:inline">Explore</span>
+                    </Link>
+                    <div className="h-4 w-[1px] bg-beige/60 hidden sm:block" />
                     <div className="flex items-center gap-2">
                         <span className="font-serif font-bold text-lg text-ink tracking-tight">
                             Finexa<sup className="text-gold font-sans font-extrabold text-[10px] ml-0.5">AI</sup>
@@ -278,7 +282,6 @@ const Chatbot = () => {
                         <RefreshCw size={14} />
                         <span className="hidden sm:inline">Reset Session</span>
                     </button>
-
                 </div>
             </header>
 
@@ -317,7 +320,6 @@ const Chatbot = () => {
 
                     {/* Messages Area with Finance Animated Icons Wallpaper */}
                     <div className="flex-1 overflow-y-auto p-4 sm:p-6 no-scrollbar bg-[#FDF8F3] relative overflow-hidden">
-                        {/* High Quality Animated Finance Icons Background */}
                         <AnimatedIconBackground />
 
                         <div className="relative z-10">
@@ -379,21 +381,17 @@ const Chatbot = () => {
                 {/* Right Side - WhatsApp Concierge Banner with 3D Phone Effect */}
                 <div className="hidden lg:flex w-[38%] flex-col items-center justify-between p-8 xl:p-12 bg-cream/60 relative z-10 text-center">
                     <div className="my-auto max-w-sm flex flex-col items-center">
-                        {/* Interactive 3D Phone Icon Box */}
                         <Interactive3DPhone />
 
-                        {/* Title matching attached image */}
                         <h2 className="font-serif text-3xl xl:text-4xl font-extrabold text-ink leading-none tracking-tight mb-4 select-none">
                             TAKE IT TO <br />
                             <span className="text-[#25D366]">WHATSAPP</span>
                         </h2>
 
-                        {/* Subtitle matching attached image */}
                         <p className="text-xs font-semibold text-taupe leading-relaxed mb-8 max-w-xs">
                             Ready to book? Chat with our live agents on WhatsApp for instant confirmation and exclusive mobile-only deals.
                         </p>
 
-                        {/* Main Button matching attached image */}
                         <a
                             href="https://wa.me/15551382180"
                             target="_blank"
@@ -403,12 +401,8 @@ const Chatbot = () => {
                             <span>OPEN WHATSAPP BOT</span>
                             <ExternalLink size={14} />
                         </a>
-
-                        {/* Sub-actions matching attached image */}
-
                     </div>
 
-                    {/* Bottom Footer Caption matching attached image */}
                     <div className="text-[9px] font-extrabold uppercase tracking-[0.35em] text-taupe/50 select-none border-t border-beige/30 pt-4 w-full">
                         FINEXA OFFICIAL MOBILE CONCIERGE
                     </div>

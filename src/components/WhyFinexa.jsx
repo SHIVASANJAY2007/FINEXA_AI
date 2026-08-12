@@ -1,7 +1,7 @@
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, memo } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import DecryptedText from './DecryptedText';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -9,15 +9,22 @@ gsap.registerPlugin(ScrollTrigger);
 const SectionWipe = ({ containerRef }) => {
     const { scrollYProgress } = useScroll({
         target: containerRef,
-        offset: ["start end", "start start"]
+        offset: ["start 100%", "start 0%"]
     });
 
-    const sweepX = useTransform(scrollYProgress, [0, 1], ["-120%", "120%"]);
-    const sweepY = useTransform(scrollYProgress, [0, 1], ["-15%", "15%"]);
+    // Smooth spring physics to slow down and enrich the ribbon transition
+    const smoothProgress = useSpring(scrollYProgress, {
+        stiffness: 55,
+        damping: 18,
+        restDelta: 0.001
+    });
 
-    // Remapped editorial brand colors
+    const sweepX = useTransform(smoothProgress, [0, 1], ["-130%", "130%"]);
+    const sweepY = useTransform(smoothProgress, [0, 1], ["-12%", "12%"]);
+
+    // Remapped editorial brand colors with the prominent Burgundy red ribbon
     const layers = [
-        { color: '#6B1E2B' }, // Burgundy
+        { color: '#6B1E2B' }, // Burgundy (Main Red Ribbon)
         { color: '#C9A227' }, // Gold
         { color: '#C2A56D' }, // Camel
         { color: '#F6F3EB' }, // Cream
@@ -37,7 +44,6 @@ const SectionWipe = ({ containerRef }) => {
                         zIndex: 100 - i,
                         rotate: -15,
                         scaleY: 1.6,
-                        transition: { delay: i * 0.015 }
                     }}
                     className="absolute inset-0 w-[150vw] h-[125vh] -top-[12vh] left-[-10vw]"
                 />
@@ -59,28 +65,43 @@ const WhyFinexa = () => {
 
     useEffect(() => {
         const ctx = gsap.context(() => {
-            // 1. Content Reveal
-            gsap.from(contentRef.current, {
-                opacity: 0,
-                y: 60,
-                duration: 1.2,
-                ease: "power3.out",
-                scrollTrigger: {
-                    trigger: sectionRef.current,
-                    start: "top 80%",
-                }
+            const pinDuration = "+=1300";
+
+            // 1. Subtle Section Pin Lock with Release After Scroll
+            ScrollTrigger.create({
+                trigger: sectionRef.current,
+                start: "top top",
+                end: pinDuration,
+                pin: true,
+                anticipatePin: 1,
+                scrub: 0.8
             });
 
-            // 2. Counting Effect for Progress Card
+            // 2. Content Reveal inside the pinned section
+            gsap.fromTo(contentRef.current, 
+                { opacity: 0, y: 40 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.8,
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: sectionRef.current,
+                        start: "top 60%",
+                    }
+                }
+            );
+
+            // 3. Counting Effect for Progress Card
             const countObj = { val: 0 };
             gsap.to(countObj, {
                 val: 94,
                 duration: 1.5,
-                delay: 0.4,
+                delay: 0.2,
                 ease: "power3.out",
                 scrollTrigger: {
                     trigger: sectionRef.current,
-                    start: "top 70%",
+                    start: "top 50%",
                 },
                 onStart: () => {
                     gsap.to(".status-text", { opacity: 0.5, repeat: 4, yoyo: true, duration: 0.15 });
@@ -98,7 +119,7 @@ const WhyFinexa = () => {
                 }
             });
 
-            // 3. Count Up Stats triggers
+            // 4. Count Up Stats triggers
             const stat1Val = { val: 0 };
             gsap.to(stat1Val, {
                 val: 2.4,
@@ -106,7 +127,7 @@ const WhyFinexa = () => {
                 ease: "power2.out",
                 scrollTrigger: {
                     trigger: sectionRef.current,
-                    start: "top 60%",
+                    start: "top 40%",
                 },
                 onUpdate: () => {
                     if (stat1Ref.current) {
@@ -122,7 +143,7 @@ const WhyFinexa = () => {
                 ease: "power2.out",
                 scrollTrigger: {
                     trigger: sectionRef.current,
-                    start: "top 60%",
+                    start: "top 40%",
                 },
                 onUpdate: () => {
                     if (stat2Ref.current) {
@@ -138,7 +159,7 @@ const WhyFinexa = () => {
                 ease: "power2.out",
                 scrollTrigger: {
                     trigger: sectionRef.current,
-                    start: "top 60%",
+                    start: "top 40%",
                 },
                 onUpdate: () => {
                     if (stat3Ref.current) {
@@ -147,17 +168,20 @@ const WhyFinexa = () => {
                 }
             });
 
-            // 4. Parallax Scroll for Right Side Stat Cards Container
-            gsap.to(".stats-cards-container", {
-                y: -180,
-                ease: "none",
-                scrollTrigger: {
-                    trigger: sectionRef.current,
-                    start: "top bottom",
-                    end: "bottom top",
-                    scrub: 1.2,
+            // 5. Subtle Entrance for Stats Cards
+            gsap.fromTo(".stats-cards-container", 
+                { opacity: 0, y: 30 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1,
+                    ease: "power2.out",
+                    scrollTrigger: {
+                        trigger: sectionRef.current,
+                        start: "top 50%",
+                    }
                 }
-            });
+            );
 
         }, sectionRef);
 
@@ -168,9 +192,9 @@ const WhyFinexa = () => {
         <section
             id="why-finexa"
             ref={sectionRef}
-            className="w-full min-h-screen bg-teal relative overflow-hidden flex flex-col justify-center py-20 px-6 md:px-12 lg:px-20"
+            className="w-full min-h-screen bg-teal relative overflow-hidden flex flex-col justify-center py-16 px-6 md:px-12 lg:px-20"
         >
-            {/* The Diagonal Wipe Transition */}
+            {/* The Slowed & Smoothed Diagonal Ribbon Wipe Transition */}
             <SectionWipe containerRef={sectionRef} />
 
             {/* Subtle background graphics */}
@@ -180,9 +204,9 @@ const WhyFinexa = () => {
                 </svg>
             </div>
 
-            <div ref={contentRef} className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center max-w-7xl mx-auto w-full">
+            <div ref={contentRef} className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center max-w-7xl mx-auto w-full">
                 {/* Left Column (Span 7) */}
-                <div className="lg:col-span-7 flex flex-col items-start text-left space-y-10">
+                <div className="lg:col-span-7 flex flex-col items-start text-left space-y-8">
                     <span className="text-ivory/60 font-semibold uppercase tracking-[0.4em] text-[10.5px]">
                         Your Advisor
                     </span>
@@ -211,45 +235,45 @@ const WhyFinexa = () => {
                 </div>
 
                 {/* Right Column: Stat Cards Container (Span 5) */}
-                <div className="lg:col-span-5 relative h-[550px] overflow-hidden flex items-center justify-center pointer-events-auto">
-                    <div className="stats-cards-container flex flex-col gap-6 py-24 w-full max-w-sm">
-                        {/* Stat Card 1 */}
-                        <div className="bg-ivory/8 border border-ivory/12 p-6 rounded-2xl shadow-[0_8px_32px_rgba(11,79,74,0.25)] hover:border-gold/45 transition-colors group">
-                            <span ref={stat1Ref} className="block font-sans font-extrabold text-4xl text-gold group-hover:scale-102 transition-transform duration-300">
+                <div className="lg:col-span-5 relative flex items-center justify-center pointer-events-auto w-full">
+                    <div className="stats-cards-container flex flex-col gap-4 py-2 w-full max-w-sm">
+                        {/* Stat Card 1: Assets Advised */}
+                        <div className="bg-ivory/8 border border-ivory/15 p-5 sm:p-6 rounded-2xl shadow-[0_8px_32px_rgba(11,79,74,0.25)] hover:border-gold/45 transition-colors group">
+                            <span ref={stat1Ref} className="block font-sans font-extrabold text-3xl sm:text-4xl text-gold group-hover:scale-102 transition-transform duration-300">
                                 ₹0.0Cr+
                             </span>
-                            <span className="block text-[12.5px] font-medium text-cream/80 uppercase tracking-widest mt-1.5">
+                            <span className="block text-[11.5px] sm:text-[12.5px] font-medium text-cream/80 uppercase tracking-widest mt-1.5">
                                 Assets Advised
                             </span>
                         </div>
 
-                        {/* Stat Card 2 */}
-                        <div className="bg-ivory/8 border border-ivory/12 p-6 rounded-2xl shadow-[0_8px_32px_rgba(11,79,74,0.25)] hover:border-gold/45 transition-colors group">
-                            <span ref={stat2Ref} className="block font-sans font-extrabold text-4xl text-gold group-hover:scale-102 transition-transform duration-300">
+                        {/* Stat Card 2: Goal Completion Rate */}
+                        <div className="bg-ivory/8 border border-ivory/15 p-5 sm:p-6 rounded-2xl shadow-[0_8px_32px_rgba(11,79,74,0.25)] hover:border-gold/45 transition-colors group">
+                            <span ref={stat2Ref} className="block font-sans font-extrabold text-3xl sm:text-4xl text-gold group-hover:scale-102 transition-transform duration-300">
                                 0%
                             </span>
-                            <span className="block text-[12.5px] font-medium text-cream/80 uppercase tracking-widest mt-1.5">
+                            <span className="block text-[11.5px] sm:text-[12.5px] font-medium text-cream/80 uppercase tracking-widest mt-1.5">
                                 Goal Completion Rate
                             </span>
                         </div>
 
-                        {/* Stat Card 3 */}
-                        <div className="bg-ivory/8 border border-ivory/12 p-6 rounded-2xl shadow-[0_8px_32px_rgba(11,79,74,0.25)] hover:border-gold/45 transition-colors group">
-                            <span ref={stat3Ref} className="block font-sans font-extrabold text-4xl text-gold group-hover:scale-102 transition-transform duration-300">
+                        {/* Stat Card 3: Average Query Speed */}
+                        <div className="bg-ivory/8 border border-ivory/15 p-5 sm:p-6 rounded-2xl shadow-[0_8px_32px_rgba(11,79,74,0.25)] hover:border-gold/45 transition-colors group">
+                            <span ref={stat3Ref} className="block font-sans font-extrabold text-3xl sm:text-4xl text-gold group-hover:scale-102 transition-transform duration-300">
                                 0 sec
                             </span>
-                            <span className="block text-[12.5px] font-medium text-cream/80 uppercase tracking-widest mt-1.5">
+                            <span className="block text-[11.5px] sm:text-[12.5px] font-medium text-cream/80 uppercase tracking-widest mt-1.5">
                                 Average Query Speed
                             </span>
                         </div>
 
                         {/* Pull Quote Card */}
-                        <div className="bg-cream border border-beige/40 p-6 rounded-2xl shadow-[0_12px_40px_rgba(58,46,37,0.12)] text-left relative">
-                            <span className="absolute top-3 right-5 text-burgundy/15 font-serif font-black text-6xl select-none leading-none">“</span>
-                            <p className="text-[12px] font-sans font-medium text-ink italic leading-relaxed pr-6">
+                        <div className="bg-cream border border-beige/40 p-5 sm:p-6 rounded-2xl shadow-[0_12px_40px_rgba(58,46,37,0.12)] text-left relative">
+                            <span className="absolute top-2 right-4 text-burgundy/15 font-serif font-black text-5xl select-none leading-none">“</span>
+                            <p className="text-[11.5px] sm:text-[12px] font-sans font-medium text-ink italic leading-relaxed pr-5">
                                 "FinexaAI feels like having a wealth manager in my WhatsApp. It analyzed my profile and built a goal-based SIP roadmap in minutes."
                             </p>
-                            <span className="block text-[10px] font-bold text-burgundy uppercase tracking-widest mt-4">
+                            <span className="block text-[9.5px] sm:text-[10px] font-bold text-burgundy uppercase tracking-widest mt-3">
                                 — Rohan M., Bangalore
                             </span>
                         </div>
@@ -260,4 +284,4 @@ const WhyFinexa = () => {
     );
 };
 
-export default WhyFinexa;
+export default memo(WhyFinexa);

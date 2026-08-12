@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, memo } from 'react';
 import { motion } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -6,7 +6,61 @@ import { UserCheck, TrendingUp, Map, Heart, Bell } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const WorkflowCard = ({ title, subtext, color, shape, index, Icon, textColor, iconColor }) => {
+const AGENTS = [
+    {
+        title: "Profile Agent",
+        subtext: "Builds your financial DNA via chat",
+        color: "#6B1E2B", // Burgundy
+        shape: "circle",
+        Icon: UserCheck,
+        textColor: "#FDF6ED", // Ivory
+        iconColor: "#C9A227"  // Gold
+    },
+    {
+        title: "Market Intelligence",
+        subtext: "Live NAVs, FDs & Nifty data",
+        color: "#C2A56D", // Camel
+        shape: "square-rounded",
+        Icon: TrendingUp,
+        textColor: "#3A2E25", // Ink
+        iconColor: "#3A2E25"
+    },
+    {
+        title: "Planner Agent",
+        subtext: "Goal-based SIP roadmaps",
+        color: "#C9A227", // Gold
+        shape: "d-shape",
+        Icon: Map,
+        textColor: "#3A2E25", // Ink
+        iconColor: "#6B1E2B"  // Burgundy
+    },
+    {
+        title: "Life Event Agent",
+        subtext: "Adapts to marriage, kids & more",
+        color: "#9A8678", // Taupe
+        shape: "square",
+        Icon: Heart,
+        textColor: "#FDF6ED", // Ivory
+        iconColor: "#FDF6ED"
+    },
+    {
+        title: "Portfolio Monitor",
+        subtext: "Autonomous weekly alerts",
+        color: "#135c56", // Lighter Teal
+        shape: "circle",
+        Icon: Bell,
+        textColor: "#FDF6ED", // Ivory
+        iconColor: "#C9A227"  // Gold
+    }
+];
+
+// Pre-seeded stable particle coordinates for consistent render performance
+const PARTICLES = Array.from({ length: 24 }, (_, i) => ({
+    top: `${((i * 37) % 94) + 3}%`,
+    left: `${((i * 59) % 94) + 3}%`
+}));
+
+const WorkflowCard = memo(({ title, subtext, color, shape, index, Icon, textColor, iconColor }) => {
     const cardRef = useRef(null);
 
     const getCardStyle = () => {
@@ -58,76 +112,41 @@ const WorkflowCard = ({ title, subtext, color, shape, index, Icon, textColor, ic
             </motion.div>
         </div>
     );
-};
+});
 
 const HowItWorks = () => {
     const sectionRef = useRef(null);
     const scrollContainerRef = useRef(null);
 
-    const agents = [
-        {
-            title: "Profile Agent",
-            subtext: "Builds your financial DNA via chat",
-            color: "#6B1E2B", // Burgundy
-            shape: "circle",
-            Icon: UserCheck,
-            textColor: "#FDF6ED", // Ivory
-            iconColor: "#C9A227"  // Gold
-        },
-        {
-            title: "Market Intelligence",
-            subtext: "Live NAVs, FDs & Nifty data",
-            color: "#C2A56D", // Camel
-            shape: "square-rounded",
-            Icon: TrendingUp,
-            textColor: "#3A2E25", // Ink
-            iconColor: "#3A2E25"
-        },
-        {
-            title: "Planner Agent",
-            subtext: "Goal-based SIP roadmaps",
-            color: "#C9A227", // Gold
-            shape: "d-shape",
-            Icon: Map,
-            textColor: "#3A2E25", // Ink
-            iconColor: "#6B1E2B"  // Burgundy
-        },
-        {
-            title: "Life Event Agent",
-            subtext: "Adapts to marriage, kids & more",
-            color: "#9A8678", // Taupe
-            shape: "square",
-            Icon: Heart,
-            textColor: "#FDF6ED", // Ivory
-            iconColor: "#FDF6ED"
-        },
-        {
-            title: "Portfolio Monitor",
-            subtext: "Autonomous weekly alerts",
-            color: "#135c56", // Lighter Teal
-            shape: "circle",
-            Icon: Bell,
-            textColor: "#FDF6ED", // Ivory
-            iconColor: "#C9A227"  // Gold
-        }
-    ];
-
     useEffect(() => {
         const ctx = gsap.context(() => {
             const container = scrollContainerRef.current;
+            if (!container) return;
             const totalWidth = container.scrollWidth - window.innerWidth;
 
-            gsap.to(container, {
-                x: -totalWidth,
-                ease: "none",
+            // Pinned timeline with extended hold after reaching Portfolio Monitor card
+            const tl = gsap.timeline({
                 scrollTrigger: {
                     trigger: sectionRef.current,
                     pin: true,
                     start: "top top",
-                    end: () => `+=${totalWidth + 1000}`,
+                    end: () => `+=${totalWidth + 2400}`,
                     scrub: 1,
                     invalidateOnRefresh: true,
                 }
+            });
+
+            // 1. Horizontal Scroll across all agent pipeline cards
+            tl.to(container, {
+                x: -totalWidth,
+                ease: "none",
+                duration: 3,
+            });
+
+            // 2. Extended Lock/Hold after arrival of the Portfolio Monitor card
+            // Holds the section locked while user scrolls through this duration
+            tl.to({}, {
+                duration: 2.2,
             });
 
             // Gentle float effect for particles
@@ -154,14 +173,13 @@ const HowItWorks = () => {
         >
             {/* Background Aesthetics */}
             <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-                {/* Visual particles for high-end feel */}
-                {Array.from({ length: 30 }).map((_, i) => (
+                {PARTICLES.map((pos, i) => (
                     <div
                         key={i}
                         className="bg-sparkle absolute w-1.5 h-1.5 bg-ivory/15 rounded-full"
                         style={{
-                            top: `${Math.random() * 100}%`,
-                            left: `${Math.random() * 100}%`
+                            top: pos.top,
+                            left: pos.left
                         }}
                     />
                 ))}
@@ -177,9 +195,9 @@ const HowItWorks = () => {
             <div className="relative z-10 w-full overflow-hidden flex items-center">
                 <div
                     ref={scrollContainerRef}
-                    className="flex items-center gap-12 md:gap-16 h-max px-8 md:px-16 pr-[40vw]"
+                    className="flex items-center gap-12 md:gap-16 h-max px-8 md:px-16 pr-[20vw] sm:pr-[25vw]"
                 >
-                    {agents.map((step, index) => (
+                    {AGENTS.map((step, index) => (
                         <WorkflowCard
                             key={index}
                             {...step}
@@ -202,4 +220,4 @@ const HowItWorks = () => {
     );
 };
 
-export default HowItWorks;
+export default memo(HowItWorks);

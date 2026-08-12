@@ -8,37 +8,34 @@ import WhyFinexa from './WhyFinexa'
 import PricingSection from './PricingSection'
 import Footer from './Footer'
 
+const NAV_ITEMS = [
+    { label: 'Features', href: '#features' },
+    { label: 'How It Works', href: '#how-it-works' },
+    { label: 'Why Finexa', href: '#why-finexa' },
+    { label: 'Pricing', href: '#pricing' },
+    { label: 'Start Free', href: '/signup' },
+];
+
 const LandingPage = () => {
     const location = useLocation()
 
-    const navItems = [
-        { label: 'Features', href: '#features' },
-        { label: 'How It Works', href: '#how-it-works' },
-        { label: 'Why Finexa', href: '#why-finexa' },
-        { label: 'Pricing', href: '#pricing' },
-        { label: 'Chatbot', href: '/chatbot' },
-        { label: 'Start Free', href: '/signup' },
-    ]
-
     return (
-        <>
+        <div className="relative">
             <PillNav
-                items={navItems}
+                items={NAV_ITEMS}
                 activeHref={location.hash || location.pathname}
                 baseColor="#FDF6ED"
                 pillColor="#3A2E25"
                 logo=""
             />
 
-            <div className="app-content relative min-h-screen bg-ivory text-ink">
-                <Hero />
-                <Features />
-                <HowItWorks />
-                <WhyFinexa />
-                <PricingSection />
-                <Footer />
-            </div>
-        </>
+            <Hero />
+            <Features />
+            <HowItWorks />
+            <WhyFinexa />
+            <PricingSection />
+            <Footer />
+        </div>
     )
 }
 

@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
+import GlobalMenu from './components/ui/GlobalMenu'
 import './App.css'
 
 const LandingPage = lazy(() => import('./components/LandingPage'))
@@ -8,6 +9,7 @@ const Chatbot = lazy(() => import('./components/Chatbot'))
 const Dashboard = lazy(() => import('./components/Dashboard'))
 const Explore = lazy(() => import('./components/Explore/Explore'))
 const LearnEarn = lazy(() => import('./components/LearnEarn/LearnEarn'))
+const FlowingMenuPage = lazy(() => import('./components/ui/FlowingMenuPage'))
 
 const PageLoader = () => (
   <div className="min-h-screen w-full bg-ivory flex flex-col items-center justify-center gap-4 dot-grid">
@@ -25,6 +27,7 @@ const PageLoader = () => (
 function App() {
   return (
     <Suspense fallback={<PageLoader />}>
+      <GlobalMenu />
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/signup" element={<SignUp />} />
@@ -32,6 +35,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/explore" element={<Explore />} />
         <Route path="/learn" element={<LearnEarn />} />
+        <Route path="/menu" element={<FlowingMenuPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Suspense>

@@ -11,7 +11,8 @@ function FlowingMenu({
   bgColor = '#120F17',
   marqueeBgColor = '#fff',
   marqueeTextColor = '#120F17',
-  borderColor = '#fff'
+  borderColor = '#fff',
+  onItemClick
 }) {
   return (
     <div className="menu-wrap" style={{ backgroundColor: bgColor }}>
@@ -25,6 +26,7 @@ function FlowingMenu({
             marqueeBgColor={marqueeBgColor}
             marqueeTextColor={marqueeTextColor}
             borderColor={borderColor}
+            onItemClick={onItemClick}
           />
         ))}
       </nav>
@@ -32,7 +34,7 @@ function FlowingMenu({
   );
 }
 
-function MenuItem({ link, text, image, speed, textColor, marqueeBgColor, marqueeTextColor, borderColor }) {
+function MenuItem({ link, text, image, speed, textColor, marqueeBgColor, marqueeTextColor, borderColor, onItemClick }) {
   const itemRef = useRef(null);
   const marqueeRef = useRef(null);
   const marqueeInnerRef = useRef(null);
@@ -136,6 +138,7 @@ function MenuItem({ link, text, image, speed, textColor, marqueeBgColor, marquee
       <Link
         className="menu__item-link"
         to={link}
+        onClick={onItemClick}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         style={{ color: textColor }}

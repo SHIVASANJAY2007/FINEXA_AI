@@ -1,6 +1,6 @@
 import React, { useEffect, useState, memo } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 const NavButton = memo(({ item, onClick, className, children }) => {
     const isHash = item.href.startsWith('#');
@@ -38,7 +38,6 @@ const PillNav = ({
 }) => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -133,57 +132,7 @@ const PillNav = ({
                         );
                     })}
                 </motion.div>
-
-                {/* Mobile Menu Toggle */}
-                <motion.button
-                    layout
-                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                    className="md:hidden w-10 h-10 flex flex-col items-center justify-center gap-1 active:scale-95 transition-transform bg-beige/20 rounded-full"
-                >
-                    <div className="w-4 h-0.5 bg-ink rounded-full" />
-                    <div className="w-4 h-0.5 bg-ink rounded-full" />
-                </motion.button>
             </motion.nav>
-
-            {/* Mobile Menu Overlay */}
-            <AnimatePresence>
-                {isMobileMenuOpen && (
-                    <motion.div
-                        initial={{ opacity: 0, y: -20, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: -20, scale: 0.95 }}
-                        className="absolute top-24 left-6 right-6 p-4 bg-cream/95 backdrop-blur-3xl border border-beige/35 rounded-3xl pointer-events-auto md:hidden shadow-[0_20px_50px_rgba(58,46,37,0.15)]"
-                    >
-                        <motion.div
-                            initial="closed"
-                            animate="open"
-                            variants={{
-                                open: { transition: { staggerChildren: 0.05 } },
-                                closed: { transition: { staggerChildren: 0.05, staggerDirection: -1 } }
-                            }}
-                            className="flex flex-col gap-2"
-                        >
-                            {navItems.map((item) => (
-                                <motion.div
-                                    key={item.href}
-                                    variants={{
-                                        open: { opacity: 1, x: 0 },
-                                        closed: { opacity: 0, x: -10 }
-                                    }}
-                                >
-                                    <NavButton
-                                        item={item}
-                                        onClick={() => setIsMobileMenuOpen(false)}
-                                        className="p-3.5 rounded-2xl bg-ivory border border-beige/25 text-ink font-semibold uppercase tracking-widest text-center hover:bg-beige/10 transition-colors block"
-                                    >
-                                        {item.label}
-                                    </NavButton>
-                                </motion.div>
-                            ))}
-                        </motion.div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
         </div>
     );
 };

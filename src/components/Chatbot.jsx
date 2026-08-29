@@ -3,11 +3,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import {
     Send, Bot, Phone, ExternalLink,
-    ArrowLeft, RefreshCw, Sparkles, Loader2, AlertCircle
+    ArrowLeft, RefreshCw, Sparkles, Loader2, AlertCircle,
+    Copy, Check
 } from 'lucide-react';
 import AnimatedIconBackground from './AnimatedIconBackground';
 
-const N8N_WEBHOOK_URL = 'https://personal-savings-marathon-moral.trycloudflare.com/webhook/afceca5f-77af-4406-b1c8-8382608031c5';
+const N8N_WEBHOOK_URL = import.meta.env.VITE_N8N_WEBHOOK_URL || 'https://prefamiliar-overliterary-princess.ngrok-free.dev/webhook/27a70dce-19d0-4858-82c0-d1126492962e';
 
 // Helper to extract plain text string from n8n response payloads
 const extractResponseText = (data) => {
@@ -157,6 +158,91 @@ const Chatbot = () => {
     const [isLoading, setIsLoading] = useState(false);
     const chatEndRef = useRef(null);
 
+    // Dynamic Connection Status States
+    const [connectionStatus, setConnectionStatus] = useState({
+        status: 'checking', // 'checking' | 'connected' | 'disconnected' | 'degraded'
+        latency: null,
+        lastChecked: null,
+        error: null
+    });
+    const [showDiagnostics, setShowDiagnostics] = useState(false);
+    const [isCheckingManual, setIsCheckingManual] = useState(false);
+    const [copied, setCopied] = useState(false);
+
+    // Function to ping/check n8n connection
+    const checkConnectionStatus = useCallback(async (isManual = false) => {
+        if (isManual) setIsCheckingManual(true);
+        const startTime = performance.now();
+        try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 6000); // 6s timeout
+
+            // Use GET request to query webhook status safely without triggering workflow logic
+            const response = await fetch(N8N_WEBHOOK_URL, {
+                method: 'GET',
+                signal: controller.signal,
+                headers: {
+                    'Accept': 'application/json',
+                }
+            });
+
+            clearTimeout(timeoutId);
+            const endTime = performance.now();
+            const latency = Math.round(endTime - startTime);
+
+            const contentType = response.headers.get('content-type') || '';
+            const isHtml = contentType.includes('text/html');
+
+            // If ngrok is offline, it serves HTML templates with status 502/504
+            if (response.status >= 500 || (response.status === 502 && isHtml) || (response.status === 504 && isHtml)) {
+                setConnectionStatus({
+                    status: 'disconnected',
+                    latency,
+                    lastChecked: new Date().toLocaleTimeString(),
+                    error: `Gateway Error: Webhook returned status ${response.status}`
+                });
+            } else {
+                setConnectionStatus({
+                    status: latency > 1800 ? 'degraded' : 'connected',
+                    latency,
+                    lastChecked: new Date().toLocaleTimeString(),
+                    error: null
+                });
+            }
+        } catch (err) {
+            const endTime = performance.now();
+            const latency = Math.round(endTime - startTime);
+            const isTimeout = err.name === 'AbortError';
+
+            setConnectionStatus({
+                status: 'disconnected',
+                latency: isTimeout ? 6000 : latency,
+                lastChecked: new Date().toLocaleTimeString(),
+                error: isTimeout ? 'Connection request timed out' : (err.message || 'Network connection failed')
+            });
+        } finally {
+            if (isManual) setIsCheckingManual(false);
+        }
+    }, []);
+
+    // Trigger connection status checking on mount and periodically
+    useEffect(() => {
+        checkConnectionStatus();
+
+        const intervalId = setInterval(() => {
+            checkConnectionStatus();
+        }, 15000); // Check every 15 seconds
+
+        return () => clearInterval(intervalId);
+    }, [checkConnectionStatus]);
+
+    const handleCopyEndpoint = (e) => {
+        e.stopPropagation();
+        navigator.clipboard.writeText(N8N_WEBHOOK_URL);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    };
+
     useEffect(() => {
         chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages, isLoading]);
@@ -180,6 +266,7 @@ const Chatbot = () => {
 
         setIsLoading(true);
 
+        const messageStartTime = performance.now();
         try {
             const response = await fetch(N8N_WEBHOOK_URL, {
                 method: 'POST',
@@ -198,6 +285,17 @@ const Chatbot = () => {
             if (!response.ok) {
                 throw new Error(`Webhook responded with status ${response.status}`);
             }
+
+            const messageEndTime = performance.now();
+            const latency = Math.round(messageEndTime - messageStartTime);
+
+            // Update connection status dynamically based on actual successful message exchange
+            setConnectionStatus({
+                status: latency > 1800 ? 'degraded' : 'connected',
+                latency,
+                lastChecked: new Date().toLocaleTimeString(),
+                error: null
+            });
 
             let responseData;
             const contentType = response.headers.get('content-type');
@@ -218,6 +316,15 @@ const Chatbot = () => {
 
         } catch (err) {
             console.error('n8n Webhook Error:', err);
+            
+            // Update status to disconnected
+            setConnectionStatus(prev => ({
+                ...prev,
+                status: 'disconnected',
+                lastChecked: new Date().toLocaleTimeString(),
+                error: err.message || 'Connection failed during query'
+            }));
+
             setMessages(prev => [...prev, {
                 id: `err-${Date.now()}`,
                 isBot: true,
@@ -304,19 +411,176 @@ const Chatbot = () => {
                                     FINEXA AI AGENT
                                 </h2>
                                 <div className="flex items-center gap-1.5 mt-0.5">
-                                    <span className="w-2 h-2 rounded-full bg-teal animate-pulse" />
-                                    <span className="text-[10px] font-extrabold uppercase tracking-widest text-teal">
-                                        N8N LIVE AGENT
+                                    <span className={`w-2 h-2 rounded-full ${
+                                        connectionStatus.status === 'connected' ? 'bg-[#0B4F4A] animate-pulse' :
+                                        connectionStatus.status === 'degraded' ? 'bg-amber-500 animate-pulse' :
+                                        connectionStatus.status === 'disconnected' ? 'bg-rose-500 animate-pulse' :
+                                        'bg-taupe/40 animate-pulse'
+                                    }`} />
+                                    <span className={`text-[10px] font-extrabold uppercase tracking-widest ${
+                                        connectionStatus.status === 'connected' ? 'text-[#0B4F4A]' :
+                                        connectionStatus.status === 'degraded' ? 'text-amber-600' :
+                                        connectionStatus.status === 'disconnected' ? 'text-rose-600' :
+                                        'text-taupe'
+                                    }`}>
+                                        {connectionStatus.status === 'connected' && 'N8N LIVE AGENT'}
+                                        {connectionStatus.status === 'degraded' && 'N8N SLOW AGENT'}
+                                        {connectionStatus.status === 'disconnected' && 'N8N OFFLINE'}
+                                        {connectionStatus.status === 'checking' && 'N8N CHECKING...'}
                                     </span>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-2 text-xs text-taupe font-medium">
-                            <Sparkles size={16} className="text-gold animate-pulse" />
-                            <span className="hidden sm:inline">n8n Connected</span>
+                        {/* Interactive Connection Status */}
+                        <div className="relative">
+                            <button
+                                onClick={() => setShowDiagnostics(prev => !prev)}
+                                className={`flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-full border transition-all cursor-pointer select-none ${
+                                    connectionStatus.status === 'connected'
+                                        ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20 hover:bg-emerald-500/25'
+                                        : connectionStatus.status === 'degraded'
+                                        ? 'bg-amber-500/10 text-amber-600 border-amber-500/20 hover:bg-amber-500/25'
+                                        : connectionStatus.status === 'disconnected'
+                                        ? 'bg-rose-500/10 text-rose-600 border-rose-500/20 hover:bg-rose-500/25 animate-pulse'
+                                        : 'bg-taupe/10 text-taupe border-taupe/20 hover:bg-taupe/25'
+                                }`}
+                            >
+                                <span className={`w-1.5 h-1.5 rounded-full ${
+                                    connectionStatus.status === 'connected' ? 'bg-emerald-500 animate-pulse' :
+                                    connectionStatus.status === 'degraded' ? 'bg-amber-500 animate-pulse' :
+                                    connectionStatus.status === 'disconnected' ? 'bg-rose-500 animate-ping' :
+                                    'bg-taupe/50 animate-pulse'
+                                }`} />
+                                <span className="hidden sm:inline font-bold">
+                                    {connectionStatus.status === 'connected' && `n8n Connected (${connectionStatus.latency}ms)`}
+                                    {connectionStatus.status === 'degraded' && `n8n Degraded (${connectionStatus.latency}ms)`}
+                                    {connectionStatus.status === 'disconnected' && 'n8n Offline'}
+                                    {connectionStatus.status === 'checking' && 'Checking Connection...'}
+                                </span>
+                                <span className="sm:hidden font-bold">
+                                    {connectionStatus.status === 'connected' && `${connectionStatus.latency}ms`}
+                                    {connectionStatus.status === 'degraded' && `${connectionStatus.latency}ms`}
+                                    {connectionStatus.status === 'disconnected' && 'Offline'}
+                                    {connectionStatus.status === 'checking' && 'Checking'}
+                                </span>
+                            </button>
+
+                            {/* Diagnostics Dropdown Card */}
+                            <AnimatePresence>
+                                {showDiagnostics && (
+                                    <>
+                                        <div 
+                                            className="fixed inset-0 z-30" 
+                                            onClick={() => setShowDiagnostics(false)} 
+                                        />
+                                        <motion.div
+                                            initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                                            exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                                            transition={{ duration: 0.15, ease: "easeOut" }}
+                                            className="absolute right-0 mt-2.5 w-72 sm:w-80 bg-white border border-beige/40 rounded-2xl shadow-xl p-5 z-40 text-left"
+                                        >
+                                            <div className="flex items-center justify-between mb-3 pb-2 border-b border-beige/25">
+                                                <h3 className="font-serif font-bold text-xs uppercase tracking-wider text-ink">
+                                                    n8n Connection
+                                                </h3>
+                                                <span className={`text-[9px] uppercase font-extrabold px-2.5 py-0.5 rounded-full ${
+                                                    connectionStatus.status === 'connected' ? 'bg-emerald-500/10 text-emerald-600' :
+                                                    connectionStatus.status === 'degraded' ? 'bg-amber-500/10 text-amber-600' :
+                                                    connectionStatus.status === 'disconnected' ? 'bg-rose-500/10 text-rose-600' :
+                                                    'bg-taupe/10 text-taupe'
+                                                }`}>
+                                                    {connectionStatus.status}
+                                                </span>
+                                            </div>
+
+                                            <div className="space-y-3.5 text-xs">
+                                                <div>
+                                                    <span className="text-[10px] uppercase font-extrabold text-taupe block mb-1">Webhook Endpoint</span>
+                                                    <div className="bg-cream/40 p-2 rounded-lg border border-beige/20 font-mono text-[9px] text-ink select-all break-all relative group flex items-center justify-between gap-1.5">
+                                                        <span className="truncate pr-4">{N8N_WEBHOOK_URL}</span>
+                                                        <button 
+                                                            onClick={handleCopyEndpoint}
+                                                            className="text-taupe hover:text-burgundy p-1 rounded hover:bg-beige/20 transition-colors cursor-pointer shrink-0"
+                                                            title="Copy Webhook URL"
+                                                        >
+                                                            {copied ? <Check size={12} className="text-emerald-600" /> : <Copy size={12} />}
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                <div className="grid grid-cols-2 gap-3.5">
+                                                    <div>
+                                                        <span className="text-[10px] uppercase font-extrabold text-taupe block mb-0.5">Response Latency</span>
+                                                        <div className="font-serif font-extrabold text-sm text-ink">
+                                                            {connectionStatus.latency !== null ? `${connectionStatus.latency} ms` : 'N/A'}
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <span className="text-[10px] uppercase font-extrabold text-taupe block mb-0.5">Last Checked</span>
+                                                        <div className="font-serif font-extrabold text-sm text-ink">
+                                                            {connectionStatus.lastChecked || 'Never'}
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {connectionStatus.error && (
+                                                    <div className="bg-rose-50 border border-rose-100 text-rose-700 p-2.5 rounded-lg text-[10px] leading-normal flex items-start gap-1.5">
+                                                        <AlertCircle size={14} className="shrink-0 mt-0.5" />
+                                                        <span className="font-medium">{connectionStatus.error}</span>
+                                                    </div>
+                                                )}
+
+                                                <div className="pt-2.5 border-t border-beige/25 flex gap-2">
+                                                    <button
+                                                        onClick={() => checkConnectionStatus(true)}
+                                                        disabled={isCheckingManual}
+                                                        className="flex-1 bg-ink hover:bg-burgundy text-white py-2.5 rounded-xl font-bold text-[10px] uppercase tracking-wider flex items-center justify-center gap-1.5 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                                                    >
+                                                        {isCheckingManual ? (
+                                                            <>
+                                                                <Loader2 size={12} className="animate-spin" />
+                                                                <span>Testing...</span>
+                                                            </>
+                                                        ) : (
+                                                            <>
+                                                                <RefreshCw size={11} />
+                                                                <span>Ping Webhook</span>
+                                                            </>
+                                                        )}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </motion.div>
+                                    </>
+                                )}
+                            </AnimatePresence>
                         </div>
                     </div>
+
+                    {/* Connection Warning Banner */}
+                    <AnimatePresence>
+                        {connectionStatus.status === 'disconnected' && (
+                            <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: 'auto', opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                className="bg-rose-500/10 border-b border-rose-500/20 px-5 py-2.5 flex items-center justify-between text-xs text-rose-800 font-semibold z-15 relative shrink-0"
+                            >
+                                <div className="flex items-center gap-2">
+                                    <AlertCircle size={14} className="text-rose-600 animate-bounce shrink-0" />
+                                    <span>n8n agent connection is offline. Responses might be delayed or unavailable.</span>
+                                </div>
+                                <button
+                                    onClick={() => checkConnectionStatus(true)}
+                                    className="text-[10px] uppercase tracking-wider font-extrabold bg-rose-600 text-white px-2.5 py-1 rounded-md hover:bg-rose-700 transition-colors shrink-0"
+                                >
+                                    Retry
+                                </button>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
 
                     {/* Messages Area with Finance Animated Icons Wallpaper */}
                     <div className="flex-1 overflow-y-auto p-4 sm:p-6 no-scrollbar bg-[#FDF8F3] relative overflow-hidden">

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, memo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import {
-    Send, Bot, Phone, ExternalLink, 
+    Send, Bot, Phone, ExternalLink,
     ArrowLeft, RefreshCw, Sparkles, Loader2, AlertCircle,
     Copy, Check
 } from 'lucide-react';
@@ -11,7 +11,7 @@ import ResponseRenderer from './ResponseRenderer';
 
 const getBackendUrl = () => {
     let url = import.meta.env.VITE_API_BASE_URL;
-    
+
     if (!url) {
         if (typeof window !== 'undefined' && window.location.hostname.includes('vercel.app')) {
             url = 'https://finexa-ai-xama.onrender.com/api';
@@ -19,17 +19,17 @@ const getBackendUrl = () => {
             url = 'http://localhost:5000/api';
         }
     }
-    
+
     // Normalize URL
     url = url.trim();
     // 1. Remove trailing slashes
     url = url.replace(/\/+$/, '');
-    
+
     // 2. Ensure it ends with /api
     if (!url.endsWith('/api')) {
         url = url + '/api';
     }
-    
+
     return url;
 };
 
@@ -204,7 +204,7 @@ const Chatbot = () => {
         {
             id: 'init-1',
             isBot: true,
-            text: "Welcome to Finexa AI! ☄️\n\nHow can I assist you with your travel and financial planning today?",
+            text: "Welcome to Finexa AI! ☄️\n\nHow can I assist you with your financial planning today?",
             time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         }
     ]);
@@ -393,7 +393,7 @@ const Chatbot = () => {
 
         } catch (err) {
             console.error('Chat Proxy Error:', err);
-            
+
             setConnectionStatus(prev => ({
                 ...prev,
                 status: 'disconnected',

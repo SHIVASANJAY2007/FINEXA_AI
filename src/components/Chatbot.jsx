@@ -7,8 +7,23 @@ import {
     Copy, Check
 } from 'lucide-react';
 import AnimatedIconBackground from './AnimatedIconBackground';
+import ResponseRenderer from './ResponseRenderer';
 
-const N8N_WEBHOOK_URL = import.meta.env.VITE_N8N_WEBHOOK_URL || 'https://prefamiliar-overliterary-princess.ngrok-free.dev/webhook/27a70dce-19d0-4858-82c0-d1126492962e';
+const BACKEND_API_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+const WHATSAPP_API_URL = import.meta.env.VITE_WHATSAPP_API_URL || 'https://wa.me/15551382180';
+const TELEGRAM_API_URL = import.meta.env.VITE_TELEGRAM_API_URL || 'https://t.me/FinexaAIBot';
+
+const WhatsAppIcon = ({ className }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor" width="100%" height="100%">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.746.953 3.71 1.458 5.704 1.459h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+    </svg>
+);
+
+const TelegramIcon = ({ className }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor" width="100%" height="100%">
+        <path d="M21.9 4.1L2.1 11.7c-.8.3-.8.8-.2 1l5.1 1.6 11.8-7.4c.6-.4 1.1-.2.6.2L9.9 14.8l-.4 3.7c.4 0 .5-.2.7-.3l1.8-1.7 3.7 2.7c.7.4 1.2.2 1.4-.6l2.4-11.4c.2-.9-.3-1.3-1-1z" />
+    </svg>
+);
 
 // Helper to extract plain text string from n8n response payloads
 const extractResponseText = (data) => {
@@ -32,7 +47,7 @@ const extractResponseText = (data) => {
 };
 
 // Interactive 3D Phone Component with backward depth tilt & smooth hover physics
-const Interactive3DPhone = memo(() => {
+const Interactive3DPhone = memo(({ platform }) => {
     const [rotate, setRotate] = useState({ x: 0, y: 0 });
     const [isHovered, setIsHovered] = useState(false);
 
@@ -51,9 +66,11 @@ const Interactive3DPhone = memo(() => {
         setRotate({ x: 0, y: 0 });
     }, []);
 
+    const isWhatsApp = platform === 'whatsapp';
+
     return (
         <div
-            className="mb-8 -ml-6"
+            className="mb-8"
             style={{ perspective: '1200px' }}
         >
             <motion.div
@@ -65,17 +82,23 @@ const Interactive3DPhone = memo(() => {
                     rotateY: isHovered ? rotate.y - 8 : 0,
                     translateZ: isHovered ? -50 : 0,
                     scale: isHovered ? 1.05 : 1,
+                    backgroundColor: isWhatsApp ? '#25D366' : '#0088cc',
+                    boxShadow: isWhatsApp
+                        ? '0px 18px 45px rgba(37, 211, 102, 0.32)'
+                        : '0px 18px 45px rgba(0, 136, 204, 0.32)'
                 }}
                 transition={{
                     type: 'spring',
                     stiffness: 140,
                     damping: 20,
-                    mass: 0.8
+                    mass: 0.8,
+                    backgroundColor: { duration: 0.5, ease: 'easeInOut' },
+                    boxShadow: { duration: 0.5, ease: 'easeInOut' }
                 }}
                 style={{
                     transformStyle: 'preserve-3d'
                 }}
-                className="w-32 h-32 xl:w-36 xl:h-36 bg-[#25D366] rounded-[34px] flex items-center justify-center shadow-[0_18px_45px_rgba(37,211,102,0.32)] cursor-pointer relative group"
+                className="w-32 h-32 xl:w-36 xl:h-36 rounded-[34px] flex items-center justify-center cursor-pointer relative group"
             >
                 <div
                     className="absolute inset-0 rounded-[34px] bg-black/20 blur-lg transition-all duration-300 pointer-events-none"
@@ -89,7 +112,7 @@ const Interactive3DPhone = memo(() => {
 
                 <motion.div
                     animate={{
-                        translateZ: isHovered ? 40 : 0,
+                        translateZ: isHovered ? 40 : 8,
                     }}
                     transition={{
                         type: 'spring',
@@ -97,8 +120,13 @@ const Interactive3DPhone = memo(() => {
                         damping: 18
                     }}
                     style={{ transformStyle: 'preserve-3d' }}
+                    className="relative z-10"
                 >
-                    <Phone size={56} className="text-white drop-shadow-lg" fill="white" />
+                    {isWhatsApp ? (
+                        <WhatsAppIcon className="w-14 h-14 text-white drop-shadow-lg" />
+                    ) : (
+                        <TelegramIcon className="w-14 h-14 text-white drop-shadow-lg" />
+                    )}
                 </motion.div>
             </motion.div>
         </div>
@@ -128,8 +156,12 @@ const ChatMessage = memo(({ text, isBot, time, isError }) => {
                     </div>
                 )}
 
-                <div className="text-xs sm:text-sm leading-relaxed font-medium whitespace-pre-wrap text-left">
-                    {text}
+                <div className="text-xs sm:text-sm leading-relaxed font-medium text-left w-full">
+                    {isBot && !isError ? (
+                        <ResponseRenderer text={text} />
+                    ) : (
+                        <div className="whitespace-pre-wrap">{text}</div>
+                    )}
                 </div>
 
                 <div className={`text-[8.5px] font-semibold mt-2.5 text-right ${isBot ? (isError ? 'text-red-400' : 'text-taupe/70') : 'text-ivory/70'}`}>
@@ -150,13 +182,23 @@ const Chatbot = () => {
         {
             id: 'init-1',
             isBot: true,
-            text: "Message Here ! ☄️",
+            text: "Welcome to Finexa AI! ☄️\n\nHow can I assist you with your travel and financial planning today?",
             time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         }
     ]);
     const [inputValue, setInputValue] = useState('');
+    const [activePlatform, setActivePlatform] = useState('whatsapp');
+    const [chatStatus, setChatStatus] = useState('checking');
     const [isLoading, setIsLoading] = useState(false);
     const chatEndRef = useRef(null);
+    const inputRef = useRef(null);
+
+    // Auto-focus input on mount and when loading finishes
+    useEffect(() => {
+        if (!isLoading) {
+            inputRef.current?.focus();
+        }
+    }, [isLoading]);
 
     // Dynamic Connection Status States
     const [connectionStatus, setConnectionStatus] = useState({
@@ -169,7 +211,7 @@ const Chatbot = () => {
     const [isCheckingManual, setIsCheckingManual] = useState(false);
     const [copied, setCopied] = useState(false);
 
-    // Function to ping/check n8n connection
+    // Function to ping/check n8n connection status via backend proxy
     const checkConnectionStatus = useCallback(async (isManual = false) => {
         if (isManual) setIsCheckingManual(true);
         const startTime = performance.now();
@@ -177,37 +219,34 @@ const Chatbot = () => {
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 6000); // 6s timeout
 
-            // Use GET request to query webhook status safely without triggering workflow logic
-            const response = await fetch(N8N_WEBHOOK_URL, {
+            const response = await fetch(`${BACKEND_API_URL}/chat/status`, {
                 method: 'GET',
-                signal: controller.signal,
-                headers: {
-                    'Accept': 'application/json',
-                }
+                signal: controller.signal
             });
 
             clearTimeout(timeoutId);
             const endTime = performance.now();
             const latency = Math.round(endTime - startTime);
 
-            const contentType = response.headers.get('content-type') || '';
-            const isHtml = contentType.includes('text/html');
+            const data = await response.json();
+            const isOnline = data.online;
 
-            // If ngrok is offline, it serves HTML templates with status 502/504
-            if (response.status >= 500 || (response.status === 502 && isHtml) || (response.status === 504 && isHtml)) {
-                setConnectionStatus({
-                    status: 'disconnected',
-                    latency,
-                    lastChecked: new Date().toLocaleTimeString(),
-                    error: `Gateway Error: Webhook returned status ${response.status}`
-                });
-            } else {
+            if (isOnline) {
                 setConnectionStatus({
                     status: latency > 1800 ? 'degraded' : 'connected',
                     latency,
                     lastChecked: new Date().toLocaleTimeString(),
                     error: null
                 });
+                setChatStatus('online');
+            } else {
+                setConnectionStatus({
+                    status: 'disconnected',
+                    latency,
+                    lastChecked: new Date().toLocaleTimeString(),
+                    error: `Service Gateway Error`
+                });
+                setChatStatus('offline');
             }
         } catch (err) {
             const endTime = performance.now();
@@ -220,6 +259,7 @@ const Chatbot = () => {
                 lastChecked: new Date().toLocaleTimeString(),
                 error: isTimeout ? 'Connection request timed out' : (err.message || 'Network connection failed')
             });
+            setChatStatus('offline');
         } finally {
             if (isManual) setIsCheckingManual(false);
         }
@@ -236,9 +276,31 @@ const Chatbot = () => {
         return () => clearInterval(intervalId);
     }, [checkConnectionStatus]);
 
+    // Real-time n8n status checking via backend proxy
+    useEffect(() => {
+        const fetchStatus = async () => {
+            try {
+                const res = await fetch(`${BACKEND_API_URL}/chat/status`);
+                if (res.ok) {
+                    const data = await res.json();
+                    setChatStatus(data.online ? 'online' : 'offline');
+                } else {
+                    setChatStatus('offline');
+                }
+            } catch (err) {
+                setChatStatus('offline');
+            }
+        };
+
+        fetchStatus();
+        const statusInterval = setInterval(fetchStatus, 15000);
+
+        return () => clearInterval(statusInterval);
+    }, []);
+
     const handleCopyEndpoint = (e) => {
         e.stopPropagation();
-        navigator.clipboard.writeText(N8N_WEBHOOK_URL);
+        navigator.clipboard.writeText(`${BACKEND_API_URL}/chat/send`);
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
     };
@@ -268,44 +330,37 @@ const Chatbot = () => {
 
         const messageStartTime = performance.now();
         try {
-            const response = await fetch(N8N_WEBHOOK_URL, {
+            const response = await fetch(`${BACKEND_API_URL}/chat/send`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                 },
                 body: JSON.stringify({
-                    message: userMsg,
-                    chatInput: userMsg,
+                    personId: "",
                     sessionId: sessionIdRef.current,
-                    timestamp: new Date().toISOString()
+                    message: userMsg
                 })
             });
 
             if (!response.ok) {
-                throw new Error(`Webhook responded with status ${response.status}`);
+                throw new Error(`Proxy responded with status ${response.status}`);
             }
 
             const messageEndTime = performance.now();
             const latency = Math.round(messageEndTime - messageStartTime);
 
-            // Update connection status dynamically based on actual successful message exchange
+            // Update connection status dynamically based on successful message exchange
             setConnectionStatus({
                 status: latency > 1800 ? 'degraded' : 'connected',
                 latency,
                 lastChecked: new Date().toLocaleTimeString(),
                 error: null
             });
+            setChatStatus('online');
 
-            let responseData;
-            const contentType = response.headers.get('content-type');
-            if (contentType && contentType.includes('application/json')) {
-                responseData = await response.json();
-            } else {
-                responseData = await response.text();
-            }
-
-            const botReplyText = extractResponseText(responseData);
+            const responseData = await response.json();
+            const botReplyText = responseData.output || "No response received.";
 
             setMessages(prev => [...prev, {
                 id: `bot-${Date.now()}`,
@@ -315,20 +370,20 @@ const Chatbot = () => {
             }]);
 
         } catch (err) {
-            console.error('n8n Webhook Error:', err);
+            console.error('Chat Proxy Error:', err);
             
-            // Update status to disconnected
             setConnectionStatus(prev => ({
                 ...prev,
                 status: 'disconnected',
                 lastChecked: new Date().toLocaleTimeString(),
                 error: err.message || 'Connection failed during query'
             }));
+            setChatStatus('offline');
 
             setMessages(prev => [...prev, {
                 id: `err-${Date.now()}`,
                 isBot: true,
-                text: "I encountered a problem connecting to the n8n AI agent. Please ensure the n8n webhook workflow is active and try sending your query again.",
+                text: "I encountered a problem connecting to the AI agent. Please check your network and try again.",
                 isError: true,
                 time: nowTime()
             }]);
@@ -345,6 +400,7 @@ const Chatbot = () => {
             text: "Chat context reset. How can Finexa AI help you today?",
             time: nowTime()
         }]);
+        inputRef.current?.focus();
     };
 
     return (
@@ -410,24 +466,25 @@ const Chatbot = () => {
                                 <h2 className="font-serif font-extrabold text-base sm:text-lg text-ink tracking-tight uppercase">
                                     FINEXA AI AGENT
                                 </h2>
-                                <div className="flex items-center gap-1.5 mt-0.5">
-                                    <span className={`w-2 h-2 rounded-full ${
-                                        connectionStatus.status === 'connected' ? 'bg-[#0B4F4A] animate-pulse' :
-                                        connectionStatus.status === 'degraded' ? 'bg-amber-500 animate-pulse' :
-                                        connectionStatus.status === 'disconnected' ? 'bg-rose-500 animate-pulse' :
-                                        'bg-taupe/40 animate-pulse'
-                                    }`} />
-                                    <span className={`text-[10px] font-extrabold uppercase tracking-widest ${
-                                        connectionStatus.status === 'connected' ? 'text-[#0B4F4A]' :
-                                        connectionStatus.status === 'degraded' ? 'text-amber-600' :
-                                        connectionStatus.status === 'disconnected' ? 'text-rose-600' :
-                                        'text-taupe'
-                                    }`}>
-                                        {connectionStatus.status === 'connected' && 'N8N LIVE AGENT'}
-                                        {connectionStatus.status === 'degraded' && 'N8N SLOW AGENT'}
-                                        {connectionStatus.status === 'disconnected' && 'N8N OFFLINE'}
-                                        {connectionStatus.status === 'checking' && 'N8N CHECKING...'}
-                                    </span>
+                                <div className="mt-0.5">
+                                    {chatStatus === 'online' && (
+                                        <div className="flex items-center gap-2">
+                                            <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(34,197,94,0.7)]"></span>
+                                            <span className="text-[10px] font-bold text-green-600 uppercase tracking-widest">Agent Online</span>
+                                        </div>
+                                    )}
+                                    {chatStatus === 'offline' && (
+                                        <div className="flex items-center gap-2">
+                                            <span className="w-2 h-2 bg-red-500 rounded-full animate-ping shadow-[0_0_10px_rgba(239,68,68,0.7)]"></span>
+                                            <span className="text-[10px] font-bold text-red-600 uppercase tracking-widest">Agent Offline</span>
+                                        </div>
+                                    )}
+                                    {chatStatus === 'checking' && (
+                                        <div className="flex items-center gap-2">
+                                            <span className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(234,179,8,0.7)]"></span>
+                                            <span className="text-[10px] font-bold text-yellow-600 uppercase tracking-widest">Connecting...</span>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -436,22 +493,20 @@ const Chatbot = () => {
                         <div className="relative">
                             <button
                                 onClick={() => setShowDiagnostics(prev => !prev)}
-                                className={`flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-full border transition-all cursor-pointer select-none ${
-                                    connectionStatus.status === 'connected'
-                                        ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20 hover:bg-emerald-500/25'
-                                        : connectionStatus.status === 'degraded'
+                                className={`flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-full border transition-all cursor-pointer select-none ${connectionStatus.status === 'connected'
+                                    ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20 hover:bg-emerald-500/25'
+                                    : connectionStatus.status === 'degraded'
                                         ? 'bg-amber-500/10 text-amber-600 border-amber-500/20 hover:bg-amber-500/25'
                                         : connectionStatus.status === 'disconnected'
-                                        ? 'bg-rose-500/10 text-rose-600 border-rose-500/20 hover:bg-rose-500/25 animate-pulse'
-                                        : 'bg-taupe/10 text-taupe border-taupe/20 hover:bg-taupe/25'
-                                }`}
+                                            ? 'bg-rose-500/10 text-rose-600 border-rose-500/20 hover:bg-rose-500/25 animate-pulse'
+                                            : 'bg-taupe/10 text-taupe border-taupe/20 hover:bg-taupe/25'
+                                    }`}
                             >
-                                <span className={`w-1.5 h-1.5 rounded-full ${
-                                    connectionStatus.status === 'connected' ? 'bg-emerald-500 animate-pulse' :
+                                <span className={`w-1.5 h-1.5 rounded-full ${connectionStatus.status === 'connected' ? 'bg-emerald-500 animate-pulse' :
                                     connectionStatus.status === 'degraded' ? 'bg-amber-500 animate-pulse' :
-                                    connectionStatus.status === 'disconnected' ? 'bg-rose-500 animate-ping' :
-                                    'bg-taupe/50 animate-pulse'
-                                }`} />
+                                        connectionStatus.status === 'disconnected' ? 'bg-rose-500 animate-ping' :
+                                            'bg-taupe/50 animate-pulse'
+                                    }`} />
                                 <span className="hidden sm:inline font-bold">
                                     {connectionStatus.status === 'connected' && `n8n Connected (${connectionStatus.latency}ms)`}
                                     {connectionStatus.status === 'degraded' && `n8n Degraded (${connectionStatus.latency}ms)`}
@@ -470,9 +525,9 @@ const Chatbot = () => {
                             <AnimatePresence>
                                 {showDiagnostics && (
                                     <>
-                                        <div 
-                                            className="fixed inset-0 z-30" 
-                                            onClick={() => setShowDiagnostics(false)} 
+                                        <div
+                                            className="fixed inset-0 z-30"
+                                            onClick={() => setShowDiagnostics(false)}
                                         />
                                         <motion.div
                                             initial={{ opacity: 0, y: 10, scale: 0.95 }}
@@ -485,12 +540,11 @@ const Chatbot = () => {
                                                 <h3 className="font-serif font-bold text-xs uppercase tracking-wider text-ink">
                                                     n8n Connection
                                                 </h3>
-                                                <span className={`text-[9px] uppercase font-extrabold px-2.5 py-0.5 rounded-full ${
-                                                    connectionStatus.status === 'connected' ? 'bg-emerald-500/10 text-emerald-600' :
+                                                <span className={`text-[9px] uppercase font-extrabold px-2.5 py-0.5 rounded-full ${connectionStatus.status === 'connected' ? 'bg-emerald-500/10 text-emerald-600' :
                                                     connectionStatus.status === 'degraded' ? 'bg-amber-500/10 text-amber-600' :
-                                                    connectionStatus.status === 'disconnected' ? 'bg-rose-500/10 text-rose-600' :
-                                                    'bg-taupe/10 text-taupe'
-                                                }`}>
+                                                        connectionStatus.status === 'disconnected' ? 'bg-rose-500/10 text-rose-600' :
+                                                            'bg-taupe/10 text-taupe'
+                                                    }`}>
                                                     {connectionStatus.status}
                                                 </span>
                                             </div>
@@ -500,7 +554,7 @@ const Chatbot = () => {
                                                     <span className="text-[10px] uppercase font-extrabold text-taupe block mb-1">Webhook Endpoint</span>
                                                     <div className="bg-cream/40 p-2 rounded-lg border border-beige/20 font-mono text-[9px] text-ink select-all break-all relative group flex items-center justify-between gap-1.5">
                                                         <span className="truncate pr-4">{N8N_WEBHOOK_URL}</span>
-                                                        <button 
+                                                        <button
                                                             onClick={handleCopyEndpoint}
                                                             className="text-taupe hover:text-burgundy p-1 rounded hover:bg-beige/20 transition-colors cursor-pointer shrink-0"
                                                             title="Copy Webhook URL"
@@ -620,6 +674,7 @@ const Chatbot = () => {
                     {/* Input Bar */}
                     <form onSubmit={handleSend} className="p-4 sm:p-5 bg-white border-t border-beige/40 flex gap-3 items-center">
                         <input
+                            ref={inputRef}
                             type="text"
                             value={inputValue}
                             onChange={(e) => setInputValue(e.target.value)}
@@ -642,29 +697,142 @@ const Chatbot = () => {
                     </form>
                 </div>
 
-                {/* Right Side - WhatsApp Concierge Banner with 3D Phone Effect */}
-                <div className="hidden lg:flex w-[38%] flex-col items-center justify-between p-8 xl:p-12 bg-cream/60 relative z-10 text-center">
-                    <div className="my-auto max-w-sm flex flex-col items-center">
-                        <Interactive3DPhone />
+                {/* Right Side - WhatsApp & Telegram Concierge Banner with 3D Phone Effect */}
+                <div className={`hidden lg:flex w-[38%] flex-col items-center justify-between p-8 xl:p-12 relative z-10 text-center transition-colors duration-700 ${activePlatform === 'whatsapp' ? 'bg-[#eefcf3]' : 'bg-[#edf6fd]'
+                    }`}>
+                    {/* Dynamic Background Glow Blobs */}
+                    <div
+                        className={`absolute top-20 right-20 w-64 h-64 rounded-full blur-3xl pointer-events-none transition-colors duration-500 ${activePlatform === 'whatsapp' ? 'bg-[#25D366]/10' : 'bg-[#0088cc]/10'
+                            }`}
+                    />
+                    <div
+                        className={`absolute bottom-20 left-20 w-48 h-48 rounded-full blur-2xl pointer-events-none transition-colors duration-500 ${activePlatform === 'whatsapp' ? 'bg-[#25D366]/5' : 'bg-[#0088cc]/5'
+                            }`}
+                    />
 
-                        <h2 className="font-serif text-3xl xl:text-4xl font-extrabold text-ink leading-none tracking-tight mb-4 select-none">
-                            TAKE IT TO <br />
-                            <span className="text-[#25D366]">WHATSAPP</span>
-                        </h2>
-
-                        <p className="text-xs font-semibold text-taupe leading-relaxed mb-8 max-w-xs">
-                            Ready to book? Chat with our live agents on WhatsApp for instant confirmation and exclusive mobile-only deals.
-                        </p>
-
-                        <a
-                            href="https://wa.me/15551382180"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="w-full bg-black hover:bg-burgundy text-white py-4 px-8 rounded-full font-extrabold text-xs uppercase tracking-widest flex items-center justify-center gap-2.5 shadow-[0_8px_24px_rgba(0,0,0,0.15)] active:scale-95 transition-all mb-8"
+                    {/* Platform Toggle Switcher at the Top */}
+                    <div className="absolute top-8 flex items-center bg-white/70 border border-beige/40 p-2 rounded-full shadow-lg backdrop-blur-md z-20 gap-3">
+                        {/* WhatsApp Option */}
+                        <motion.button
+                            layout
+                            type="button"
+                            onClick={() => setActivePlatform('whatsapp')}
+                            title="Switch to WhatsApp"
+                            className={`flex items-center justify-center gap-3 h-12 rounded-full cursor-pointer transition-all duration-500 relative border overflow-hidden ${activePlatform === 'whatsapp'
+                                ? 'bg-[#25D366] border-[#1ebd5b] text-black w-44 shadow-lg shadow-[#25D366]/30'
+                                : 'bg-[#25D366]/10 border-[#25D366]/30 text-[#25D366] hover:bg-[#25D366]/20 w-12'
+                                }`}
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            transition={{ type: "spring", stiffness: 350, damping: 26 }}
                         >
-                            <span>OPEN WHATSAPP BOT</span>
-                            <ExternalLink size={14} />
-                        </a>
+                            <WhatsAppIcon className={`w-5 h-5 flex-shrink-0 transition-colors duration-500 ${activePlatform === 'whatsapp' ? 'text-black' : 'text-[#25D366]'}`} />
+                            {activePlatform === 'whatsapp' && (
+                                <motion.span
+                                    initial={{ opacity: 0, x: -10 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    exit={{ opacity: 0, x: -10 }}
+                                    transition={{ duration: 0.2 }}
+                                    className="font-black uppercase text-[10px] tracking-[2px] whitespace-nowrap text-black"
+                                >
+                                    WhatsApp
+                                </motion.span>
+                            )}
+                        </motion.button>
+
+                        {/* Telegram Option */}
+                        <motion.button
+                            layout
+                            type="button"
+                            onClick={() => setActivePlatform('telegram')}
+                            title="Switch to Telegram"
+                            className={`flex items-center justify-center gap-3 h-12 rounded-full cursor-pointer transition-all duration-500 relative border overflow-hidden ${activePlatform === 'telegram'
+                                ? 'bg-[#0088cc] border-[#0077b5] text-white w-44 shadow-lg shadow-[#0088cc]/30'
+                                : 'bg-[#0088cc]/10 border-[#0088cc]/30 text-[#0088cc] hover:bg-[#0088cc]/20 w-12'
+                                }`}
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            transition={{ type: "spring", stiffness: 350, damping: 26 }}
+                        >
+                            <TelegramIcon className={`w-5 h-5 flex-shrink-0 transition-colors duration-500 ${activePlatform === 'telegram' ? 'text-white' : 'text-[#0088cc]'}`} />
+                            {activePlatform === 'telegram' && (
+                                <motion.span
+                                    initial={{ opacity: 0, x: -10 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    exit={{ opacity: 0, x: -10 }}
+                                    transition={{ duration: 0.2 }}
+                                    className="font-black uppercase text-[10px] tracking-[2px] whitespace-nowrap text-white"
+                                >
+                                    Telegram
+                                </motion.span>
+                            )}
+                        </motion.button>
+                    </div>
+
+                    <div className="my-auto max-w-sm flex flex-col items-center z-10 w-full pt-12">
+                        <AnimatePresence mode="wait">
+                            {activePlatform === 'whatsapp' ? (
+                                <motion.div
+                                    key="whatsapp"
+                                    initial={{ opacity: 0, y: 15 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -15 }}
+                                    transition={{ duration: 0.3 }}
+                                    className="flex flex-col items-center w-full"
+                                >
+                                    <Interactive3DPhone platform="whatsapp" />
+
+                                    <h2 className="font-serif text-3xl xl:text-4xl font-extrabold text-ink leading-none tracking-tight mb-4 select-none">
+                                        TAKE IT TO <br />
+                                        <span className="text-[#25D366]">WHATSAPP</span>
+                                    </h2>
+
+                                    <p className="text-xs font-semibold text-taupe leading-relaxed mb-8 max-w-xs">
+                                        Ready to chat? Connect with our Finexa AI bot on WhatsApp for instant financial insights and alerts on the go.
+                                    </p>
+
+                                    <a
+                                        href={WHATSAPP_API_URL}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="w-full bg-black hover:bg-burgundy text-white py-4 px-8 rounded-full font-extrabold text-xs uppercase tracking-widest flex items-center justify-center gap-2.5 shadow-[0_8px_24px_rgba(0,0,0,0.15)] active:scale-95 transition-all mb-8"
+                                    >
+                                        <span>OPEN WHATSAPP BOT</span>
+                                        <ExternalLink size={14} />
+                                    </a>
+                                </motion.div>
+                            ) : (
+                                <motion.div
+                                    key="telegram"
+                                    initial={{ opacity: 0, y: 15 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -15 }}
+                                    transition={{ duration: 0.3 }}
+                                    className="flex flex-col items-center w-full"
+                                >
+                                    <Interactive3DPhone platform="telegram" />
+
+                                    <h2 className="font-serif text-3xl xl:text-4xl font-extrabold text-ink leading-none tracking-tight mb-4 select-none">
+                                        TAKE IT TO <br />
+                                        <span className="text-[#0088cc]">TELEGRAM</span>
+                                    </h2>
+
+                                    <p className="text-xs font-semibold text-taupe leading-relaxed mb-8 max-w-xs">
+                                        Prefer Telegram? Interact with the Finexa AI Telegram bot for seamless, private and secure wealth management answers.
+                                    </p>
+
+                                    <a
+                                        href={TELEGRAM_API_URL}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="w-full bg-black hover:bg-burgundy text-white py-4 px-8 rounded-full font-extrabold text-xs uppercase tracking-widest flex items-center justify-center gap-2.5 shadow-[0_8px_24px_rgba(0,0,0,0.15)] active:scale-95 transition-all mb-8"
+                                    >
+                                        <span>OPEN TELEGRAM BOT</span>
+                                        <ExternalLink size={14} />
+                                    </a>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
                     </div>
 
                     <div className="text-[9px] font-extrabold uppercase tracking-[0.35em] text-taupe/50 select-none border-t border-beige/30 pt-4 w-full">

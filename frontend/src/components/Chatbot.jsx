@@ -9,8 +9,7 @@ import {
 import AnimatedIconBackground from './AnimatedIconBackground';
 import ResponseRenderer from './ResponseRenderer';
 
-const N8N_WEBHOOK_URL = 'https://prefamiliar-overliterary-princess.ngrok-free.dev/webhook/27a70dce-19d0-4858-82c0-d1126492962e';
-const N8N_BASE_URL = 'https://prefamiliar-overliterary-princess.ngrok-free.dev';
+const BACKEND_API_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 const WHATSAPP_API_URL = import.meta.env.VITE_WHATSAPP_API_URL || 'https://wa.me/15551382180';
 const TELEGRAM_API_URL = import.meta.env.VITE_TELEGRAM_API_URL || 'https://t.me/FinexaAIBot';
 
@@ -183,7 +182,7 @@ const Chatbot = () => {
         {
             id: 'init-1',
             isBot: true,
-            text: "Welcome to Finexa AI! ☄️\n\nI am connected directly to your production n8n AI Agent. How can I assist you with your travel and financial planning today?",
+            text: "Welcome to Finexa AI! ☄️\n\nHow can I assist you with your travel and financial planning today?",
             time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         }
     ]);
@@ -212,7 +211,7 @@ const Chatbot = () => {
     const [isCheckingManual, setIsCheckingManual] = useState(false);
     const [copied, setCopied] = useState(false);
 
-    // Function to ping/check n8n connection directly from frontend
+    // Function to ping/check n8n connection status via backend proxy
     const checkConnectionStatus = useCallback(async (isManual = false) => {
         if (isManual) setIsCheckingManual(true);
         const startTime = performance.now();
@@ -220,26 +219,35 @@ const Chatbot = () => {
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 6000); // 6s timeout
 
-            const response = await fetch(N8N_BASE_URL, {
+            const response = await fetch(`${BACKEND_API_URL}/chat/status`, {
                 method: 'GET',
-                mode: 'no-cors', // Avoid CORS checks on ping
-                signal: controller.signal,
-                headers: {
-                    'ngrok-skip-browser-warning': 'true'
-                }
+                signal: controller.signal
             });
 
             clearTimeout(timeoutId);
             const endTime = performance.now();
             const latency = Math.round(endTime - startTime);
 
-            setConnectionStatus({
-                status: latency > 1800 ? 'degraded' : 'connected',
-                latency,
-                lastChecked: new Date().toLocaleTimeString(),
-                error: null
-            });
-            setChatStatus('online');
+            const data = await response.json();
+            const isOnline = data.online;
+
+            if (isOnline) {
+                setConnectionStatus({
+                    status: latency > 1800 ? 'degraded' : 'connected',
+                    latency,
+                    lastChecked: new Date().toLocaleTimeString(),
+                    error: null
+                });
+                setChatStatus('online');
+            } else {
+                setConnectionStatus({
+                    status: 'disconnected',
+                    latency,
+                    lastChecked: new Date().toLocaleTimeString(),
+                    error: `Service Gateway Error`
+                });
+                setChatStatus('offline');
+            }
         } catch (err) {
             const endTime = performance.now();
             const latency = Math.round(endTime - startTime);
@@ -268,16 +276,17 @@ const Chatbot = () => {
         return () => clearInterval(intervalId);
     }, [checkConnectionStatus]);
 
-    // Real-time n8n status checking directly from frontend
+    // Real-time n8n status checking via backend proxy
     useEffect(() => {
         const fetchStatus = async () => {
             try {
-                await fetch(N8N_BASE_URL, {
-                    method: 'GET',
-                    mode: 'no-cors', // Avoid CORS checks on ping
-                    headers: { 'ngrok-skip-browser-warning': 'true' }
-                });
-                setChatStatus('online');
+                const res = await fetch(`${BACKEND_API_URL}/chat/status`);
+                if (res.ok) {
+                    const data = await res.json();
+                    setChatStatus(data.online ? 'online' : 'offline');
+                } else {
+                    setChatStatus('offline');
+                }
             } catch (err) {
                 setChatStatus('offline');
             }
@@ -291,7 +300,7 @@ const Chatbot = () => {
 
     const handleCopyEndpoint = (e) => {
         e.stopPropagation();
-        navigator.clipboard.writeText(N8N_WEBHOOK_URL);
+        navigator.clipboard.writeText(`${BACKEND_API_URL}/chat/send`);
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
     };
@@ -321,24 +330,21 @@ const Chatbot = () => {
 
         const messageStartTime = performance.now();
         try {
-            const response = await fetch(N8N_WEBHOOK_URL, {
+            const response = await fetch(`${BACKEND_API_URL}/chat/send`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'ngrok-skip-browser-warning': 'true'
+                    'Accept': 'application/json'
                 },
                 body: JSON.stringify({
                     personId: "",
                     sessionId: sessionIdRef.current,
-                    message: userMsg,
-                    chatInput: userMsg,
-                    timestamp: new Date().toISOString()
+                    message: userMsg
                 })
             });
 
             if (!response.ok) {
-                throw new Error(`n8n Webhook responded with status ${response.status}`);
+                throw new Error(`Proxy responded with status ${response.status}`);
             }
 
             const messageEndTime = performance.now();
@@ -353,23 +359,8 @@ const Chatbot = () => {
             });
             setChatStatus('online');
 
-            let responseData;
-            const rawText = await response.text();
-            if (rawText && rawText.trim() !== '') {
-                const contentType = response.headers.get('content-type');
-                if (contentType && contentType.includes('application/json')) {
-                    try {
-                        responseData = JSON.parse(rawText);
-                    } catch (e) {
-                        responseData = rawText;
-                    }
-                } else {
-                    responseData = rawText;
-                }
-            } else {
-                responseData = "Request processed successfully.";
-            }
-            const botReplyText = extractResponseText(responseData);
+            const responseData = await response.json();
+            const botReplyText = responseData.output || "No response received.";
 
             setMessages(prev => [...prev, {
                 id: `bot-${Date.now()}`,
@@ -379,7 +370,7 @@ const Chatbot = () => {
             }]);
 
         } catch (err) {
-            console.error('n8n Webhook Error:', err);
+            console.error('Chat Proxy Error:', err);
             
             setConnectionStatus(prev => ({
                 ...prev,
@@ -392,7 +383,7 @@ const Chatbot = () => {
             setMessages(prev => [...prev, {
                 id: `err-${Date.now()}`,
                 isBot: true,
-                text: "I encountered a problem connecting directly to the n8n AI agent. Please verify that the n8n webhook tunnel is active.",
+                text: "I encountered a problem connecting to the AI agent. Please check your network and try again.",
                 isError: true,
                 time: nowTime()
             }]);

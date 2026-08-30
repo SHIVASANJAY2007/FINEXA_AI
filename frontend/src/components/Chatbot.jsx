@@ -13,7 +13,7 @@ const getBackendUrl = () => {
     if (import.meta.env.VITE_API_BASE_URL) {
         return import.meta.env.VITE_API_BASE_URL;
     }
-    // Dynamic fallback for vercel deployment
+    
     if (typeof window !== 'undefined' && window.location.hostname.includes('vercel.app')) {
         return 'https://finexa-ai-backend.onrender.com/api';
     }
@@ -36,7 +36,6 @@ const TelegramIcon = ({ className }) => (
     </svg>
 );
 
-// Helper to extract plain text string from n8n response payloads
 const extractResponseText = (data) => {
     if (!data) return "Thank you. I have processed your request.";
     if (typeof data === 'string') return data;
@@ -57,7 +56,6 @@ const extractResponseText = (data) => {
     return String(data);
 };
 
-// Interactive 3D Phone Component with backward depth tilt & smooth hover physics
 const Interactive3DPhone = memo(({ platform }) => {
     const [rotate, setRotate] = useState({ x: 0, y: 0 });
     const [isHovered, setIsHovered] = useState(false);

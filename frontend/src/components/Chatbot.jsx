@@ -9,7 +9,18 @@ import {
 import AnimatedIconBackground from './AnimatedIconBackground';
 import ResponseRenderer from './ResponseRenderer';
 
-const BACKEND_API_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+const getBackendUrl = () => {
+    if (import.meta.env.VITE_API_BASE_URL) {
+        return import.meta.env.VITE_API_BASE_URL;
+    }
+    // Dynamic fallback for vercel deployment
+    if (typeof window !== 'undefined' && window.location.hostname.includes('vercel.app')) {
+        return 'https://finexa-ai-backend.onrender.com/api';
+    }
+    return 'http://localhost:5000/api';
+};
+
+const BACKEND_API_URL = getBackendUrl();
 const WHATSAPP_API_URL = import.meta.env.VITE_WHATSAPP_API_URL || 'https://wa.me/15551382180';
 const TELEGRAM_API_URL = import.meta.env.VITE_TELEGRAM_API_URL || 'https://t.me/FinexaAIBot';
 

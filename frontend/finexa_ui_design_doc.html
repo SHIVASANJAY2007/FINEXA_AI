@@ -1,0 +1,652 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans,'Inter',sans-serif);background:transparent}
+.wrap{display:flex;flex-direction:column;gap:0;border:0.5px solid var(--color-border-tertiary);border-radius:14px;overflow:hidden}
+.doc-header{background:#3A2E25;padding:28px 28px 22px;position:relative;overflow:hidden}
+.doc-header::before{content:'';position:absolute;top:-60px;right:-40px;width:200px;height:200px;border-radius:50%;background:#C2A56D;opacity:.07}
+.doc-eyebrow{font-size:10px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:#C2A56D;margin-bottom:8px}
+.doc-title{font-size:20px;font-weight:500;color:#FDF6ED;line-height:1.3;margin-bottom:6px}
+.doc-sub{font-size:12px;color:#9A8678;line-height:1.6;max-width:500px}
+.stack-pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.pill{display:inline-block;font-size:10px;font-weight:500;padding:3px 10px;border-radius:20px;background:rgba(194,165,109,.15);color:#C2A56D;border:0.5px solid rgba(194,165,109,.3)}
+
+.tabs{display:flex;background:var(--color-background-secondary);border-bottom:0.5px solid var(--color-border-tertiary);overflow-x:auto;flex-wrap:nowrap}
+.tab{flex-shrink:0;padding:10px 14px;font-size:11px;font-weight:500;color:var(--color-text-secondary);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap}
+.tab.active{color:#6B1E2B;border-bottom-color:#6B1E2B;background:var(--color-background-primary)}
+.tab:hover:not(.active){color:var(--color-text-primary)}
+.tc{display:none;padding:22px;background:var(--color-background-primary)}
+.tc.active{display:block}
+
+.sec-label{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--color-text-secondary);margin-bottom:12px}
+.sec-hd{font-size:14px;font-weight:500;color:var(--color-text-primary);margin-bottom:10px;padding-bottom:6px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.card{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:10px;padding:12px 14px;margin-bottom:10px}
+.card:last-child{margin-bottom:0}
+.card.bur{border-left:3px solid #6B1E2B;border-radius:0 10px 10px 0}
+.card.teal{border-left:3px solid #0B4F4A;border-radius:0 10px 10px 0}
+.card.gold{border-left:3px solid #C9A227;border-radius:0 10px 10px 0}
+.card.terra{border-left:3px solid #C46A4F;border-radius:0 10px 10px 0}
+.card.dark{background:#3A2E25;border-color:#9A8678}
+.card-title{font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
+.card.dark .card-title{color:#FDF6ED}
+.card-body{font-size:11px;color:var(--color-text-secondary);line-height:1.65}
+.card.dark .card-body{color:#DCCFC0}
+pre{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:8px;padding:10px 12px;font-size:10.5px;color:var(--color-text-primary);overflow-x:auto;line-height:1.65;margin:8px 0;font-family:var(--font-mono,'Courier New',monospace)}
+.kw{color:#6B1E2B;font-weight:500}
+.str{color:#0B4F4A}
+.cm{color:var(--color-text-secondary);font-style:italic}
+.badge{display:inline-block;font-size:10px;font-weight:500;padding:2px 7px;border-radius:4px;margin:2px}
+.bb{background:#E3F0EF;color:#0B4F4A}
+.bbur{background:#F5E8EA;color:#6B1E2B}
+.bgold{background:#FAF0D5;color:#7A5C00}
+.bterra{background:#FAECE7;color:#C46A4F}
+.bink{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.swatch-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.swatch{display:flex;flex-direction:column;align-items:center;gap:3px}
+.sw{width:38px;height:38px;border-radius:8px;border:0.5px solid rgba(0,0,0,.1)}
+.sw-label{font-size:9px;color:var(--color-text-secondary);text-align:center;max-width:48px}
+.tbl{width:100%;border-collapse:collapse;font-size:11px;margin-bottom:14px}
+.tbl th{text-align:left;padding:7px 8px;font-weight:500;color:var(--color-text-secondary);border-bottom:0.5px solid var(--color-border-tertiary);font-size:10px;text-transform:uppercase}
+.tbl td{padding:7px 8px;color:var(--color-text-primary);border-bottom:0.5px solid var(--color-border-tertiary);vertical-align:top}
+.tbl tr:last-child td{border-bottom:none}
+.flow{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin:8px 0}
+.fn{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:6px;padding:4px 9px;font-size:10px;font-weight:500;color:var(--color-text-primary)}
+.fn.bur{background:#F5E8EA;border-color:#6B1E2B;color:#6B1E2B}
+.fn.teal{background:#E3F0EF;border-color:#0B4F4A;color:#0B4F4A}
+.fn.gold{background:#FAF0D5;border-color:#C9A227;color:#7A5C00}
+.arr{color:var(--color-text-secondary);font-size:12px}
+.mono{font-family:var(--font-mono,'Courier New',monospace);font-size:10.5px}
+</style>
+
+<div class="wrap">
+<div class="doc-header">
+  <div class="doc-eyebrow">Complete UI Design Documentation</div>
+  <div class="doc-title">FinexaAI — Premium Financial Advisor Landing Page</div>
+  <div class="doc-sub">Full design system, component library, animation inventory, page architecture, and copy spec — remapped from TravelZyvox to FinexaAI's olive/cream/burgundy editorial brand.</div>
+  <div class="stack-pills">
+    <span class="pill">React + Vite</span>
+    <span class="pill">TailwindCSS v4</span>
+    <span class="pill">Framer Motion</span>
+    <span class="pill">GSAP + ScrollTrigger</span>
+    <span class="pill">Clerk Auth</span>
+    <span class="pill">React Router</span>
+  </div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="sw('design')">🎨 Design System</div>
+  <div class="tab" onclick="sw('arch')">📐 Architecture</div>
+  <div class="tab" onclick="sw('nav')">🧭 PillNav</div>
+  <div class="tab" onclick="sw('hero')">🦸 Hero</div>
+  <div class="tab" onclick="sw('features')">✨ Features</div>
+  <div class="tab" onclick="sw('how')">🔄 How It Works</div>
+  <div class="tab" onclick="sw('why')">📊 Why Finexa</div>
+  <div class="tab" onclick="sw('pricing')">💰 Pricing</div>
+  <div class="tab" onclick="sw('footer')">🦶 Footer</div>
+  <div class="tab" onclick="sw('auth')">🔐 Auth + Chat</div>
+  <div class="tab" onclick="sw('anim')">🎬 Animation OS</div>
+</div>
+
+<!-- DESIGN SYSTEM -->
+<div id="tc-design" class="tc active">
+  <div class="sec-label">Design System</div>
+
+  <div class="sec-hd">Color Palette — 10 Tokens</div>
+  <div class="swatch-row">
+    <div class="swatch"><div class="sw" style="background:#FDF6ED"></div><div class="sw-label">Ivory #FDF6ED<br>Page bg</div></div>
+    <div class="swatch"><div class="sw" style="background:#F6F3EB"></div><div class="sw-label">Cream #F6F3EB<br>Alt bg</div></div>
+    <div class="swatch"><div class="sw" style="background:#DCCFC0"></div><div class="sw-label">Beige #DCCFC0<br>Borders</div></div>
+    <div class="swatch"><div class="sw" style="background:#C2A56D"></div><div class="sw-label">Camel #C2A56D<br>Accent</div></div>
+    <div class="swatch"><div class="sw" style="background:#9A8678"></div><div class="sw-label">Taupe #9A8678<br>Body text</div></div>
+    <div class="swatch"><div class="sw" style="background:#3A2E25"></div><div class="sw-label">Ink #3A2E25<br>Headlines</div></div>
+    <div class="swatch"><div class="sw" style="background:#6B1E2B"></div><div class="sw-label">Burgundy #6B1E2B<br>Primary CTA</div></div>
+    <div class="swatch"><div class="sw" style="background:#0B4F4A"></div><div class="sw-label">Teal #0B4F4A<br>Services</div></div>
+    <div class="swatch"><div class="sw" style="background:#C9A227"></div><div class="sw-label">Gold #C9A227<br>Max 3 uses</div></div>
+    <div class="swatch"><div class="sw" style="background:#C46A4F"></div><div class="sw-label">Terra #C46A4F<br>Hover only</div></div>
+  </div>
+
+  <table class="tbl">
+    <thead><tr><th>Token</th><th>Hex</th><th>Usage</th></tr></thead>
+    <tbody>
+      <tr><td>Ivory</td><td class="mono">#FDF6ED</td><td>Global page background — replaces black</td></tr>
+      <tr><td>Cream</td><td class="mono">#F6F3EB</td><td>Pricing bg, GetPlan bg, SignUp bg — replaces cream/parchment</td></tr>
+      <tr><td>Beige</td><td class="mono">#DCCFC0</td><td>Card borders, dividers — replaces white/10</td></tr>
+      <tr><td>Camel</td><td class="mono">#C2A56D</td><td>Logo "AI" mark, decorative fills, badge accents</td></tr>
+      <tr><td>Taupe</td><td class="mono">#9A8678</td><td>Body text, secondary labels — replaces white/60</td></tr>
+      <tr><td>Ink</td><td class="mono">#3A2E25</td><td>Headlines, dark section bg, nav text — replaces pure black</td></tr>
+      <tr><td>Burgundy</td><td class="mono">#6B1E2B</td><td>CTA buttons, AI chat bubbles, primary accent — replaces brand orange</td></tr>
+      <tr><td>Deep Teal</td><td class="mono">#0B4F4A</td><td>Services section bg, Why Finexa dark band — replaces brand purple</td></tr>
+      <tr><td>Gold</td><td class="mono">#C9A227</td><td>Max 3 touches: logo AI, Recommended badge, stat numbers — replaces acid green</td></tr>
+      <tr><td>Terracotta</td><td class="mono">#C46A4F</td><td>Hover underlines, ping dot, active states only — replaces amber</td></tr>
+    </tbody>
+  </table>
+
+  <div class="sec-hd">Typography</div>
+  <div class="grid2">
+    <div class="card bur">
+      <div class="card-title">Source Serif 4 — Display/Editorial</div>
+      <div class="card-body">Hero headline · Section headings · Pull quote · Pricing tier names · Footer CTA. Gives the cream palette its annual-report warmth. Letter-spacing: -0.02em. Replaces all-caps utility font-[1000] from TravelZyvox.</div>
+    </div>
+    <div class="card teal">
+      <div class="card-title">Inter — UI/Body</div>
+      <div class="card-body">Navigation · Body copy · Badges · Chat bubbles · Form labels. Font-variant-numeric: tabular-nums for all ₹ figures. Weights 400/500/600/700/800. Replaces system default.</div>
+    </div>
+  </div>
+
+  <div class="sec-hd">Shadow Language — Editorial Soft (replaces neo-brutalist)</div>
+  <pre><span class="cm">/* FinexaAI shadow language — warm, editorial, never harsh black offsets */</span>
+Card soft:      shadow-[0_4px_24px_rgba(58,46,37,0.10)]
+Card hover:     shadow-[0_12px_40px_rgba(58,46,37,0.16)]
+Nav glass:      shadow-[0_8px_32px_rgba(58,46,37,0.12),inset_0_1px_1px_rgba(253,246,237,0.2)]
+CTA button:     shadow-[0_4px_16px_rgba(107,30,43,0.25)]
+Dark card:      shadow-[0_8px_32px_rgba(11,79,74,0.2)]
+Gold stat:      shadow-[0_2px_12px_rgba(201,162,39,0.2)]
+
+<span class="cm">/* REMOVED: Hard offset black shadows from TravelZyvox */</span>
+<span class="cm">/* NO: shadow-[12px_12px_0px_#000] — too brutalist for editorial finance */</span></pre>
+
+  <div class="sec-hd">Border Language — Glass on Cream</div>
+  <pre><span class="cm">/* Burgundy-tinted borders — never pure black */</span>
+Cards:        border border-[rgba(107,30,43,0.12)] rounded-2xl
+Nav:          border border-[rgba(58,46,37,0.12)]  (warm glass)
+Pricing:      border border-[rgba(107,30,43,0.18)] rounded-[24px]
+Dark section: border border-[rgba(253,246,237,0.10)]
+
+<span class="cm">/* REMOVED: border-[4px] border-black — neo-brutalist, wrong for this brand */</span></pre>
+
+  <div class="sec-hd">Texture & Visual Language</div>
+  <div class="card gold">
+    <div class="card-title">Dot-grid + linen noise (hero only)</div>
+    <div class="card-body">radial-gradient dots at 24px spacing in ink at 4% opacity. Linen-noise SVG at 4% overlay. Reads as fine paper grain — editorial, not tech. Replaces the warping grid and scan lines from TravelZyvox Features section.</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Radial light blooms</div>
+    <div class="card-body">Burgundy at 6% in hero top-left. Gold at 4% in hero lower-right. Soft reading-lamp feel. No neon. Replaces the spotlight cursor from Hero.jsx.</div>
+  </div>
+</div>
+
+<!-- ARCHITECTURE -->
+<div id="tc-arch" class="tc">
+  <div class="sec-label">Page Architecture</div>
+  <pre><span class="cm">/ (LandingPage)</span>
+├── <span class="kw">PillNav</span>          ← Fixed floating navigation (cream glass)
+├── <span class="kw">Hero</span>             ← Full-screen ivory + animated finance cards + phone mockup
+├── <span class="kw">Features</span>         ← Burgundy pinned section + StickyScrollReveal
+├── <span class="kw">HowItWorks</span>       ← Teal section + horizontal GSAP scroll (5 agents)
+├── <span class="kw">WhyFinexa</span>        ← Teal dark band + count-up stats + pull quote
+├── <span class="kw">PricingSection</span>   ← Cream section + 2-tier editorial cards
+└── <span class="kw">Footer</span>           ← 500vh cinematic scroll + arrow wipe + CTA
+
+<span class="cm">/signup              ← Split screen: logo panel + Google OAuth</span>
+<span class="cm">/dashboard           ← AI Chat (protected) + WhatsApp redirect panel</span></pre>
+
+  <div class="sec-hd">Section-by-Section Color Identity</div>
+  <table class="tbl">
+    <thead><tr><th>Section</th><th>Background</th><th>Accent leads</th><th>Replaces</th></tr></thead>
+    <tbody>
+      <tr><td>PillNav</td><td>Ivory glass 90%</td><td>Burgundy</td><td>Black glass nav</td></tr>
+      <tr><td>Hero</td><td>Ivory #FDF6ED</td><td>Burgundy</td><td>Full black</td></tr>
+      <tr><td>Features</td><td>Burgundy #6B1E2B</td><td>Ivory text</td><td>Orange #ff6d38</td></tr>
+      <tr><td>HowItWorks</td><td>Teal #0B4F4A</td><td>Cream cards</td><td>Black</td></tr>
+      <tr><td>WhyFinexa</td><td>Teal #0B4F4A</td><td>Gold stats</td><td>Destinations purple</td></tr>
+      <tr><td>Pricing</td><td>Cream #F6F3EB</td><td>Burgundy</td><td>Cream/parchment</td></tr>
+      <tr><td>Footer</td><td>Ink #3A2E25</td><td>Camel</td><td>Black 500vh</td></tr>
+      <tr><td>SignUp</td><td>Cream #F6F3EB</td><td>Burgundy</td><td>Cream #fdf8f3</td></tr>
+      <tr><td>Dashboard</td><td>Cream #F6F3EB</td><td>Burgundy + teal</td><td>GetPlan cream</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- PILLNAV -->
+<div id="tc-nav" class="tc">
+  <div class="sec-label">PillNav — Floating Navigation</div>
+  <div class="sec-hd">Behavior (unchanged logic, recolored)</div>
+  <div class="card">
+    <div class="card-title">Default state</div>
+    <div class="card-body">Centered at top, full pill with all nav links visible. Ivory background at 90% opacity, warm backdrop-blur-md, beige border.</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Scrolled (&gt;100px)</div>
+    <div class="card-body">Docks to top-left, collapses to FinexaAI logo icon only (isDocked). Hovered while docked → expands links with spring animation.</div>
+  </div>
+
+  <div class="sec-hd">Nav Items — Financial Context</div>
+  <table class="tbl">
+    <thead><tr><th>Label</th><th>Target</th><th>Replaces</th></tr></thead>
+    <tbody>
+      <tr><td>Features</td><td>#features</td><td>Explore</td></tr>
+      <tr><td>How It Works</td><td>#how-it-works</td><td>Workflow</td></tr>
+      <tr><td>Why Finexa</td><td>#why-finexa</td><td>Destinations</td></tr>
+      <tr><td>Pricing</td><td>#pricing</td><td>Pricing</td></tr>
+      <tr><td>Start free / Dashboard</td><td>/signup or /dashboard</td><td>Sign Up / Open App</td></tr>
+    </tbody>
+  </table>
+
+  <div class="sec-hd">Active State + Styling</div>
+  <pre><span class="cm">/* Active pill — slides behind active label */</span>
+layoutId="active-nav-pill"
+Active text:   text-[#3A2E25] on ivory pill (ink on ivory)
+Inactive text: text-[#9A8678]/60 → text-[#3A2E25] on hover
+
+<span class="cm">/* Nav shell */</span>
+background:       rgba(253,246,237,0.90)   <span class="cm">/* ivory glass */</span>
+backdrop-filter:  blur(24px)
+border:           1px solid rgba(58,46,37,0.12)
+border-radius:    9999px (pill)
+
+<span class="cm">/* Hover underline on links */</span>
+::after width: 0 → 100%, color: #C46A4F (terracotta)
+transition: 0.25s ease from center</pre>
+
+  <div class="sec-hd">Logo</div>
+  <pre><span class="str">"Finexa"</span> <span class="cm">/* Source Serif 4, 600, ink #3A2E25 */</span>
+<span class="kw">"AI"</span>     <span class="cm">/* gold #C9A227, superscript, 14px — gold touch #1 of 3 */</span></pre>
+</div>
+
+<!-- HERO -->
+<div id="tc-hero" class="tc">
+  <div class="sec-label">Hero Section</div>
+  <div class="sec-hd">Layout</div>
+  <div class="card">
+    <div class="card-body">Full-screen ivory (#FDF6ED). Two-column grid (copy left, floating phone right). Dot-grid texture + linen noise background layer. Burgundy radial bloom top-left, gold bloom lower-right at low opacity. Replaces full-black Hero with spotlight cursor.</div>
+  </div>
+
+  <div class="sec-hd">Headline — EncryptedText Animation</div>
+  <pre><span class="str">"YOUR WEALTH"</span>      ← EncryptedText scramble→reveal, 500ms delay
+<span class="str">"NEVER SLEEPS.."</span>   ← EncryptedText scramble→reveal, 800ms delay
+
+<span class="cm">/* Typography */</span>
+font-family: 'Source Serif 4', serif
+font-size: clamp(3.5rem, 7vw, 5.5rem)
+font-weight: 700
+letter-spacing: -0.02em
+encryptedClassName: "text-[#DCCFC0]"  <span class="cm">/* beige during scramble */</span>
+revealedClassName:  "text-[#3A2E25]"  <span class="cm">/* ink when revealed */</span>
+<span class="cm">/* "intelligence" word → color: #6B1E2B (burgundy accent) */</span></pre>
+
+  <div class="sec-hd">5 Feature Cards — Financial Domains (180×180px)</div>
+  <table class="tbl">
+    <thead><tr><th>Card</th><th>Color</th><th>Shape</th><th>Icon</th><th>Replaces</th></tr></thead>
+    <tbody>
+      <tr><td>Invest / AI Portfolio</td><td>#6B1E2B burgundy</td><td>rounded-full</td><td>TrendingUp</td><td>Planner/lavender</td></tr>
+      <tr><td>Budget / Smart Tracking</td><td>#0B4F4A teal</td><td>rounded-[40px]</td><td>Wallet</td><td>Budget/green</td></tr>
+      <tr><td>Goals / Plan Builder</td><td>#C2A56D camel</td><td>rounded-[40px] rounded-r-[100px]</td><td>Target</td><td>Support/orange</td></tr>
+      <tr><td>Tax / 80C Optimizer</td><td>#C9A227 gold</td><td>rounded-[40px]</td><td>Receipt</td><td>Gems/amber</td></tr>
+      <tr><td>Savings / Auto-SIP</td><td>#9A8678 taupe</td><td>rounded-full</td><td>PiggyBank</td><td>Booking/blue</td></tr>
+    </tbody>
+  </table>
+
+  <div class="sec-hd">Card Animation (GSAP ScrollTrigger — unchanged logic)</div>
+  <pre><span class="cm">/* Initial state */</span>
+opacity: 0, y: 60, rotate: -8, scale: 0.8, filter: blur(12px) grayscale(1)
+
+<span class="cm">/* Scroll in — each card reveals sequentially */</span>
+pops to: scale: 1.1, brightness: 1.1
+settles: scale: 1, power2.inOut
+
+<span class="cm">/* Hover */</span>
+scale-110 + ivory overlay bg-[rgba(253,246,237,0.15)] fades in
+(replaces white/20 — warmer on dark card backgrounds)</pre>
+
+  <div class="sec-hd">Phone Mockup Chat — Financial Script</div>
+  <div class="card bur"><div class="card-title">AI (0.8s)</div><div class="card-body">"Hi Aanya 👋 I noticed you have ₹18,400 sitting idle this month."</div></div>
+  <div class="card"><div class="card-title">User (1.8s)</div><div class="card-body">"What should I do with it?"</div></div>
+  <div class="card bur"><div class="card-title">AI (2.8s)</div><div class="card-body">"Based on your goals, I'd suggest: 60% into your index fund SIP, 40% into your emergency buffer."</div></div>
+  <div class="card gold"><div class="card-title">Projection Card (3.2s — scale 0.9→1 pop)</div><div class="card-body">₹18,400 today → ₹31,200 in 5 years · at 8.2% avg. return · Burgundy progress bar 65%</div></div>
+  <div class="card bur"><div class="card-title">AI (4.8s)</div><div class="card-body">"Want me to set this up automatically?"</div></div>
+
+  <div class="sec-hd">Hero Trust Line</div>
+  <pre><span class="str">"40,000+ investors  ·  SOC 2 Certified  ·  Bank-level encryption"</span>
+font: Inter 500, 12px, taupe #9A8678
+dot separator: 3px circle, beige #DCCFC0</pre>
+</div>
+
+<!-- FEATURES -->
+<div id="tc-features" class="tc">
+  <div class="sec-label">Features Section</div>
+  <div class="sec-hd">Background — Burgundy (replaces orange)</div>
+  <pre>bg-[#6B1E2B]  <span class="cm">/* full section background */</span>
+
+<span class="cm">/* Edge progress borders — same clockwise mechanic, recolored */</span>
+12px bars: camel #C2A56D (replaces black)
+
+<span class="cm">/* Runner text (dual parallax) */</span>
+Left:  "INVEST GROW PROTECT PLAN SAVE"   text-[25vw] text-[rgba(194,165,109,0.15)]
+Right: "RETURNS FREEDOM WEALTH SECURITY" text-[20vw] text-[rgba(253,246,237,0.06)]
+
+<span class="cm">/* Floating elements: 8 geometric shapes */</span>
+Colors: rgba(253,246,237,0.06) ivory · rgba(201,162,39,0.08) gold</pre>
+
+  <div class="sec-hd">Header — Typewriter Cycling</div>
+  <pre><span class="str">"THE NEXT"</span>
+<span class="kw">[ERA / STEP / MOVE]</span>  ← TextType cycling, mix-blend-difference
+ivory text on burgundy bg
+font-size: clamp(3.5rem, 7vw, 8rem), font-weight: 800, uppercase</pre>
+
+  <div class="sec-hd">StickyScrollReveal — 4 Financial Feature Panels</div>
+  <pre><span class="cm">/* Panel card */</span>
+h-[70vh] rounded-[32px] bg-[#FDF6ED] border-[1px] border-[rgba(58,46,37,0.15)]
+shadow-[0_20px_60px_rgba(58,46,37,0.25)]</pre>
+
+  <table class="tbl">
+    <thead><tr><th>#</th><th>Title</th><th>Overlay Style</th><th>Badge</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>AI-Powered Portfolio Planning</td><td>Gradient ivory→burgundy top, ivory label</td><td>"Smart Allocation"</td></tr>
+      <tr><td>2</td><td>Live Market Intelligence</td><td>Teal top gradient, badges: "FD RATES / MF NAVs / NIFTY 50"</td><td>"Real-Time Data"</td></tr>
+      <tr><td>3</td><td>Goal-Based Financial Planning</td><td>Ink 50% overlay, monospace label GOAL_TRACKING_ACTIVE</td><td>Goals</td></tr>
+      <tr><td>4</td><td>DPDP-Compliant Privacy</td><td>TR gradient gold, "AES-256", monospace PRIVACY_SHIELD_ACTIVE</td><td>"Zero Data Exposure"</td></tr>
+    </tbody>
+  </table>
+  <div class="card"><div class="card-body">Images: grayscale by default → grayscale-0 on hover (700ms). Replaces travel photography with financial dashboard/money imagery.</div></div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div id="tc-how" class="tc">
+  <div class="sec-label">HowItWorks — 5 Agent Architecture</div>
+  <div class="sec-hd">Layout</div>
+  <pre>bg-[#0B4F4A]  <span class="cm">/* deep teal — replaces black */</span>
+h-screen full-screen
+Horizontal scroll driven by GSAP ScrollTrigger pin
+30 ivory particle dots (replaces white) float with random GSAP yoyo</pre>
+
+  <div class="sec-hd">Headline</div>
+  <pre><span class="str">"Agent"</span>
+<span class="str">"Architecture"</span>   ← cream/10 italic ghost text (replaces Architectures)
+font-size: clamp(2.5rem, 6vw, 9rem), font-weight: 800, uppercase
+text color: ivory #FDF6ED</pre>
+
+  <div class="sec-hd">5 Agent Cards — Horizontal Scroll (380×380px)</div>
+  <table class="tbl">
+    <thead><tr><th>#</th><th>Agent Name</th><th>Subtext</th><th>Color</th><th>Shape</th><th>Icon</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Profile Agent</td><td>Builds your financial profile</td><td>#6B1E2B burgundy</td><td>Circle (50%)</td><td>UserCheck</td></tr>
+      <tr><td>2</td><td>Market Intelligence</td><td>Live rates & NAVs</td><td>#C2A56D camel</td><td>Square 60px radius</td><td>TrendingUp</td></tr>
+      <tr><td>3</td><td>Planner Agent</td><td>Generates your roadmap</td><td>#C9A227 gold</td><td>D-shape 80/220px</td><td>Map</td></tr>
+      <tr><td>4</td><td>Life Event Agent</td><td>Adapts to life changes</td><td>#9A8678 taupe</td><td>Square</td><td>Heart</td></tr>
+      <tr><td>5</td><td>Portfolio Monitor</td><td>Weekly autonomous alerts</td><td>#0B4F4A teal (lighter)</td><td>Circle</td><td>Bell</td></tr>
+    </tbody>
+  </table>
+
+  <div class="sec-hd">Card Interactions (Framer Motion)</div>
+  <pre>whileHover={{ scale: 1.05, rotate: ±2 }}   <span class="cm">/* alternates by index */</span>
+border: 1px solid rgba(253,246,237,0.08)
+shadow-[0_20px_50px_rgba(11,79,74,0.3)]    <span class="cm">/* teal glow */</span>
+
+<span class="cm">/* Ambient labels */</span>
+Right edge: AGENT_PIPELINE_ACTIVE rotated 90°, text-[rgba(253,246,237,0.05)]
+Bottom:    "Scroll to explore the pipeline" animate-pulse opacity-20</pre>
+
+  <div class="flow">
+    <div class="fn bur">Profile Agent</div><div class="arr">→</div>
+    <div class="fn gold">Market Intelligence</div><div class="arr">→</div>
+    <div class="fn teal">Planner Agent</div><div class="arr">→</div>
+    <div class="fn">Life Event Agent</div><div class="arr">→</div>
+    <div class="fn teal">Portfolio Monitor</div>
+  </div>
+</div>
+
+<!-- WHY FINEXA -->
+<div id="tc-why" class="tc">
+  <div class="sec-label">WhyFinexa — Dark Band (replaces Destinations)</div>
+  <div class="sec-hd">Background & Diagonal Wipe Transition</div>
+  <pre>bg-[#0B4F4A]  <span class="cm">/* deep teal replaces purple #7c3aed */</span>
+
+<span class="cm">/* SectionWipe — 5 colored panels swipe diagonally as you scroll in */</span>
+Colors: #6B1E2B, #C9A227, #C2A56D, #F6F3EB, #FDF6ED
+<span class="cm">/* replaces: #7B61FF, #B6FF33, #FFC700, #A0D7FB, #F8F6E9 */</span>
+clipPath: 'polygon(0% 0%, 85% 0%, 100% 100%, 0% 100%)' + rotate(-15deg)
+Driven by Framer Motion useScroll + useTransform</pre>
+
+  <div class="sec-hd">Layout — 2-column</div>
+  <div class="grid2">
+    <div class="card dark">
+      <div class="card-title">Left Column</div>
+      <div class="card-body">Label: "YOUR ADVISOR" — cream/60, tracking-[0.4em]. Headline (DecryptedText): "Financial advice shouldn't cost [your privacy.] Finexa is your guard." Progress Card (camel amber bg): Counter 0%→94% on scroll, label "Save your goals..."</div>
+    </div>
+    <div class="card dark">
+      <div class="card-title">Right Column — Stat Cards (scroll parallax -400px)</div>
+      <div class="card-body">3 stat cards in cream glass. Numbers in gold (count-up on scroll): ₹2.4Cr+ / 94% / 11 sec. Labels in cream-soft. Pull quote: "FinexaAI didn't just tell me to save more..." — Rohan M., Bangalore.</div>
+    </div>
+  </div>
+
+  <div class="sec-hd">Stat Card Styling</div>
+  <pre><span class="cm">/* Replaces destination city cards */</span>
+background: rgba(253,246,237,0.07)
+border: 1px solid rgba(253,246,237,0.12)
+border-radius: rounded-2xl
+shadow: 0 8px 32px rgba(11,79,74,0.2)
+
+<span class="cm">/* Hover: no translate trick — instead border brightens */</span>
+hover: border-[rgba(201,162,39,0.4)]  <span class="cm">/* gold glow on hover */</span>
+
+Stat numbers: Inter 800, 44px, #C9A227 (gold — touch #2 of 3)
+Stat labels:  Inter 400, 14px, rgba(230,228,192,0.8)</pre>
+</div>
+
+<!-- PRICING -->
+<div id="tc-pricing" class="tc">
+  <div class="sec-label">Pricing Section</div>
+  <div class="sec-hd">Background</div>
+  <pre>bg-[#F6F3EB]   <span class="cm">/* cream replaces #F8F6E9 parchment */</span>
+border-t:  1px solid #DCCFC0  <span class="cm">/* beige, replaces border-t-[6px] border-black */</span></pre>
+
+  <div class="sec-hd">Headline</div>
+  <pre><span class="str">"Simple, honest"</span>
+<span class="str">"Pricing"</span>   ← #6B1E2B burgundy (replaces purple #7B61FF)
+font: Source Serif 4, clamp(3rem,6vw,5rem), font-weight 700</pre>
+
+  <div class="sec-hd">Billing Toggle</div>
+  <pre>Monthly / Yearly toggle
+rounded-full bg-[#FDF6ED] border border-[#DCCFC0] shadow-[0_4px_12px_rgba(58,46,37,0.1)]
+Active state: bg-[#3A2E25] text-[#FDF6ED]  <span class="cm">/* ink bg, ivory text */</span>
+Yearly shows: (-30%) in #C9A227 gold       <span class="cm">/* replaces acid green #B6FF33 */</span></pre>
+
+  <div class="sec-hd">Pricing Cards — 2 Tiers (replaces 3 neo-brutalist)</div>
+  <table class="tbl">
+    <thead><tr><th>Plan</th><th>Price/mo</th><th>Price/yr</th><th>CTA Color</th><th>Badge</th></tr></thead>
+    <tbody>
+      <tr><td>Free</td><td>₹0</td><td>₹0</td><td>Ivory + burgundy border</td><td>—</td></tr>
+      <tr><td>Pro</td><td>₹499</td><td>₹1,499</td><td>Burgundy solid</td><td>Gold "Recommended" — gold touch #3 of 3</td></tr>
+    </tbody>
+  </table>
+
+  <div class="sec-hd">Card Styling</div>
+  <pre><span class="cm">/* Editorial — NOT neo-brutalist */</span>
+rounded-[20px]
+border: 1px solid rgba(107,30,43,0.15)   <span class="cm">/* burgundy-tinted */</span>
+background: rgba(255,255,255,0.75)
+shadow: 0 4px 24px rgba(58,46,37,0.10)
+
+<span class="cm">/* Pro card — featured */</span>
+border-color: rgba(107,30,43,0.50)       <span class="cm">/* stronger burgundy */</span>
+shadow: 0 8px 40px rgba(107,30,43,0.15)
+Pro card enters 0.15s AFTER Free — spring bounce larger (bounce: 0.4 vs 0.2)
+
+Recommended badge: bg-[#C9A227] color-[#3A2E25] font-weight-700 rounded-full</pre>
+
+  <div class="sec-hd">Feature Lists</div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">Free</div>
+      <div class="card-body">Budgeting and expense tracking · Basic spending insights · Monthly financial summary · Up to 2 linked accounts</div>
+    </div>
+    <div class="card bur">
+      <div class="card-title">Pro</div>
+      <div class="card-body">Full AI portfolio analysis · Goal planning with month-by-month roadmap · Risk stress-testing · Unlimited account connections · Priority support · DPDP-compliant privacy dashboard</div>
+    </div>
+  </div>
+
+  <div class="sec-hd">Animations</div>
+  <pre>whileHover={{ y: -8 }}   <span class="cm">/* soft lift — no rotate on financial brand */</span>
+ScrollReveal on entry: opacity 0→1, y 20→0, 0.6s easeOut</pre>
+</div>
+
+<!-- FOOTER -->
+<div id="tc-footer" class="tc">
+  <div class="sec-label">Footer — 500vh Cinematic Scroll</div>
+  <div class="sec-hd">Architecture (same 3-phase mechanic, recolored)</div>
+  <pre>500vh div. Content: position:sticky top:0 h-screen bg-[#3A2E25]</pre>
+
+  <div class="sec-hd">Phase 1 — Hero Text (scroll 0→40%)</div>
+  <pre><span class="str">"Stop guessing"</span>
+<span class="str">"with your money."</span>
+font: Source Serif 4, text-7xl md:text-9xl, font-weight 700
+color: ivory #FDF6ED
+Scales: scale 1→12 as user scrolls, fades at 35–45%
+
+<span class="cm">/* Floating Badges (parallax — replaces G.A.T.E.S./ACTIVE_SYNC) */</span>
+Burgundy #6B1E2B:  "DPDP.COMPLIANT" (Shield icon)   — moves up -200px
+Teal #0B4F4A:      "AI.AUTONOMOUS"  (Cpu icon)       — moves down +150px
+Gold #C9A227:      "5.AGENTS.LIVE"  (Zap icon)       — static
+
+Subtext: "Join 40,000+ Indians building wealth with intelligence that never sleeps."</pre>
+
+  <div class="sec-hd">Phase 2 — Arrow Wipe (scroll 30→80%)</div>
+  <pre><span class="cm">/* 3 giant arrow shapes sweep RIGHT-TO-LEFT */</span>
+#6B1E2B burgundy  — top third    — enters 30%, exits 60%
+#0B4F4A teal      — middle third — enters 40%, exits 70%
+#C9A227 gold      — bottom third — enters 50%, exits 80%
+clipPath: 'polygon(0% 0%, 90% 0%, 100% 50%, 90% 100%, 0% 100%)'</pre>
+
+  <div class="sec-hd">Phase 3 — Final Content (scroll 70→90%)</div>
+  <pre><span class="cm">/* Full-screen cream reveal, 2-column grid */</span>
+Left: Financial dashboard photo (grayscale → color on hover, 1000ms)
+
+Right CTA Card — bg-[#6B1E2B] burgundy (replaces indigo):
+  Heading: "Ready to invest?"
+  Body:    "Join the community redefining personal finance in India..."
+  CTA:     ivory rounded-full → hover #531722 darker burgundy
+  Label:   "→ START FREE" with ArrowRight icon
+
+<span class="cm">/* Footer Bar — 4 columns */</span>
+Financial:  Features link
+Connect:    Subscribe button hover:bg-[#6B1E2B] + Bell icon
+Socials:    X · LinkedIn · Instagram pill buttons
+Copyright:  © 2025 FINEXA_TECHNOLOGIES_PVT_LTD</pre>
+</div>
+
+<!-- AUTH + CHAT -->
+<div id="tc-auth" class="tc">
+  <div class="sec-label">SignUp + Dashboard (AI Chat)</div>
+  <div class="sec-hd">SignUp — Split Screen</div>
+  <pre>bg-[#F6F3EB]   <span class="cm">/* cream base */</span>
+
+Left Panel (hidden mobile):
+  w-1/2 dark card bg-[#3A2E25] ink  border border-[#DCCFC0] rounded-[32px]
+  FinexaAI logo centered
+  Gradient overlay from-transparent to-[rgba(58,46,37,0.3)]
+
+Right Panel:
+  Headline: "Start investing smarter." Source Serif 4, 56px, ink
+  Sub:      "Join 40,000+ Indians already building wealth."
+  Google OAuth: ivory, border-[#DCCFC0], rounded-full
+  Footer: Terms · Privacy links in taupe</pre>
+
+  <div class="sec-hd">Dashboard — AI Financial Chat (replaces GetPlan)</div>
+  <div class="sec-hd" style="font-size:12px;border:none;padding-bottom:0">Left 60% — Chat Interface</div>
+  <pre><span class="cm">/* Header bar */</span>
+Bot avatar:  bg-[#6B1E2B] rounded-2xl border border-[#DCCFC0]
+Name:        "Finexa AI" font-black uppercase
+Status:      ● Online — bg-teal animate-pulse
+
+<span class="cm">/* Bubble styles */</span>
+AI bubbles:   bg-[#6B1E2B] text-[#FDF6ED] rounded-2xl rounded-tl-none
+User bubbles: bg-[#3A2E25] text-[#FDF6ED] rounded-2xl rounded-tr-none
+
+<span class="cm">/* Special message types */</span>
+plan type:     "⚡ Plan Generated" burgundy label
+               "Your Finexa Roadmap" · 12-month/₹6.2L goal
+               2-col: Monthly SIP + Projected Value in bg-[#F6F3EB] tiles
+               "✓ DPDP Compliant · Live Market Rates"
+
+whatsapp type: bg-[rgba(37,211,102,0.08)] green tinted
+               "Continue on WhatsApp" → wa.me/...</pre>
+
+  <div class="sec-hd">Menu Structure — Financial Context</div>
+  <pre><span class="cm">Main Menu</span>
+├── 1) Investment Planning
+│   ├── 1) Mutual Funds (SIP / Lumpsum)
+│   ├── 2) Fixed Deposits (SBI / HDFC / ICICI)
+│   ├── 3) Gold (ETF / SGB)
+│   ├── 4) PPF & NPS
+│   └── 5) Direct Equity (Index Funds)
+├── 2) Budgeting & Savings
+│   ├── 1) Monthly Budget Analysis
+│   ├── 2) Emergency Fund Calculator
+│   ├── 3) Expense Tracker Setup
+│   └── 4) Savings Goal Planner
+├── 3) Tax Planning
+│   ├── 1) Section 80C Optimizer
+│   ├── 2) ELSS Recommendations
+│   └── 3) NPS Tax Benefits
+├── 4) Security & Privacy
+│   ├── 1) Data Encryption Info
+│   ├── 2) Consent Management
+│   └── 3) DPDP Act Rights
+└── 5) ⚡ Generate My Plan → triggers plan card + WhatsApp CTA</pre>
+
+  <div class="sec-hd">Right 40% — WhatsApp Panel</div>
+  <pre>bg-[#F6F3EB] cream
+#25D366 rounded-[35%] icon square — Phone icon (unchanged)
+Headline: "Take it to WhatsApp" — #25D366 green
+CTA: shadow-[0_8px_24px_rgba(37,211,102,0.3)] + burgundy button
+     (replaces neo-brutalist shadow-[8px_8px_0px_#25D366])</pre>
+</div>
+
+<!-- ANIMATION -->
+<div id="tc-anim" class="tc">
+  <div class="sec-label">Animation & Motion Inventory</div>
+  <table class="tbl">
+    <thead><tr><th>Component</th><th>Library</th><th>Technique</th><th>Change from Travel</th></tr></thead>
+    <tbody>
+      <tr><td>Hero cards reveal</td><td>GSAP ScrollTrigger</td><td>Pin + sequential scrub</td><td>Same mechanic, financial icons</td></tr>
+      <tr><td>Hero headline</td><td>Custom EncryptedText</td><td>Character scramble → reveal</td><td>Same, new copy</td></tr>
+      <tr><td>Features runner</td><td>GSAP ScrollTrigger</td><td>Dual parallax xPercent</td><td>Financial copy, camel/ivory colors</td></tr>
+      <tr><td>Features border</td><td>GSAP ScrollTrigger</td><td>Clockwise progress bars</td><td>Camel bars replaces black</td></tr>
+      <tr><td>HowItWorks</td><td>GSAP ScrollTrigger</td><td>Horizontal scroll pin</td><td>5 agents replaces 5 workflow cards</td></tr>
+      <tr><td>Agent particles</td><td>GSAP</td><td>Random yoyo float</td><td>Ivory dots replaces white</td></tr>
+      <tr><td>Agent cards</td><td>Framer Motion</td><td>whileHover scale+rotate</td><td>Same, teal glow shadow</td></tr>
+      <tr><td>WhyFinexa wipe</td><td>Framer Motion useScroll</td><td>5-layer diagonal panel sweep</td><td>Burgundy/gold/camel panels</td></tr>
+      <tr><td>Count-up stats</td><td>GSAP CountTo</td><td>0→₹2.4Cr / 94% / 11sec</td><td>Financial stats, gold color</td></tr>
+      <tr><td>Stat cards</td><td>GSAP ScrollTrigger</td><td>Vertical parallax -400px</td><td>Financial cards, cream glass</td></tr>
+      <tr><td>Pricing cards</td><td>Framer Motion useInView</td><td>Fade+y slide on entry</td><td>Pro card 0.15s later, bigger bounce</td></tr>
+      <tr><td>Scroll color morph</td><td>Framer Motion useScroll</td><td>ivory→teal bg interpolation</td><td>NEW — not in TravelZyvox</td></tr>
+      <tr><td>Magnetic CTAs</td><td>useSpring + mousemove</td><td>±6px cursor pull</td><td>NEW — not in TravelZyvox</td></tr>
+      <tr><td>Footer phase 1</td><td>Framer Motion useScroll</td><td>Text scale 1→12</td><td>Same, ink bg, ivory text</td></tr>
+      <tr><td>Footer arrows</td><td>Framer Motion useScroll</td><td>Right→Left sweep</td><td>Burgundy/teal/gold replaces red/indigo/yellow</td></tr>
+      <tr><td>Nav collapse</td><td>Framer Motion layout</td><td>Spring dock/expand</td><td>Ivory glass replaces black glass</td></tr>
+      <tr><td>Nav active pill</td><td>Framer Motion layoutId</td><td>Sliding ivory pill</td><td>Ivory pill on ivory bg — subtle</td></tr>
+      <tr><td>Chat messages</td><td>Framer Motion AnimatePresence</td><td>Scale+fade in</td><td>Burgundy AI bubbles, financial copy</td></tr>
+      <tr><td>Typing indicator</td><td>CSS @keyframes</td><td>3-dot bounce 600ms</td><td>Ivory dots on burgundy bg</td></tr>
+      <tr><td>Toast notification</td><td>Framer Motion AnimatePresence</td><td>Slide up + progress bar</td><td>bg-[#C9A227] gold replaces acid green</td></tr>
+      <tr><td>Tilt icon counter</td><td>mousemove + useSpring</td><td>Icon rotates -50% of card tilt</td><td>NEW — not in TravelZyvox</td></tr>
+    </tbody>
+  </table>
+
+  <div class="sec-hd" style="margin-top:8px">Key Design Principles (remapped)</div>
+  <div class="grid2">
+    <div class="card bur"><div class="card-title">1. Editorial-Finance Foundation</div><div class="card-body">Soft borders, warm shadows, Source Serif 4 headlines. Replaces neo-brutalist hard black offsets with cream-glass editorial warmth.</div></div>
+    <div class="card teal"><div class="card-title">2. Cinematic Scroll</div><div class="card-body">Every section is a "scene." Unchanged from TravelZyvox — GSAP pin mechanics kept exactly, only colors and copy swap.</div></div>
+    <div class="card gold"><div class="card-title">3. Gold Discipline — Max 3 Uses</div><div class="card-body">Logo "AI" · "Recommended" badge · Stat numbers in WhyFinexa. Never used a 4th time. Scarcity = premium signal.</div></div>
+    <div class="card terra"><div class="card-title">4. Terracotta = Interaction Only</div><div class="card-body">Nav hover underlines · Hero ping dot · Active states. Never in static layout. Hover states have their own identity — not just "burgundy but lighter."</div></div>
+    <div class="card"><div class="card-title">5. Section Color Theming</div><div class="card-body">Ivory → Burgundy → Teal → Cream → Ink. Each section has a distinct identity, not arbitrary. Teal = analytical trust. Burgundy = financial authority.</div></div>
+    <div class="card"><div class="card-title">6. Privacy-First Messaging</div><div class="card-body">"Financial advice shouldn't cost your privacy. Finexa is your guard." — the brand promise that earns SDG 16. Replaces travel privacy messaging.</div></div>
+  </div>
+
+  <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+    <button onclick="sendPrompt('Build the complete FinexaAI Hero section with phone mockup, 5 finance cards, GSAP scroll reveal, and all animations ↗')">Build Hero section ↗</button>
+    <button onclick="sendPrompt('Build the FinexaAI HowItWorks horizontal GSAP scroll section with 5 agent cards ↗')">Build HowItWorks ↗</button>
+    <button onclick="sendPrompt('Build the complete FinexaAI landing page as a single React file with all 7 sections ↗')">Build full page ↗</button>
+  </div>
+</div>
+</div>
+
+<script>
+function sw(id){
+  const ids=['design','arch','nav','hero','features','how','why','pricing','footer','auth','anim'];
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',ids[i]===id));
+  document.querySelectorAll('.tc').forEach(c=>c.classList.toggle('active',c.id==='tc-'+id));
+}
+</script>

@@ -325,7 +325,8 @@ const Chatbot = () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Accept': 'application/json'
+                    'Accept': 'application/json',
+                    'ngrok-skip-browser-warning': 'true'
                 },
                 body: JSON.stringify({
                     personId: "",
@@ -353,11 +354,20 @@ const Chatbot = () => {
             setChatStatus('online');
 
             let responseData;
-            const contentType = response.headers.get('content-type');
-            if (contentType && contentType.includes('application/json')) {
-                responseData = await response.json();
+            const rawText = await response.text();
+            if (rawText && rawText.trim() !== '') {
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('application/json')) {
+                    try {
+                        responseData = JSON.parse(rawText);
+                    } catch (e) {
+                        responseData = rawText;
+                    }
+                } else {
+                    responseData = rawText;
+                }
             } else {
-                responseData = await response.text();
+                responseData = "Request processed successfully.";
             }
             const botReplyText = extractResponseText(responseData);
 

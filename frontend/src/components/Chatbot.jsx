@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, memo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import {
-    Send, Bot, Phone, ExternalLink,
+    Send, Bot, Phone, ExternalLink, 
     ArrowLeft, RefreshCw, Sparkles, Loader2, AlertCircle,
     Copy, Check
 } from 'lucide-react';

@@ -10,14 +10,27 @@ import AnimatedIconBackground from './AnimatedIconBackground';
 import ResponseRenderer from './ResponseRenderer';
 
 const getBackendUrl = () => {
-    if (import.meta.env.VITE_API_BASE_URL) {
-        return import.meta.env.VITE_API_BASE_URL;
+    let url = import.meta.env.VITE_API_BASE_URL;
+    
+    if (!url) {
+        if (typeof window !== 'undefined' && window.location.hostname.includes('vercel.app')) {
+            url = 'https://finexa-ai-xama.onrender.com/api';
+        } else {
+            url = 'http://localhost:5000/api';
+        }
     }
     
-    if (typeof window !== 'undefined' && window.location.hostname.includes('vercel.app')) {
-        return 'https://finexa-ai-backend.onrender.com/api';
+    // Normalize URL
+    url = url.trim();
+    // 1. Remove trailing slashes
+    url = url.replace(/\/+$/, '');
+    
+    // 2. Ensure it ends with /api
+    if (!url.endsWith('/api')) {
+        url = url + '/api';
     }
-    return 'http://localhost:5000/api';
+    
+    return url;
 };
 
 const BACKEND_API_URL = getBackendUrl();

@@ -4,7 +4,7 @@ import Hero from './Hero'
 import PillNav from './PillNav'
 import Features from './Features'
 import HowItWorks from './HowItWorks'
-import WhyFINEXA from './WhyFINEXA'
+import WhyFINEXA from './WhyFinexa'
 import PricingSection from './PricingSection'
 import Footer from './Footer'
 

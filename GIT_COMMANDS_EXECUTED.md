@@ -1,17 +1,17 @@
 # Git Execution Log & Command Summary
 
-**Repository:** [FINEXA_AI](https://github.com/SHIVASANJAY2007/FINEXA_AI.git)  
+**Repository:** [BIZRA_AI](https://github.com/SHIVASANJAY2007/BIZRA_AI.git)  
 **Execution Date:** August 4, 2026  
 
 ---
 
 ## Task Summary
 
-1. **`main` Branch:** Validated and verified the **Finexa AI** React application codebase on the `main` branch (`https://github.com/SHIVASANJAY2007/FINEXA_AI.git`).
+1. **`main` Branch:** Validated and verified the **BIZRA AI** React application codebase on the `main` branch (`https://github.com/SHIVASANJAY2007/BIZRA_AI.git`).
 2. **`workflow-n8n` Branch:** 
    - Checked out the `workflow-n8n` branch.
    - Removed duplicated files from the `main` branch that were present on `workflow-n8n`.
-   - Added the `Workflow` folder containing the n8n workflows (`Finexa - Chatbot.json` and `Finexa AI - Email.json`).
+   - Added the `Workflow` folder containing the n8n workflows (`BIZRA - Chatbot.json` and `BIZRA AI - Email.json`).
    - Configured `.gitignore` and `README.md` specifically for the workflow branch.
    - Committed and pushed the `Workflow` directory to the remote `workflow-n8n` branch.
 
@@ -79,6 +79,6 @@ git status
 
 | Branch | Contents |
 | :--- | :--- |
-| **`main`** | Full React + Vite Finexa AI Web Application (Components, UI, Assets, Configuration) |
-| **`workflow-n8n`** | `Workflow/` folder containing `Finexa - Chatbot.json` and `Finexa AI - Email.json` |
+| **`main`** | Full React + Vite BIZRA AI Web Application (Components, UI, Assets, Configuration) |
+| **`workflow-n8n`** | `Workflow/` folder containing `BIZRA - Chatbot.json` and `BIZRA AI - Email.json` |
 

@@ -4,14 +4,14 @@ import Hero from './Hero'
 import PillNav from './PillNav'
 import Features from './Features'
 import HowItWorks from './HowItWorks'
-import WhyFinexa from './WhyFinexa'
+import WhyFINEXA from './WhyFINEXA'
 import PricingSection from './PricingSection'
 import Footer from './Footer'
 
 const NAV_ITEMS = [
     { label: 'Features', href: '#features' },
     { label: 'How It Works', href: '#how-it-works' },
-    { label: 'Why Finexa', href: '#why-finexa' },
+    { label: 'Why BIZRA', href: '#why-BIZRA' },
     { label: 'Pricing', href: '#pricing' },
     { label: 'Start Free', href: '/signup' },
 ];
@@ -32,7 +32,7 @@ const LandingPage = () => {
             <Hero />
             <Features />
             <HowItWorks />
-            <WhyFinexa />
+            <WhyFINEXA />
             <PricingSection />
             <Footer />
         </div>

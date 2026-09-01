@@ -5,7 +5,7 @@ import NewsDetailModal from './NewsDetailModal';
 
 const NewsCard = memo(({ article, onClick }) => {
     return (
-        <motion.div 
+        <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             onClick={() => onClick(article)}
@@ -13,31 +13,30 @@ const NewsCard = memo(({ article, onClick }) => {
         >
             <div className="relative h-48 sm:h-56 overflow-hidden bg-cream">
                 {article.image ? (
-                    <img 
-                        src={article.image} 
-                        alt={article.title} 
+                    <img
+                        src={article.image}
+                        alt={article.title}
                         loading="lazy"
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                     />
                 ) : (
                     <div className="w-full h-full flex items-center justify-center text-taupe/40 font-serif text-2xl font-extrabold italic bg-gradient-to-br from-beige/20 to-burgundy/5">
-                        FINEXA
+                        BIZRA
                     </div>
                 )}
                 <div className="absolute top-4 left-4 bg-ink/80 backdrop-blur-md text-white text-[10px] font-extrabold uppercase tracking-widest px-3 py-1.5 rounded-full">
                     {article.category}
                 </div>
                 {article.sentiment && (
-                    <div className={`absolute top-4 right-4 text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-full backdrop-blur-md ${
-                        article.sentiment === 'Positive' ? 'bg-teal/20 text-teal-800 border border-teal/30' :
-                        article.sentiment === 'Negative' ? 'bg-red-500/20 text-red-900 border border-red-500/30' :
-                        'bg-white/30 text-ink border border-white/40'
-                    }`}>
+                    <div className={`absolute top-4 right-4 text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-full backdrop-blur-md ${article.sentiment === 'Positive' ? 'bg-teal/20 text-teal-800 border border-teal/30' :
+                            article.sentiment === 'Negative' ? 'bg-red-500/20 text-red-900 border border-red-500/30' :
+                                'bg-white/30 text-ink border border-white/40'
+                        }`}>
                         {article.sentiment}
                     </div>
                 )}
             </div>
-            
+
             <div className="p-6 flex-1 flex flex-col justify-between">
                 <div>
                     <div className="flex items-center gap-2 text-[10px] font-bold text-taupe uppercase tracking-wider mb-3">
@@ -52,7 +51,7 @@ const NewsCard = memo(({ article, onClick }) => {
                         {article.summary}
                     </p>
                 </div>
-                
+
                 {article.relatedSectors && article.relatedSectors.length > 0 && (
                     <div className="mt-4 pt-4 border-t border-beige/40">
                         <div className="text-[10px] font-bold uppercase tracking-wider text-taupe mb-2">Affected Sectors</div>
@@ -105,9 +104,9 @@ const NewsFeed = ({ news, isLoading }) => {
 
             <AnimatePresence>
                 {selectedArticle && (
-                    <NewsDetailModal 
-                        article={selectedArticle} 
-                        onClose={() => setSelectedArticle(null)} 
+                    <NewsDetailModal
+                        article={selectedArticle}
+                        onClose={() => setSelectedArticle(null)}
                     />
                 )}
             </AnimatePresence>

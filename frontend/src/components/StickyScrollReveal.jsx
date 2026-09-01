@@ -40,11 +40,10 @@ export const StickyScrollReveal = memo(({
                         <button
                             key={index}
                             onClick={() => handleCardSelect(index)}
-                            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all cursor-pointer select-none ${
-                                currentCard === index
+                            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all cursor-pointer select-none ${currentCard === index
                                     ? "bg-ink text-ivory shadow-md scale-102"
                                     : "bg-beige/30 text-taupe hover:bg-beige/60 hover:text-ink"
-                            }`}
+                                }`}
                         >
                             <span className={`w-1.5 h-1.5 rounded-full ${currentCard === index ? "bg-gold" : "bg-taupe/40"}`} />
                             <span>0{index + 1}</span>
@@ -99,9 +98,8 @@ export const StickyScrollReveal = memo(({
                             <div
                                 key={i}
                                 onClick={() => handleCardSelect(i)}
-                                className={`h-1.5 rounded-full transition-all cursor-pointer ${
-                                    currentCard === i ? "w-8 bg-burgundy" : "w-2 bg-beige/60 hover:bg-taupe/40"
-                                }`}
+                                className={`h-1.5 rounded-full transition-all cursor-pointer ${currentCard === i ? "w-8 bg-burgundy" : "w-2 bg-beige/60 hover:bg-taupe/40"
+                                    }`}
                             />
                         ))}
                     </div>
@@ -148,7 +146,7 @@ export const StickyScrollReveal = memo(({
                             PLAN_ID: FX_{currentCard + 402}
                         </div>
                         <div className="absolute bottom-4 left-4 font-mono text-[8px] text-camel tracking-widest uppercase">
-                            [ FINEXA_PORTFOLIO_ENGINE_V1 ]
+                            [ BIZRA_PORTFOLIO_ENGINE_V1 ]
                         </div>
                         {/* Scanning Bar */}
                         <motion.div

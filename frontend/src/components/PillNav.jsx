@@ -80,7 +80,7 @@ const PillNav = ({
                         className="h-10 px-3.5 flex items-center justify-center bg-beige/25 rounded-full hover:bg-beige/45 transition-all active:scale-95"
                     >
                         <span className="font-serif font-bold text-sm text-ink tracking-tight">
-                            Finexa
+                            BIZRA
                             <sup className="text-gold font-sans font-extrabold text-[9px] ml-0.5">AI</sup>
                         </span>
                     </Link>
@@ -102,7 +102,7 @@ const PillNav = ({
                     {navItems.map((item) => {
                         const currentHash = window.location.hash;
                         const isCurrentActive = currentHash === item.href || (item.href === '/signup' && window.location.pathname === '/signup') || (item.href === '/dashboard' && window.location.pathname === '/dashboard');
-                        
+
                         return (
                             <NavButton
                                 key={item.href}

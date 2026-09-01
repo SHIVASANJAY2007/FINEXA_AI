@@ -171,6 +171,189 @@ const parseInlineStyles = (inputText) => {
     });
 };
 
+// Helper to extract plain text from React nodes
+const getNodeText = (node) => {
+    if (!node) return '';
+    if (typeof node === 'string' || typeof node === 'number') return String(node);
+    if (Array.isArray(node)) return node.map(getNodeText).join('');
+    if (node.props) {
+        if (node.props.children) return getNodeText(node.props.children);
+        if (node.props.value) return String(node.props.value);
+    }
+    return '';
+};
+
+// Interactive Table component that parses React elements and provides Recharts visualization
+const InteractiveTable = ({ children, ...props }) => {
+    const [viewMode, setViewMode] = useState('table'); // 'table' | 'chart'
+    const [chartType, setChartType] = useState('bar'); // 'bar' | 'line' | 'area'
+
+    // Parse the table data
+    const headers = [];
+    const rows = [];
+
+    const childrenArray = React.Children.toArray(children);
+    const thead = childrenArray.find(c => c && (c.type === 'thead' || (c.props && c.props.node && c.props.node.tagName === 'thead')));
+    const tbody = childrenArray.find(c => c && (c.type === 'tbody' || (c.props && c.props.node && c.props.node.tagName === 'tbody')));
+
+    if (thead) {
+        const trs = React.Children.toArray(thead.props.children);
+        const theadTr = trs.find(c => c && (c.type === 'tr' || (c.props && c.props.node && c.props.node.tagName === 'tr')));
+        if (theadTr) {
+            React.Children.forEach(theadTr.props.children, (cell) => {
+                if (cell) {
+                    headers.push(getNodeText(cell).trim());
+                }
+            });
+        }
+    }
+
+    if (tbody) {
+        React.Children.forEach(tbody.props.children, (tr) => {
+            if (tr && (tr.type === 'tr' || (tr.props && tr.props.node && tr.props.node.tagName === 'tr'))) {
+                const rowData = {};
+                let cellIndex = 0;
+                React.Children.forEach(tr.props.children, (td) => {
+                    if (td) {
+                        const headerName = headers[cellIndex] || `col_${cellIndex}`;
+                        const textVal = getNodeText(td).trim();
+                        
+                        // Parse as number if numeric (match first floating point number, ignoring commas)
+                        const numMatch = textVal.replace(/,/g, '').match(/[-+]?\d*\.?\d+/);
+                        const numVal = numMatch ? Number(numMatch[0]) : NaN;
+                        
+                        rowData[headerName] = !isNaN(numVal) ? numVal : textVal;
+                        cellIndex++;
+                    }
+                });
+                if (cellIndex > 0) {
+                    rows.push(rowData);
+                }
+            }
+        });
+    }
+
+    // Determine chartable numeric columns (all columns except first that contain any numeric value)
+    const chartableKeys = headers.slice(1).filter(header => {
+        return rows.some(row => typeof row[header] === 'number');
+    });
+
+    const isChartable = chartableKeys.length > 0 && rows.length > 0;
+    const xAxisKey = headers[0] || 'name';
+    const themeColors = ['#6B1E2B', '#C5A880', '#10B981', '#3B82F6', '#EF4444'];
+
+    if (!isChartable) {
+        return (
+            <div className="my-5 overflow-x-auto rounded-xl border border-beige/45 shadow-sm">
+                <table className="min-w-full divide-y divide-beige/40 text-left border-collapse" {...props}>
+                    {children}
+                </table>
+            </div>
+        );
+    }
+
+    return (
+        <div className="my-5 border border-beige/45 rounded-2xl bg-white overflow-hidden shadow-sm">
+            {/* Header Control Bar */}
+            <div className="flex items-center justify-between border-b border-beige/40 bg-cream/20 px-4 py-2.5 text-xs select-none">
+                <div className="flex gap-2">
+                    <button
+                        type="button"
+                        onClick={() => setViewMode('table')}
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
+                            viewMode === 'table'
+                                ? 'bg-burgundy text-white shadow-sm'
+                                : 'text-taupe hover:text-ink hover:bg-beige/10'
+                        }`}
+                    >
+                        📋 Table
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => setViewMode('chart')}
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
+                            viewMode === 'chart'
+                                ? 'bg-burgundy text-white shadow-sm'
+                                : 'text-taupe hover:text-ink hover:bg-beige/10'
+                        }`}
+                    >
+                        📊 Chart
+                    </button>
+                </div>
+
+                {viewMode === 'chart' && (
+                    <div className="flex gap-1.5 bg-cream/35 border border-beige/30 p-1 rounded-lg">
+                        {['bar', 'line', 'area'].map((type) => (
+                            <button
+                                key={type}
+                                type="button"
+                                onClick={() => setChartType(type)}
+                                className={`px-2.5 py-1 rounded-md font-bold uppercase text-[10px] tracking-wider transition-all cursor-pointer ${
+                                    chartType === type
+                                        ? 'bg-white text-burgundy shadow-sm border border-beige/40'
+                                        : 'text-taupe hover:text-ink'
+                                }`}
+                            >
+                                {type}
+                            </button>
+                        ))}
+                    </div>
+                )}
+            </div>
+
+            {/* View Output Content */}
+            <div className="p-4 bg-white">
+                {viewMode === 'table' ? (
+                    <div className="overflow-x-auto rounded-xl border border-beige/25">
+                        <table className="min-w-full divide-y divide-beige/40 text-left border-collapse" {...props}>
+                            {children}
+                        </table>
+                    </div>
+                ) : (
+                    <div className="h-[240px] w-full mt-2 pr-4">
+                        <ResponsiveContainer width="100%" height="100%">
+                            {chartType === 'line' ? (
+                                <LineChart data={rows} margin={{ top: 15, right: 5, left: -20, bottom: 5 }}>
+                                    <CartesianGrid strokeDasharray="3 3" stroke="#f0ede9" />
+                                    <XAxis dataKey={xAxisKey} stroke="#8a7a6e" fontSize={10} />
+                                    <YAxis stroke="#8a7a6e" fontSize={10} />
+                                    <Tooltip contentStyle={{ background: '#faf8f5', borderColor: '#d9d2c9', borderRadius: '12px', fontSize: '11px' }} />
+                                    <Legend wrapperStyle={{ fontSize: '10px' }} />
+                                    {chartableKeys.map((key, idx) => (
+                                        <Line key={key} type="monotone" dataKey={key} stroke={themeColors[idx % themeColors.length]} strokeWidth={2} dot={{ r: 3 }} />
+                                    ))}
+                                </LineChart>
+                            ) : chartType === 'area' ? (
+                                <AreaChart data={rows} margin={{ top: 15, right: 5, left: -20, bottom: 5 }}>
+                                    <CartesianGrid strokeDasharray="3 3" stroke="#f0ede9" />
+                                    <XAxis dataKey={xAxisKey} stroke="#8a7a6e" fontSize={10} />
+                                    <YAxis stroke="#8a7a6e" fontSize={10} />
+                                    <Tooltip contentStyle={{ background: '#faf8f5', borderColor: '#d9d2c9', borderRadius: '12px', fontSize: '11px' }} />
+                                    <Legend wrapperStyle={{ fontSize: '10px' }} />
+                                    {chartableKeys.map((key, idx) => (
+                                        <Area key={key} type="monotone" dataKey={key} stroke={themeColors[idx % themeColors.length]} fill={themeColors[idx % themeColors.length]} fillOpacity={0.15} strokeWidth={2} />
+                                    ))}
+                                </AreaChart>
+                            ) : (
+                                <BarChart data={rows} margin={{ top: 15, right: 5, left: -20, bottom: 5 }}>
+                                    <CartesianGrid strokeDasharray="3 3" stroke="#f0ede9" />
+                                    <XAxis dataKey={xAxisKey} stroke="#8a7a6e" fontSize={10} />
+                                    <YAxis stroke="#8a7a6e" fontSize={10} />
+                                    <Tooltip contentStyle={{ background: '#faf8f5', borderColor: '#d9d2c9', borderRadius: '12px', fontSize: '11px' }} />
+                                    <Legend wrapperStyle={{ fontSize: '10px' }} />
+                                    {chartableKeys.map((key, idx) => (
+                                        <Bar key={key} dataKey={key} fill={themeColors[idx % themeColors.length]} radius={[4, 4, 0, 0]} />
+                                    ))}
+                                </BarChart>
+                            )}
+                        </ResponsiveContainer>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+};
+
 // Markdown block rendering (renders paragraphs, lists, headers, etc.)
 // Markdown block rendering using ReactMarkdown for robust tables, lists, and headers
 const MarkdownBlock = ({ block }) => {
@@ -197,11 +380,7 @@ const MarkdownBlock = ({ block }) => {
                             {...props}
                         />
                     ),
-                    table: ({node, ...props}) => (
-                        <div className="my-5 overflow-x-auto rounded-xl border border-beige/45 shadow-sm">
-                            <table className="min-w-full divide-y divide-beige/40 text-left border-collapse" {...props} />
-                        </div>
-                    ),
+                    table: ({node, ...props}) => <InteractiveTable {...props} />,
                     thead: ({node, ...props}) => <thead className="bg-cream/40" {...props} />,
                     tbody: ({node, ...props}) => <tbody className="divide-y divide-beige/25 bg-white" {...props} />,
                     tr: ({node, ...props}) => <tr className="hover:bg-cream/10 transition-colors" {...props} />,

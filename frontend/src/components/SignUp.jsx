@@ -38,7 +38,7 @@ const SignUp = () => {
                     <div className="relative w-full h-[520px] rounded-2xl overflow-hidden bg-ink flex flex-col justify-between p-8 text-left shadow-inner">
                         {/* Gold bloom */}
                         <div className="absolute top-0 right-0 w-48 h-48 bg-gold/10 rounded-full blur-3xl pointer-events-none" />
-                        
+
                         <div className="flex justify-between items-center z-10 select-none">
                             <span className="text-[10px] font-bold text-gold uppercase tracking-widest flex items-center gap-1.5">
                                 <Cpu size={12} /> SECURE_NODE_V1
@@ -54,7 +54,7 @@ const SignUp = () => {
                                 Autonomous <br /> wealth building starts here.
                             </h3>
                             <p className="text-xs text-cream/70 leading-relaxed font-normal max-w-xs">
-                                FinexaAI connects your financial roadmap to smart, private, and automated portfolios.
+                                BIZRAAI connects your financial roadmap to smart, private, and automated portfolios.
                             </p>
                         </div>
 
@@ -70,7 +70,7 @@ const SignUp = () => {
                     <div className="mb-10 text-left">
                         <h1 className="font-serif text-4xl lg:text-5xl font-bold text-ink leading-tight mb-4">
                             Welcome to <br />
-                            <span className="text-burgundy">FinexaAI</span>
+                            <span className="text-burgundy">BIZRAAI</span>
                         </h1>
                         <p className="text-sm font-semibold text-taupe">
                             Access your private wealth concierge & autonomous AI assistant.
@@ -81,9 +81,8 @@ const SignUp = () => {
                         <button
                             onClick={signUpWithGoogle}
                             disabled={isLoading}
-                            className={`w-full bg-white text-ink font-extrabold text-xs uppercase tracking-widest py-4 rounded-full border border-beige hover:border-burgundy/40 flex items-center justify-center gap-3 shadow-[0_4px_16px_rgba(58,46,37,0.06)] active:scale-98 transition-all cursor-pointer ${
-                                isLoading ? 'opacity-60 cursor-not-allowed' : 'hover:bg-ivory/60'
-                            }`}
+                            className={`w-full bg-white text-ink font-extrabold text-xs uppercase tracking-widest py-4 rounded-full border border-beige hover:border-burgundy/40 flex items-center justify-center gap-3 shadow-[0_4px_16px_rgba(58,46,37,0.06)] active:scale-98 transition-all cursor-pointer ${isLoading ? 'opacity-60 cursor-not-allowed' : 'hover:bg-ivory/60'
+                                }`}
                         >
                             <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-5 h-5" />
                             {isLoading ? 'Navigating to Chatbot...' : 'Continue with Google'}
@@ -91,7 +90,7 @@ const SignUp = () => {
                     </div>
 
                     <p className="text-[10px] text-taupe mt-12 text-center font-medium leading-relaxed max-w-xs mx-auto">
-                        By connecting to FinexaAI you agree to our <span className="text-ink font-bold cursor-pointer hover:text-burgundy">Terms of use</span> and <span className="text-ink font-bold cursor-pointer hover:text-burgundy">Privacy Policy</span>.
+                        By connecting to BIZRAAI you agree to our <span className="text-ink font-bold cursor-pointer hover:text-burgundy">Terms of use</span> and <span className="text-ink font-bold cursor-pointer hover:text-burgundy">Privacy Policy</span>.
                     </p>
                 </div>
             </div>

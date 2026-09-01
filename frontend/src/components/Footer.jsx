@@ -4,6 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Link } from 'react-router-dom';
 import { User, Activity, ShieldCheck, Cpu, Bell, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { AreaChart, Area, Tooltip as ChartTooltip, ResponsiveContainer } from 'recharts';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -24,6 +25,8 @@ const Footer = () => {
     const finalContentRef = useRef(null);
 
     const [showNotification, setShowNotification] = useState(false);
+    const [years, setYears] = useState(15);
+    const [investment, setInvestment] = useState(10000);
 
     const handleSubscribe = () => {
         setShowNotification(true);
@@ -93,6 +96,53 @@ const Footer = () => {
         return () => ctx.revert();
     }, []);
 
+    const P = investment; // Dynamic monthly investment
+    const r = 0.12;  // 12% annual return
+    const i = r / 12;
+    const n = years * 12;
+    const fv = P * ((Math.pow(1 + i, n) - 1) / i) * (1 + i);
+    const totalInvested = P * n;
+
+    // Formatting helper
+    const formatRupees = (val) => {
+        if (val >= 10000000) {
+            return `₹${(val / 10000000).toFixed(2)} Cr`;
+        }
+        if (val >= 100000) {
+            return `₹${(val / 100000).toFixed(2)} Lakh`;
+        }
+        return `₹${Math.round(val).toLocaleString('en-IN')}`;
+    };
+
+    // Build dynamic points for the Recharts AreaChart
+    const chartData = [];
+    for (let y = 0; y <= years; y++) {
+        const currentMonth = y * 12;
+        const currentVal = P * ((Math.pow(1 + i, currentMonth) - 1) / i) * (1 + i);
+        const currentInvested = P * currentMonth;
+        chartData.push({
+            year: `Year ${y}`,
+            value: Math.round(currentVal),
+            invested: currentInvested,
+            wealth: Math.round(currentVal - currentInvested)
+        });
+    }
+
+    const CustomTooltip = ({ active, payload }) => {
+        if (active && payload && payload.length) {
+            const data = payload[0].payload;
+            return (
+                <div className="bg-[#1c140e]/95 border border-gold/30 p-3 rounded-xl shadow-xl backdrop-blur-md text-[10px] sm:text-xs">
+                    <p className="font-bold text-gold uppercase tracking-wider mb-1 font-mono">{data.year}</p>
+                    <p className="text-ivory/80">Future Value: <span className="font-bold text-ivory">{formatRupees(data.value)}</span></p>
+                    <p className="text-ivory/80">Invested: <span className="font-bold text-ivory">{formatRupees(data.invested)}</span></p>
+                    <p className="text-ivory/85 font-semibold">Wealth Gained: <span className="font-extrabold text-gold">{formatRupees(data.wealth)}</span></p>
+                </div>
+            );
+        }
+        return null;
+    };
+
     return (
         <div ref={containerRef} className="relative bg-black w-full">
             {/* Sticky viewport */}
@@ -127,7 +177,7 @@ const Footer = () => {
                         ref={badge3Ref}
                         className="absolute bottom-0 left-1/4 bg-gold px-4 py-1.5 rounded-lg flex items-center gap-2 text-[10px] font-bold text-ink tracking-widest border border-beige/10 select-none"
                     >
-                        <Cpu size={12} /> FINEXA_AI
+                        <Cpu size={12} /> BIZRA_AI
                     </div>
                 </div>
 
@@ -189,33 +239,125 @@ const Footer = () => {
                 >
                     <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center max-w-7xl mx-auto w-full pt-16">
                         {/* Chart Card */}
-                        <div className="bg-cream rounded-3xl h-[35vh] lg:h-[450px] p-8 flex flex-col justify-between overflow-hidden border border-beige/40 shadow-[0_8px_32px_rgba(58,46,37,0.06)] relative group">
-                            <div>
-                                <span className="px-2.5 py-0.5 bg-burgundy/10 text-burgundy text-[9px] font-bold rounded uppercase tracking-wider">
-                                    Growth Matrix
-                                </span>
-                                <h3 className="font-serif text-2xl font-bold text-ink mt-3">Compounded Trajectory</h3>
+                        <div className="bg-ink rounded-3xl h-[35vh] lg:h-[450px] p-8 flex flex-col justify-between overflow-hidden border border-beige/40 shadow-[0_8px_32px_rgba(58,46,37,0.06)] relative group select-none">
+                            {/* Video Background */}
+                            <video
+                                src="/Compounded.mp4"
+                                autoPlay
+                                loop
+                                muted
+                                playsInline
+                                className="absolute inset-0 w-full h-full object-cover z-0 opacity-35 group-hover:scale-102 transition-transform duration-1000"
+                            />
+
+                            {/* Top header */}
+                            <div className="relative z-10 flex justify-between items-start">
+                                <div>
+                                    <span className="px-2.5 py-0.5 bg-gold/20 text-gold text-[9px] font-bold rounded uppercase tracking-wider">
+                                        Growth Matrix
+                                    </span>
+                                    <h3 className="font-serif text-2xl font-bold text-ivory mt-2.5">Compounded Trajectory</h3>
+                                </div>
+                                <div className="text-right">
+                                    <span className="text-[9.5px] uppercase font-bold text-ivory/50 block">Future Value</span>
+                                    <span className="font-serif text-xl sm:text-2xl font-black text-gold select-all">{formatRupees(fv)}</span>
+                                </div>
                             </div>
 
-                            {/* SVG Line Chart */}
-                            <div className="w-full h-32 flex items-end relative overflow-visible mt-auto mb-4">
-                                <svg className="w-full h-full overflow-visible" viewBox="0 0 400 120" preserveAspectRatio="none">
-                                    <defs>
-                                        <linearGradient id="footerChartGrad" x1="0" y1="0" x2="0" y2="1">
-                                            <stop offset="0%" stopColor="#6B1E2B" stopOpacity="0.15" />
-                                            <stop offset="100%" stopColor="#6B1E2B" stopOpacity="0" />
-                                        </linearGradient>
-                                    </defs>
-                                    <path d="M0,110 C80,105 120,80 180,75 C240,70 300,20 400,5 L400,120 L0,120 Z" fill="url(#footerChartGrad)" />
-                                    <path d="M0,110 C80,105 120,80 180,75 C240,70 300,20 400,5" fill="none" stroke="#6B1E2B" strokeWidth="3.5" strokeLinecap="round" />
-                                    <circle cx="400" cy="5" r="5" fill="#C9A227" className="animate-ping" />
-                                    <circle cx="400" cy="5" r="4" fill="#C9A227" />
-                                </svg>
+                            {/* Dynamic stats values */}
+                            <div className="relative z-10 grid grid-cols-3 gap-2 bg-black/40 backdrop-blur-xs p-3 rounded-2xl border border-ivory/5 text-left my-auto mt-4">
+                                <div>
+                                    <span className="text-[8px] sm:text-[9px] uppercase font-bold text-ivory/50 block">Investment</span>
+                                    <span className="text-xs sm:text-sm font-extrabold text-ivory">
+                                        ₹{Math.round(investment).toLocaleString('en-IN')}/mo
+                                    </span>
+                                </div>
+                                <div>
+                                    <span className="text-[8px] sm:text-[9px] uppercase font-bold text-ivory/50 block">Total Invested</span>
+                                    <span className="text-xs sm:text-sm font-extrabold text-ivory/90">{formatRupees(totalInvested)}</span>
+                                </div>
+                                <div>
+                                    <span className="text-[8px] sm:text-[9px] uppercase font-bold text-ivory/50 block">Duration</span>
+                                    <span className="text-xs sm:text-sm font-extrabold text-gold">{years} Years</span>
+                                </div>
                             </div>
 
-                            <div className="flex justify-between items-center text-[10px] font-mono text-taupe border-t border-beige/40 pt-4">
+                            {/* Interactive Sliders */}
+                            <div className="relative z-10 mt-4 flex flex-col gap-3 text-left">
+                                {/* Monthly Investment Control */}
+                                <div className="flex flex-col gap-1">
+                                    <div className="flex justify-between items-center text-[8px] sm:text-[9px] font-bold text-ivory/50 uppercase tracking-widest">
+                                        <span>Monthly Investment</span>
+                                        <div className="flex items-center gap-1 bg-black/30 border border-ivory/10 px-2 py-0.5 rounded">
+                                            <span className="text-gold font-extrabold text-[10px]">₹</span>
+                                            <input
+                                                type="number"
+                                                min="500"
+                                                max="1000000"
+                                                value={investment}
+                                                onChange={(e) => setInvestment(Math.max(0, Number(e.target.value)))}
+                                                className="bg-transparent text-gold font-extrabold text-[10px] w-14 outline-none border-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                            />
+                                        </div>
+                                    </div>
+                                    <input
+                                        type="range"
+                                        min="1000"
+                                        max="100000"
+                                        step="1000"
+                                        value={investment}
+                                        onChange={(e) => setInvestment(Number(e.target.value))}
+                                        className="w-full accent-gold bg-ivory/10 h-1 rounded-lg appearance-none cursor-pointer relative z-10 transition-all hover:bg-ivory/20"
+                                    />
+                                </div>
+
+                                {/* Years Control */}
+                                <div className="flex flex-col gap-1">
+                                    <label className="text-[8px] sm:text-[9px] font-bold text-ivory/50 uppercase tracking-widest flex justify-between">
+                                        <span>Adjust Horizon</span>
+                                        <span className="text-gold font-extrabold">{years} Years</span>
+                                    </label>
+                                    <input
+                                        type="range"
+                                        min="5"
+                                        max="30"
+                                        step="1"
+                                        value={years}
+                                        onChange={(e) => setYears(Number(e.target.value))}
+                                        className="w-full accent-gold bg-ivory/10 h-1 rounded-lg appearance-none cursor-pointer relative z-10 transition-all hover:bg-ivory/20"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Dynamic Recharts AreaChart */}
+                            <div className="w-full h-24 sm:h-28 relative z-10 overflow-visible mt-4 mb-2">
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <AreaChart data={chartData} margin={{ top: 5, right: 5, left: 5, bottom: 5 }}>
+                                        <defs>
+                                            <linearGradient id="footerChartGradDark" x1="0" y1="0" x2="0" y2="1">
+                                                <stop offset="5%" stopColor="#C9A227" stopOpacity={0.4} />
+                                                <stop offset="95%" stopColor="#C9A227" stopOpacity={0} />
+                                            </linearGradient>
+                                        </defs>
+                                        <ChartTooltip content={<CustomTooltip />} cursor={{ stroke: 'rgba(201,162,39,0.3)', strokeWidth: 1 }} />
+                                        <Area
+                                            type="monotone"
+                                            dataKey="value"
+                                            stroke="#C9A227"
+                                            strokeWidth={3}
+                                            fillOpacity={1}
+                                            fill="url(#footerChartGradDark)"
+                                            dot={{ r: 3, fill: '#C9A227', strokeWidth: 0 }}
+                                            activeDot={{ r: 6, fill: '#6B1E2B', stroke: '#C9A227', strokeWidth: 2 }}
+                                        />
+                                    </AreaChart>
+                                </ResponsiveContainer>
+                            </div>
+
+                            {/* Timeline bottom */}
+                            <div className="flex justify-between items-center text-[9px] font-mono text-ivory/50 border-t border-ivory/10 pt-3 relative z-10">
                                 <span>YEAR_0</span>
-                                <span>YEAR_5</span>
+                                <span>YEAR_{years}</span>
                             </div>
                         </div>
 
@@ -282,7 +424,7 @@ const Footer = () => {
                                     </button>
                                 ))}
                             </div>
-                            <p className="text-[9.5px] font-mono text-taupe uppercase tracking-widest">© 2026 FINEXA_AI</p>
+                            <p className="text-[9.5px] font-mono text-taupe uppercase tracking-widest">© 2026 BIZRA_AI</p>
                         </div>
                     </footer>
                 </div>

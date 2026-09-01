@@ -63,7 +63,7 @@ const Hero = () => {
         const y = e.clientY - rect.top - rect.height / 2;
         setPhoneRotate({
             x: -(y / (rect.height / 2)) * 12,
-            y:  (x / (rect.width  / 2)) * 12,
+            y: (x / (rect.width / 2)) * 12,
         });
     }, []);
 
@@ -153,8 +153,8 @@ const Hero = () => {
     }, []);
 
     return (
-        <div 
-            ref={containerRef} 
+        <div
+            ref={containerRef}
             className="w-full bg-ivory text-ink relative min-h-screen overflow-hidden flex flex-col justify-center pt-20 md:pt-24 pb-12 dot-grid linen-noise"
         >
             {/* Ambient Blooms */}
@@ -268,109 +268,109 @@ const Hero = () => {
                         style={{ transformStyle: 'preserve-3d' }}
                         className="cursor-pointer"
                     >
-                    <div className="w-[340px] sm:w-[365px] lg:w-[385px] h-[590px] sm:h-[625px] lg:h-[650px] bg-ink rounded-[46px] p-3.5 shadow-[0_28px_72px_rgba(58,46,37,0.22)] border-4 border-beige/60 relative overflow-hidden flex flex-col">
-                        {/* Status bar */}
-                        <div className="flex justify-between items-center px-6 pt-2 pb-3.5 z-20 text-[10px] font-semibold text-cream/70 select-none">
-                            <span>9:41</span>
-                            <div className="w-22 h-4 bg-black rounded-full absolute left-1/2 -translate-x-1/2 top-1.5" />
-                            <div className="flex items-center gap-1.5">
-                                <span>5G</span>
-                                <div className="w-4 h-2.5 bg-cream/70 rounded-xs" />
+                        <div className="w-[340px] sm:w-[365px] lg:w-[385px] h-[590px] sm:h-[625px] lg:h-[650px] bg-ink rounded-[46px] p-3.5 shadow-[0_28px_72px_rgba(58,46,37,0.22)] border-4 border-beige/60 relative overflow-hidden flex flex-col">
+                            {/* Status bar */}
+                            <div className="flex justify-between items-center px-6 pt-2 pb-3.5 z-20 text-[10px] font-semibold text-cream/70 select-none">
+                                <span>9:41</span>
+                                <div className="w-22 h-4 bg-black rounded-full absolute left-1/2 -translate-x-1/2 top-1.5" />
+                                <div className="flex items-center gap-1.5">
+                                    <span>5G</span>
+                                    <div className="w-4 h-2.5 bg-cream/70 rounded-xs" />
+                                </div>
+                            </div>
+
+                            {/* Chat Body */}
+                            <div className="flex-1 overflow-y-auto no-scrollbar px-3 space-y-3 pt-2">
+                                {/* Message 1: AI */}
+                                {chatStep >= 1 && (
+                                    <motion.div
+                                        initial={{ opacity: 0, scale: 0.9, y: 10 }}
+                                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                                        className="flex items-start gap-2 max-w-[85%]"
+                                    >
+                                        <div className="w-6.5 h-6.5 rounded-xl bg-burgundy flex items-center justify-center text-[10.5px] font-extrabold text-gold flex-shrink-0">F</div>
+                                        <div className="bg-burgundy text-ivory p-3 rounded-2xl rounded-tl-xs text-[11.5px] leading-normal shadow-[0_4px_12px_rgba(107,30,43,0.12)]">
+                                            Hi Aanya 👋 I noticed you have ₹18,400 sitting idle this month.
+                                        </div>
+                                    </motion.div>
+                                )}
+
+                                {/* Message 2: User */}
+                                {chatStep >= 2 && (
+                                    <motion.div
+                                        initial={{ opacity: 0, scale: 0.9, y: 10 }}
+                                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                                        className="flex items-end justify-end max-w-[85%] ml-auto"
+                                    >
+                                        <div className="bg-beige/25 border border-beige/40 text-cream p-3 rounded-2xl rounded-tr-xs text-[11.5px] leading-normal">
+                                            What should I do with it?
+                                        </div>
+                                    </motion.div>
+                                )}
+
+                                {/* Message 3: AI */}
+                                {chatStep >= 3 && (
+                                    <motion.div
+                                        initial={{ opacity: 0, scale: 0.9, y: 10 }}
+                                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                                        className="flex items-start gap-2 max-w-[85%]"
+                                    >
+                                        <div className="w-6.5 h-6.5 rounded-xl bg-burgundy flex items-center justify-center text-[10.5px] font-extrabold text-gold flex-shrink-0">F</div>
+                                        <div className="bg-burgundy text-ivory p-3 rounded-2xl rounded-tl-xs text-[11.5px] leading-normal shadow-[0_4px_12px_rgba(107,30,43,0.12)]">
+                                            Based on your goals, I'd suggest: 60% into your index fund SIP, 40% into your emergency buffer.
+                                        </div>
+                                    </motion.div>
+                                )}
+
+                                {/* Message 4: Projection Card */}
+                                {chatStep >= 4 && (
+                                    <motion.div
+                                        initial={{ opacity: 0, scale: 0.9, y: 15 }}
+                                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                                        transition={{ type: "spring", stiffness: 200, damping: 15 }}
+                                        className="bg-cream border border-beige/50 p-3 rounded-2xl text-ink space-y-2 max-w-[92%] mx-auto shadow-[0_8px_20px_rgba(0,0,0,0.18)]"
+                                    >
+                                        <div className="flex justify-between items-center text-[10px] font-extrabold text-burgundy uppercase tracking-wider">
+                                            <span>Projection Card</span>
+                                            <span className="text-gold font-bold">8.2% Return</span>
+                                        </div>
+                                        <div className="text-sm font-bold tracking-tight text-ink">
+                                            ₹18,400 today → ₹31,200
+                                        </div>
+                                        <div className="text-[9px] text-taupe font-medium">
+                                            Projected value in 5 years compound
+                                        </div>
+                                        <div className="w-full bg-beige/35 h-1.5 rounded-full overflow-hidden">
+                                            <div className="bg-burgundy h-full rounded-full" style={{ width: '65%' }} />
+                                        </div>
+                                    </motion.div>
+                                )}
+
+                                {/* Message 5: AI */}
+                                {chatStep >= 5 && (
+                                    <motion.div
+                                        initial={{ opacity: 0, scale: 0.9, y: 10 }}
+                                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                                        className="flex items-start gap-2 max-w-[85%]"
+                                    >
+                                        <div className="w-6.5 h-6.5 rounded-xl bg-burgundy flex items-center justify-center text-[10.5px] font-extrabold text-gold flex-shrink-0">F</div>
+                                        <div className="bg-burgundy text-ivory p-3 rounded-2xl rounded-tl-xs text-[11.5px] leading-normal shadow-[0_4px_12px_rgba(107,30,43,0.12)]">
+                                            Want me to set this up automatically?
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </div>
+
+                            {/* Interactive Footer */}
+                            <div className="p-3 border-t border-beige/10 bg-ink/80 backdrop-blur-md flex items-center gap-2">
+                                <div className="flex-1 bg-beige/10 rounded-full h-8 px-3.5 flex items-center text-xs text-cream/40">
+                                    Send message to BIZRA...
+                                </div>
+                                <div className="w-8 h-8 rounded-full bg-burgundy flex items-center justify-center text-ivory shadow-md">
+                                    <ArrowRight size={14} />
+                                </div>
                             </div>
                         </div>
-
-                        {/* Chat Body */}
-                        <div className="flex-1 overflow-y-auto no-scrollbar px-3 space-y-3 pt-2">
-                            {/* Message 1: AI */}
-                            {chatStep >= 1 && (
-                                <motion.div
-                                    initial={{ opacity: 0, scale: 0.9, y: 10 }}
-                                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                                    className="flex items-start gap-2 max-w-[85%]"
-                                >
-                                    <div className="w-6.5 h-6.5 rounded-xl bg-burgundy flex items-center justify-center text-[10.5px] font-extrabold text-gold flex-shrink-0">F</div>
-                                    <div className="bg-burgundy text-ivory p-3 rounded-2xl rounded-tl-xs text-[11.5px] leading-normal shadow-[0_4px_12px_rgba(107,30,43,0.12)]">
-                                        Hi Aanya 👋 I noticed you have ₹18,400 sitting idle this month.
-                                    </div>
-                                </motion.div>
-                            )}
-
-                            {/* Message 2: User */}
-                            {chatStep >= 2 && (
-                                <motion.div
-                                    initial={{ opacity: 0, scale: 0.9, y: 10 }}
-                                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                                    className="flex items-end justify-end max-w-[85%] ml-auto"
-                                >
-                                    <div className="bg-beige/25 border border-beige/40 text-cream p-3 rounded-2xl rounded-tr-xs text-[11.5px] leading-normal">
-                                        What should I do with it?
-                                    </div>
-                                </motion.div>
-                            )}
-
-                            {/* Message 3: AI */}
-                            {chatStep >= 3 && (
-                                <motion.div
-                                    initial={{ opacity: 0, scale: 0.9, y: 10 }}
-                                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                                    className="flex items-start gap-2 max-w-[85%]"
-                                >
-                                    <div className="w-6.5 h-6.5 rounded-xl bg-burgundy flex items-center justify-center text-[10.5px] font-extrabold text-gold flex-shrink-0">F</div>
-                                    <div className="bg-burgundy text-ivory p-3 rounded-2xl rounded-tl-xs text-[11.5px] leading-normal shadow-[0_4px_12px_rgba(107,30,43,0.12)]">
-                                        Based on your goals, I'd suggest: 60% into your index fund SIP, 40% into your emergency buffer.
-                                    </div>
-                                </motion.div>
-                            )}
-
-                            {/* Message 4: Projection Card */}
-                            {chatStep >= 4 && (
-                                <motion.div
-                                    initial={{ opacity: 0, scale: 0.9, y: 15 }}
-                                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                                    transition={{ type: "spring", stiffness: 200, damping: 15 }}
-                                    className="bg-cream border border-beige/50 p-3 rounded-2xl text-ink space-y-2 max-w-[92%] mx-auto shadow-[0_8px_20px_rgba(0,0,0,0.18)]"
-                                >
-                                    <div className="flex justify-between items-center text-[10px] font-extrabold text-burgundy uppercase tracking-wider">
-                                        <span>Projection Card</span>
-                                        <span className="text-gold font-bold">8.2% Return</span>
-                                    </div>
-                                    <div className="text-sm font-bold tracking-tight text-ink">
-                                        ₹18,400 today → ₹31,200
-                                    </div>
-                                    <div className="text-[9px] text-taupe font-medium">
-                                        Projected value in 5 years compound
-                                    </div>
-                                    <div className="w-full bg-beige/35 h-1.5 rounded-full overflow-hidden">
-                                        <div className="bg-burgundy h-full rounded-full" style={{ width: '65%' }} />
-                                    </div>
-                                </motion.div>
-                            )}
-
-                            {/* Message 5: AI */}
-                            {chatStep >= 5 && (
-                                <motion.div
-                                    initial={{ opacity: 0, scale: 0.9, y: 10 }}
-                                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                                    className="flex items-start gap-2 max-w-[85%]"
-                                >
-                                    <div className="w-6.5 h-6.5 rounded-xl bg-burgundy flex items-center justify-center text-[10.5px] font-extrabold text-gold flex-shrink-0">F</div>
-                                    <div className="bg-burgundy text-ivory p-3 rounded-2xl rounded-tl-xs text-[11.5px] leading-normal shadow-[0_4px_12px_rgba(107,30,43,0.12)]">
-                                        Want me to set this up automatically?
-                                    </div>
-                                </motion.div>
-                            )}
-                        </div>
-
-                        {/* Interactive Footer */}
-                        <div className="p-3 border-t border-beige/10 bg-ink/80 backdrop-blur-md flex items-center gap-2">
-                            <div className="flex-1 bg-beige/10 rounded-full h-8 px-3.5 flex items-center text-xs text-cream/40">
-                                Send message to Finexa...
-                            </div>
-                            <div className="w-8 h-8 rounded-full bg-burgundy flex items-center justify-center text-ivory shadow-md">
-                                <ArrowRight size={14} />
-                            </div>
-                        </div>
-                    </div>
                     </motion.div>
                 </div>
             </div>

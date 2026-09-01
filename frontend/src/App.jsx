@@ -10,6 +10,7 @@ const Dashboard = lazy(() => import('./components/Dashboard'))
 const Explore = lazy(() => import('./components/Explore/Explore'))
 const LearnEarn = lazy(() => import('./components/LearnEarn/LearnEarn'))
 const FlowingMenuPage = lazy(() => import('./components/ui/FlowingMenuPage'))
+const Calculator = lazy(() => import('./components/Calculator/Calculator'))
 
 const PageLoader = () => (
   <div className="min-h-screen w-full bg-ivory flex flex-col items-center justify-center gap-4 dot-grid">
@@ -36,6 +37,7 @@ function App() {
         <Route path="/explore" element={<Explore />} />
         <Route path="/learn" element={<LearnEarn />} />
         <Route path="/menu" element={<FlowingMenuPage />} />
+        <Route path="/calculator" element={<Calculator />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Suspense>

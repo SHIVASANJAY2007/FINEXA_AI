@@ -14,7 +14,7 @@ const getBackendUrl = () => {
 
     if (!url) {
         if (typeof window !== 'undefined' && window.location.hostname.includes('vercel.app')) {
-            url = 'https://finexa-ai-xama.onrender.com/api';
+            url = 'https://BIZRA-ai-xama.onrender.com/api';
         } else {
             url = 'http://localhost:5000/api';
         }
@@ -34,8 +34,9 @@ const getBackendUrl = () => {
 };
 
 const BACKEND_API_URL = getBackendUrl();
+const N8N_WEBHOOK_URL = import.meta.env.VITE_N8N_WEBHOOK_URL || `${BACKEND_API_URL}/chat/send`;
 const WHATSAPP_API_URL = import.meta.env.VITE_WHATSAPP_API_URL || 'https://wa.me/15551382180';
-const TELEGRAM_API_URL = import.meta.env.VITE_TELEGRAM_API_URL || 'https://t.me/FinexaAIBot';
+const TELEGRAM_API_URL = import.meta.env.VITE_TELEGRAM_API_URL || 'https://t.me/BIZRAAIBot';
 
 const WhatsAppIcon = ({ className }) => (
     <svg className={className} viewBox="0 0 24 24" fill="currentColor" width="100%" height="100%">
@@ -204,7 +205,7 @@ const Chatbot = () => {
         {
             id: 'init-1',
             isBot: true,
-            text: "Welcome to Finexa AI! ☄️\n\nHow can I assist you with your financial planning today?",
+            text: "Welcome to BIZRA AI! ☄️\n\nHow can I assist you with your financial planning today?",
             time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         }
     ]);
@@ -297,28 +298,6 @@ const Chatbot = () => {
 
         return () => clearInterval(intervalId);
     }, [checkConnectionStatus]);
-
-    // Real-time n8n status checking via backend proxy
-    useEffect(() => {
-        const fetchStatus = async () => {
-            try {
-                const res = await fetch(`${BACKEND_API_URL}/chat/status`);
-                if (res.ok) {
-                    const data = await res.json();
-                    setChatStatus(data.online ? 'online' : 'offline');
-                } else {
-                    setChatStatus('offline');
-                }
-            } catch (err) {
-                setChatStatus('offline');
-            }
-        };
-
-        fetchStatus();
-        const statusInterval = setInterval(fetchStatus, 15000);
-
-        return () => clearInterval(statusInterval);
-    }, []);
 
     const handleCopyEndpoint = (e) => {
         e.stopPropagation();
@@ -419,7 +398,7 @@ const Chatbot = () => {
         setMessages([{
             id: `init-${Date.now()}`,
             isBot: true,
-            text: "Chat context reset. How can Finexa AI help you today?",
+            text: "Chat context reset. How can BIZRA AI help you today?",
             time: nowTime()
         }]);
         inputRef.current?.focus();
@@ -450,7 +429,7 @@ const Chatbot = () => {
                     <div className="h-4 w-[1px] bg-beige/60 hidden sm:block" />
                     <div className="flex items-center gap-2">
                         <span className="font-serif font-bold text-lg text-ink tracking-tight">
-                            Finexa<sup className="text-gold font-sans font-extrabold text-[10px] ml-0.5">AI</sup>
+                            BIZRA<sup className="text-gold font-sans font-extrabold text-[10px] ml-0.5">AI</sup>
                         </span>
                         <span className="text-[9px] uppercase tracking-widest font-extrabold bg-burgundy/10 text-burgundy px-2 py-0.5 rounded-full">
                             N8N DYNAMIC
@@ -458,7 +437,7 @@ const Chatbot = () => {
                     </div>
                 </div>
 
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 pr-16">
                     <button
                         onClick={resetChat}
                         className="flex items-center gap-1.5 text-xs font-semibold text-taupe hover:text-burgundy px-3 py-1.5 rounded-full hover:bg-beige/30 transition-colors cursor-pointer"
@@ -486,7 +465,7 @@ const Chatbot = () => {
                             </div>
                             <div>
                                 <h2 className="font-serif font-extrabold text-base sm:text-lg text-ink tracking-tight uppercase">
-                                    FINEXA AI AGENT
+                                    BIZRA AI AGENT
                                 </h2>
                                 <div className="mt-0.5">
                                     {chatStatus === 'online' && (
@@ -572,19 +551,7 @@ const Chatbot = () => {
                                             </div>
 
                                             <div className="space-y-3.5 text-xs">
-                                                <div>
-                                                    <span className="text-[10px] uppercase font-extrabold text-taupe block mb-1">Webhook Endpoint</span>
-                                                    <div className="bg-cream/40 p-2 rounded-lg border border-beige/20 font-mono text-[9px] text-ink select-all break-all relative group flex items-center justify-between gap-1.5">
-                                                        <span className="truncate pr-4">{N8N_WEBHOOK_URL}</span>
-                                                        <button
-                                                            onClick={handleCopyEndpoint}
-                                                            className="text-taupe hover:text-burgundy p-1 rounded hover:bg-beige/20 transition-colors cursor-pointer shrink-0"
-                                                            title="Copy Webhook URL"
-                                                        >
-                                                            {copied ? <Check size={12} className="text-emerald-600" /> : <Copy size={12} />}
-                                                        </button>
-                                                    </div>
-                                                </div>
+
 
                                                 <div className="grid grid-cols-2 gap-3.5">
                                                     <div>
@@ -659,10 +626,10 @@ const Chatbot = () => {
                     </AnimatePresence>
 
                     {/* Messages Area with Finance Animated Icons Wallpaper */}
-                    <div className="flex-1 overflow-y-auto p-4 sm:p-6 no-scrollbar bg-[#FDF8F3] relative overflow-hidden">
+                    <div className="flex-1 relative overflow-hidden bg-[#FDF8F3]">
                         <AnimatedIconBackground />
 
-                        <div className="relative z-10">
+                        <div className="absolute inset-0 overflow-y-auto p-4 sm:p-6 no-scrollbar z-10">
                             <AnimatePresence>
                                 {messages.map((msg) => (
                                     <ChatMessage key={msg.id} {...msg} />
@@ -684,7 +651,7 @@ const Chatbot = () => {
                                             <span className="w-2 h-2 rounded-full bg-burgundy animate-bounce [animation-delay:-0.3s]" />
                                             <span className="w-2 h-2 rounded-full bg-burgundy animate-bounce [animation-delay:-0.15s]" />
                                             <span className="w-2 h-2 rounded-full bg-burgundy animate-bounce" />
-                                            <span className="text-xs font-semibold text-taupe ml-2">Finexa AI is thinking...</span>
+                                            <span className="text-xs font-semibold text-taupe ml-2">BIZRA AI is thinking...</span>
                                         </div>
                                     </div>
                                 </motion.div>
@@ -701,7 +668,7 @@ const Chatbot = () => {
                             value={inputValue}
                             onChange={(e) => setInputValue(e.target.value)}
                             disabled={isLoading}
-                            placeholder={isLoading ? "Finexa AI is processing..." : "Ask Finexa AI anything..."}
+                            placeholder={isLoading ? "BIZRA AI is processing..." : "Ask BIZRA AI anything..."}
                             className={`flex-1 bg-cream/90 border border-beige/50 focus:border-burgundy focus:ring-1 focus:ring-burgundy rounded-full px-6 py-3.5 font-semibold text-xs sm:text-sm text-ink placeholder:text-taupe/60 outline-none transition-all ${isLoading ? 'opacity-50 cursor-not-allowed' : ''
                                 }`}
                         />
@@ -810,7 +777,7 @@ const Chatbot = () => {
                                     </h2>
 
                                     <p className="text-xs font-semibold text-taupe leading-relaxed mb-8 max-w-xs">
-                                        Ready to chat? Connect with our Finexa AI bot on WhatsApp for instant financial insights and alerts on the go.
+                                        Ready to chat? Connect with our BIZRA AI bot on WhatsApp for instant financial insights and alerts on the go.
                                     </p>
 
                                     <a
@@ -840,7 +807,7 @@ const Chatbot = () => {
                                     </h2>
 
                                     <p className="text-xs font-semibold text-taupe leading-relaxed mb-8 max-w-xs">
-                                        Prefer Telegram? Interact with the Finexa AI Telegram bot for seamless, private and secure wealth management answers.
+                                        Prefer Telegram? Interact with the BIZRA AI Telegram bot for seamless, private and secure wealth management answers.
                                     </p>
 
                                     <a
@@ -858,7 +825,7 @@ const Chatbot = () => {
                     </div>
 
                     <div className="text-[9px] font-extrabold uppercase tracking-[0.35em] text-taupe/50 select-none border-t border-beige/30 pt-4 w-full">
-                        FINEXA OFFICIAL MOBILE CONCIERGE
+                        BIZRA OFFICIAL MOBILE CONCIERGE
                     </div>
                 </div>
             </div>

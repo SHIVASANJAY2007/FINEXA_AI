@@ -13,8 +13,8 @@ const FEATURES_CONTENT = [
         description: "Craft tailor-made asset allocations driven by autonomous algorithms. Optimize risk-adjusted returns automatically without exposing your personal information.",
         content: (
             <div className="h-full w-full relative group overflow-hidden bg-ink">
-                <img src="/assets/features/ai_portfolio_1784285084959.png" alt="AI Portfolio" className="absolute inset-0 w-full h-full object-cover opacity-60 grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110" />
-                <div className="absolute inset-0 bg-gradient-to-t from-ivory via-ivory/95 to-ivory/60" />
+                <img src="/assets/features/ai_portfolio_1784285084959.png" alt="AI Portfolio" className="absolute inset-0 w-full h-full object-cover opacity-80 grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110" />
+                <div className="absolute inset-0 bg-gradient-to-t from-ivory/90 via-ivory/70 to-ivory/30" />
                 <div className="relative z-10 h-full p-8 flex flex-col justify-between text-left">
                     <div>
                         <span className="px-3 py-1 bg-burgundy/10 text-burgundy text-[10px] font-bold rounded-full uppercase tracking-wider">
@@ -69,8 +69,8 @@ const FEATURES_CONTENT = [
         description: "Stay updated with live mutual fund NAVs, FD interest rates across major Indian banks, and Nifty index movements, all streamed into your private chat workspace.",
         content: (
             <div className="h-full w-full relative group overflow-hidden bg-ink">
-                <img src="/assets/features/market_intel_1784285101555.png" alt="Market Intelligence" className="absolute inset-0 w-full h-full object-cover opacity-60 grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110" />
-                <div className="absolute inset-0 bg-gradient-to-t from-ivory via-ivory/95 to-ivory/60" />
+                <img src="/assets/features/market_intel_1784285101555.png" alt="Market Intelligence" className="absolute inset-0 w-full h-full object-cover opacity-80 grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110" />
+                <div className="absolute inset-0 bg-gradient-to-t from-ivory/90 via-ivory/70 to-ivory/30" />
                 <div className="relative z-10 h-full p-8 flex flex-col justify-between text-left">
                     <div>
                         <span className="px-3 py-1 bg-teal/10 text-teal text-[10px] font-bold rounded-full uppercase tracking-wider">
@@ -109,8 +109,8 @@ const FEATURES_CONTENT = [
         description: "Establish specific milestones like home purchases, child education, or retirement. Let our planner build a step-by-step monthly saving and SIP roadmap.",
         content: (
             <div className="h-full w-full relative group overflow-hidden bg-ink">
-                <img src="/assets/features/goal_planning_1784285113310.png" alt="Goal Planning" className="absolute inset-0 w-full h-full object-cover opacity-60 grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110" />
-                <div className="absolute inset-0 bg-gradient-to-t from-ivory via-ivory/95 to-ivory/60" />
+                <img src="/assets/features/goal_planning_1784285113310.png" alt="Goal Planning" className="absolute inset-0 w-full h-full object-cover opacity-80 grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110" />
+                <div className="absolute inset-0 bg-gradient-to-t from-ivory/90 via-ivory/70 to-ivory/30" />
                 <div className="relative z-10 h-full p-8 flex flex-col justify-between text-left">
                     <div>
                         <span className="px-3 py-1 bg-camel/15 text-camel text-[10px] font-bold rounded-full uppercase tracking-wider">
@@ -157,8 +157,8 @@ const FEATURES_CONTENT = [
         description: "Your wealth is your business. We conform fully to India's DPDP Act, keeping your credentials secure and never selling your data.",
         content: (
             <div className="h-full w-full relative group overflow-hidden bg-ink">
-                <img src="/assets/features/privacy_vault_1784285123899.png" alt="Privacy Vault" className="absolute inset-0 w-full h-full object-cover opacity-60 grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110" />
-                <div className="absolute inset-0 bg-gradient-to-t from-ivory via-ivory/95 to-ivory/60" />
+                <img src="/assets/features/privacy_vault_1784285123899.png" alt="Privacy Vault" className="absolute inset-0 w-full h-full object-cover opacity-80 grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110" />
+                <div className="absolute inset-0 bg-gradient-to-t from-ivory/90 via-ivory/70 to-ivory/30" />
                 <div className="relative z-10 h-full p-8 flex flex-col justify-between text-left">
                     <div>
                         <span className="px-3 py-1 bg-gold/15 text-gold text-[10px] font-bold rounded-full uppercase tracking-wider">

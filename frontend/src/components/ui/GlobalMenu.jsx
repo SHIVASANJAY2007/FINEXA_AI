@@ -74,6 +74,14 @@ const GlobalMenu = () => {
                                             textColor: '#3A2E25',
                                             marqueeBgColor: '#C9A227',
                                             marqueeTextColor: '#3A2E25'
+                                        },
+                                        { 
+                                            link: '/calculator', 
+                                            text: 'Calculator', 
+                                            image: 'https://images.unsplash.com/photo-1586486855514-8c633cc6fd38?w=600&q=80',
+                                            textColor: '#3A2E25',
+                                            marqueeBgColor: '#0B4F4A',
+                                            marqueeTextColor: '#FDF6ED'
                                         }
                                     ]}
                                     bgColor="transparent"

@@ -29,7 +29,7 @@ app.get('/healthz', (req, res) => {
 });
 
 app.get('/api/health', (req, res) => {
-  res.status(200).json({ status: "OK", service: "Finexa AI Backend", timestamp: new Date().toISOString() });
+  res.status(200).json({ status: "OK", service: "BIZRA AI Backend", timestamp: new Date().toISOString() });
 });
 
 // Register API Routes
@@ -75,8 +75,8 @@ app.use((err, req, res, next) => {
 
 // Start Server immediately
 app.listen(PORT, () => {
-  console.log(`Finexa AI proxy server is running on port ${PORT}`);
-  
+  console.log(`BIZRA AI proxy server is running on port ${PORT}`);
+
   // Initialize Database asynchronously in the background
   initDb()
     .then(() => {

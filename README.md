@@ -1,6 +1,6 @@
-# BIZRA AI - Production Deployment Guide
+# FINEXA AI - Production Deployment Guide
 
-This repository contains the **BIZRA AI** project organized as a clean, production-ready monorepo:
+This repository contains the **FINEXA AI** project organized as a clean, production-ready monorepo:
 - **`frontend/`**: React + Vite single-page application (deployed to **Vercel**).
 - **`backend/`**: Node.js + Express proxy server with PostgreSQL storage (deployed to **Render**).
 
@@ -51,5 +51,5 @@ Vercel is optimized to build and deploy the React frontend directly from the `fr
    - **Output Directory**: `dist`
    - **Install Command**: `npm install`
 4. Add the following **Environment Variable**:
-   - `VITE_API_BASE_URL`: Point this to the URL of your deployed Render backend (e.g. `https://BIZRA-ai-backend.onrender.com/api`).
+   - `VITE_API_BASE_URL`: Point this to the URL of your deployed Render backend (e.g. `https://FINEXA-ai-backend.onrender.com/api`).
 5. Click **Deploy**. Vercel will build the assets and handle SPA routing seamlessly using the included `vercel.json` rewrites.

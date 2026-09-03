@@ -468,8 +468,8 @@ const Calculator = () => {
                             key={type.id}
                             onClick={() => setCalcType(type.id)}
                             className={`px-4 py-3 rounded-xl font-bold text-[10.5px] uppercase tracking-wider transition-all cursor-pointer select-none text-center truncate ${calcType === type.id
-                                    ? 'bg-ink text-ivory shadow-md scale-[1.02]'
-                                    : 'text-taupe hover:text-ink hover:bg-beige/35'
+                                ? 'bg-ink text-ivory shadow-md scale-[1.02]'
+                                : 'text-taupe hover:text-ink hover:bg-beige/35'
                                 }`}
                             title={type.description}
                         >
@@ -901,7 +901,7 @@ const Calculator = () => {
 
                         {/* Stats bottom */}
                         <div className="mt-8 pt-6 border-t border-beige/35 text-[10px] font-mono text-taupe uppercase tracking-wider">
-                            CALC_ENGINE: BIZRA_calculators_v2.0
+                            CALC_ENGINE: FINEXA_calculators_v2.0
                         </div>
                     </div>
 

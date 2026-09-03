@@ -133,8 +133,8 @@ This plan targets maximum compounding through small-cap, mid-cap equities and th
 - Estimated Annual Yield: 13-16%
 
 ### References
-- [BIZRA Investment Guidelines](https://BIZRA.ai/guidelines)
-- [Staging Market Trends](https://BIZRA.ai/market-trends)`,
+- [FINEXA Investment Guidelines](https://FINEXA.ai/guidelines)
+- [Staging Market Trends](https://FINEXA.ai/market-trends)`,
       responseType: "plans-container"
     };
   }
@@ -160,7 +160,7 @@ Here is a comparison table of interest rates and projected returns for different
 
   // 6. Default fallback Response
   return {
-    output: `### Welcome to BIZRA AI Support! ☄️
+    output: `### Welcome to FINEXA AI Support! ☄️
 I am your smart financial planning assistant. I can render beautiful interactive tables, charts, calculators, and risk meters. 
 
 Try asking me:

@@ -130,8 +130,8 @@ const Explore = () => {
                                     key={cat}
                                     onClick={() => { setActiveCategory(cat); setSearchQuery(''); }}
                                     className={`whitespace-nowrap px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer ${activeCategory === cat
-                                            ? 'bg-ink text-white shadow-md'
-                                            : 'bg-white text-taupe border border-beige/40 hover:bg-beige/20'
+                                        ? 'bg-ink text-white shadow-md'
+                                        : 'bg-white text-taupe border border-beige/40 hover:bg-beige/20'
                                         }`}
                                 >
                                     {cat}
@@ -156,7 +156,7 @@ const Explore = () => {
             <div className="max-w-7xl mx-auto px-6 sm:px-12 mt-16 pt-8 border-t border-beige/40 text-center">
                 <p className="text-[10px] sm:text-xs text-taupe/70 font-medium max-w-3xl mx-auto flex items-center justify-center gap-2">
                     <Info size={14} className="shrink-0" />
-                    BIZRA provides financial information and educational content for informational purposes only. Market data, news interpretations and AI-generated insights may be delayed or inaccurate and should not be considered personalized investment advice.
+                    FINEXA provides financial information and educational content for informational purposes only. Market data, news interpretations and AI-generated insights may be delayed or inaccurate and should not be considered personalized investment advice.
                 </p>
             </div>
         </div>

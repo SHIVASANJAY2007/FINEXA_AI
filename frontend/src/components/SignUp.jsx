@@ -54,7 +54,7 @@ const SignUp = () => {
                                 Autonomous <br /> wealth building starts here.
                             </h3>
                             <p className="text-xs text-cream/70 leading-relaxed font-normal max-w-xs">
-                                BIZRAAI connects your financial roadmap to smart, private, and automated portfolios.
+                                FINEXAAI connects your financial roadmap to smart, private, and automated portfolios.
                             </p>
                         </div>
 
@@ -70,7 +70,7 @@ const SignUp = () => {
                     <div className="mb-10 text-left">
                         <h1 className="font-serif text-4xl lg:text-5xl font-bold text-ink leading-tight mb-4">
                             Welcome to <br />
-                            <span className="text-burgundy">BIZRAAI</span>
+                            <span className="text-burgundy">FINEXAAI</span>
                         </h1>
                         <p className="text-sm font-semibold text-taupe">
                             Access your private wealth concierge & autonomous AI assistant.
@@ -90,7 +90,7 @@ const SignUp = () => {
                     </div>
 
                     <p className="text-[10px] text-taupe mt-12 text-center font-medium leading-relaxed max-w-xs mx-auto">
-                        By connecting to BIZRAAI you agree to our <span className="text-ink font-bold cursor-pointer hover:text-burgundy">Terms of use</span> and <span className="text-ink font-bold cursor-pointer hover:text-burgundy">Privacy Policy</span>.
+                        By connecting to FINEXAAI you agree to our <span className="text-ink font-bold cursor-pointer hover:text-burgundy">Terms of use</span> and <span className="text-ink font-bold cursor-pointer hover:text-burgundy">Privacy Policy</span>.
                     </p>
                 </div>
             </div>

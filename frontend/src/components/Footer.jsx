@@ -177,7 +177,7 @@ const Footer = () => {
                         ref={badge3Ref}
                         className="absolute bottom-0 left-1/4 bg-gold px-4 py-1.5 rounded-lg flex items-center gap-2 text-[10px] font-bold text-ink tracking-widest border border-beige/10 select-none"
                     >
-                        <Cpu size={12} /> BIZRA_AI
+                        <Cpu size={12} /> FINEXA_AI
                     </div>
                 </div>
 
@@ -424,7 +424,7 @@ const Footer = () => {
                                     </button>
                                 ))}
                             </div>
-                            <p className="text-[9.5px] font-mono text-taupe uppercase tracking-widest">© 2026 BIZRA_AI</p>
+                            <p className="text-[9.5px] font-mono text-taupe uppercase tracking-widest">© 2026 FINEXA_AI</p>
                         </div>
                     </footer>
                 </div>

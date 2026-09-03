@@ -11,7 +11,7 @@ import Footer from './Footer'
 const NAV_ITEMS = [
     { label: 'Features', href: '#features' },
     { label: 'How It Works', href: '#how-it-works' },
-    { label: 'Why BIZRA', href: '#why-BIZRA' },
+    { label: 'Why FINEXA', href: '#why-FINEXA' },
     { label: 'Pricing', href: '#pricing' },
     { label: 'Start Free', href: '/signup' },
 ];

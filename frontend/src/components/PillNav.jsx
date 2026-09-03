@@ -80,7 +80,7 @@ const PillNav = ({
                         className="h-10 px-3.5 flex items-center justify-center bg-beige/25 rounded-full hover:bg-beige/45 transition-all active:scale-95"
                     >
                         <span className="font-serif font-bold text-sm text-ink tracking-tight">
-                            BIZRA
+                            FINEXA
                             <sup className="text-gold font-sans font-extrabold text-[9px] ml-0.5">AI</sup>
                         </span>
                     </Link>

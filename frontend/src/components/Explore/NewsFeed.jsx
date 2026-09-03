@@ -21,7 +21,7 @@ const NewsCard = memo(({ article, onClick }) => {
                     />
                 ) : (
                     <div className="w-full h-full flex items-center justify-center text-taupe/40 font-serif text-2xl font-extrabold italic bg-gradient-to-br from-beige/20 to-burgundy/5">
-                        BIZRA
+                        FINEXA
                     </div>
                 )}
                 <div className="absolute top-4 left-4 bg-ink/80 backdrop-blur-md text-white text-[10px] font-extrabold uppercase tracking-widest px-3 py-1.5 rounded-full">
@@ -29,8 +29,8 @@ const NewsCard = memo(({ article, onClick }) => {
                 </div>
                 {article.sentiment && (
                     <div className={`absolute top-4 right-4 text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-full backdrop-blur-md ${article.sentiment === 'Positive' ? 'bg-teal/20 text-teal-800 border border-teal/30' :
-                            article.sentiment === 'Negative' ? 'bg-red-500/20 text-red-900 border border-red-500/30' :
-                                'bg-white/30 text-ink border border-white/40'
+                        article.sentiment === 'Negative' ? 'bg-red-500/20 text-red-900 border border-red-500/30' :
+                            'bg-white/30 text-ink border border-white/40'
                         }`}>
                         {article.sentiment}
                     </div>

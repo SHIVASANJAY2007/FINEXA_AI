@@ -2,7 +2,7 @@
 
 This document contains:
 1. **The System Prompt**: The system instructions to configure the LLM (in n8n or direct integrations) to generate responses that perfectly render into Zyvox AI's premium interactive widgets.
-2. **The Frontend Parser Code**: The core regex and parsing logic extracted from [ResponseRenderer.jsx](file:///d:/Zyvox%20&%20BIZRA/Zyvox%20AI/Zyvox%20AI/frontend/src/components/ResponseRenderer.jsx).
+2. **The Frontend Parser Code**: The core regex and parsing logic extracted from [ResponseRenderer.jsx](file:///d:/Zyvox%20&%20FINEXA/Zyvox%20AI/Zyvox%20AI/frontend/src/components/ResponseRenderer.jsx).
 
 ---
 
@@ -93,7 +93,7 @@ Available JSON types:
 
 ## 2. Frontend Parser Code Reference
 
-Below is the JavaScript parsing engine extracted from [ResponseRenderer.jsx](file:///d:/Zyvox%20&%20BIZRA/Zyvox%20AI/Zyvox%20AI/frontend/src/components/ResponseRenderer.jsx) that decodes the chatbot's message into React components.
+Below is the JavaScript parsing engine extracted from [ResponseRenderer.jsx](file:///d:/Zyvox%20&%20FINEXA/Zyvox%20AI/Zyvox%20AI/frontend/src/components/ResponseRenderer.jsx) that decodes the chatbot's message into React components.
 
 ### Regex Constants
 These regex patterns identify block starts in the text output of the AI:

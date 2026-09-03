@@ -14,7 +14,7 @@ const getBackendUrl = () => {
 
     if (!url) {
         if (typeof window !== 'undefined' && window.location.hostname.includes('vercel.app')) {
-            url = 'https://BIZRA-ai-xama.onrender.com/api';
+            url = 'https://FINEXA-ai-xama.onrender.com/api';
         } else {
             url = 'http://localhost:5000/api';
         }
@@ -36,7 +36,7 @@ const getBackendUrl = () => {
 const BACKEND_API_URL = getBackendUrl();
 const N8N_WEBHOOK_URL = import.meta.env.VITE_N8N_WEBHOOK_URL || `${BACKEND_API_URL}/chat/send`;
 const WHATSAPP_API_URL = import.meta.env.VITE_WHATSAPP_API_URL || 'https://wa.me/15551382180';
-const TELEGRAM_API_URL = import.meta.env.VITE_TELEGRAM_API_URL || 'https://t.me/BIZRAAIBot';
+const TELEGRAM_API_URL = import.meta.env.VITE_TELEGRAM_API_URL || 'https://t.me/FINEXAAIBot';
 
 const WhatsAppIcon = ({ className }) => (
     <svg className={className} viewBox="0 0 24 24" fill="currentColor" width="100%" height="100%">
@@ -205,7 +205,7 @@ const Chatbot = () => {
         {
             id: 'init-1',
             isBot: true,
-            text: "Welcome to BIZRA AI! ☄️\n\nHow can I assist you with your financial planning today?",
+            text: "Welcome to FINEXA AI! ☄️\n\nHow can I assist you with your financial planning today?",
             time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         }
     ]);
@@ -398,7 +398,7 @@ const Chatbot = () => {
         setMessages([{
             id: `init-${Date.now()}`,
             isBot: true,
-            text: "Chat context reset. How can BIZRA AI help you today?",
+            text: "Chat context reset. How can FINEXA AI help you today?",
             time: nowTime()
         }]);
         inputRef.current?.focus();
@@ -429,7 +429,7 @@ const Chatbot = () => {
                     <div className="h-4 w-[1px] bg-beige/60 hidden sm:block" />
                     <div className="flex items-center gap-2">
                         <span className="font-serif font-bold text-lg text-ink tracking-tight">
-                            BIZRA<sup className="text-gold font-sans font-extrabold text-[10px] ml-0.5">AI</sup>
+                            FINEXA<sup className="text-gold font-sans font-extrabold text-[10px] ml-0.5">AI</sup>
                         </span>
                         <span className="text-[9px] uppercase tracking-widest font-extrabold bg-burgundy/10 text-burgundy px-2 py-0.5 rounded-full">
                             N8N DYNAMIC
@@ -465,7 +465,7 @@ const Chatbot = () => {
                             </div>
                             <div>
                                 <h2 className="font-serif font-extrabold text-base sm:text-lg text-ink tracking-tight uppercase">
-                                    BIZRA AI AGENT
+                                    FINEXA AI AGENT
                                 </h2>
                                 <div className="mt-0.5">
                                     {chatStatus === 'online' && (
@@ -651,7 +651,7 @@ const Chatbot = () => {
                                             <span className="w-2 h-2 rounded-full bg-burgundy animate-bounce [animation-delay:-0.3s]" />
                                             <span className="w-2 h-2 rounded-full bg-burgundy animate-bounce [animation-delay:-0.15s]" />
                                             <span className="w-2 h-2 rounded-full bg-burgundy animate-bounce" />
-                                            <span className="text-xs font-semibold text-taupe ml-2">BIZRA AI is thinking...</span>
+                                            <span className="text-xs font-semibold text-taupe ml-2">FINEXA AI is thinking...</span>
                                         </div>
                                     </div>
                                 </motion.div>
@@ -668,7 +668,7 @@ const Chatbot = () => {
                             value={inputValue}
                             onChange={(e) => setInputValue(e.target.value)}
                             disabled={isLoading}
-                            placeholder={isLoading ? "BIZRA AI is processing..." : "Ask BIZRA AI anything..."}
+                            placeholder={isLoading ? "FINEXA AI is processing..." : "Ask FINEXA AI anything..."}
                             className={`flex-1 bg-cream/90 border border-beige/50 focus:border-burgundy focus:ring-1 focus:ring-burgundy rounded-full px-6 py-3.5 font-semibold text-xs sm:text-sm text-ink placeholder:text-taupe/60 outline-none transition-all ${isLoading ? 'opacity-50 cursor-not-allowed' : ''
                                 }`}
                         />
@@ -777,7 +777,7 @@ const Chatbot = () => {
                                     </h2>
 
                                     <p className="text-xs font-semibold text-taupe leading-relaxed mb-8 max-w-xs">
-                                        Ready to chat? Connect with our BIZRA AI bot on WhatsApp for instant financial insights and alerts on the go.
+                                        Ready to chat? Connect with our FINEXA AI bot on WhatsApp for instant financial insights and alerts on the go.
                                     </p>
 
                                     <a
@@ -807,7 +807,7 @@ const Chatbot = () => {
                                     </h2>
 
                                     <p className="text-xs font-semibold text-taupe leading-relaxed mb-8 max-w-xs">
-                                        Prefer Telegram? Interact with the BIZRA AI Telegram bot for seamless, private and secure wealth management answers.
+                                        Prefer Telegram? Interact with the FINEXA AI Telegram bot for seamless, private and secure wealth management answers.
                                     </p>
 
                                     <a
@@ -825,7 +825,7 @@ const Chatbot = () => {
                     </div>
 
                     <div className="text-[9px] font-extrabold uppercase tracking-[0.35em] text-taupe/50 select-none border-t border-beige/30 pt-4 w-full">
-                        BIZRA OFFICIAL MOBILE CONCIERGE
+                        FINEXA OFFICIAL MOBILE CONCIERGE
                     </div>
                 </div>
             </div>

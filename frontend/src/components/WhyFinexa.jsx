@@ -190,7 +190,7 @@ const WhyFINEXA = () => {
 
     return (
         <section
-            id="why-BIZRA"
+            id="why-FINEXA"
             ref={sectionRef}
             className="w-full min-h-screen bg-teal relative overflow-hidden flex flex-col justify-center py-16 px-6 md:px-12 lg:px-20"
         >
@@ -271,7 +271,7 @@ const WhyFINEXA = () => {
                         <div className="bg-cream border border-beige/40 p-5 sm:p-6 rounded-2xl shadow-[0_12px_40px_rgba(58,46,37,0.12)] text-left relative">
                             <span className="absolute top-2 right-4 text-burgundy/15 font-serif font-black text-5xl select-none leading-none">“</span>
                             <p className="text-[11.5px] sm:text-[12px] font-sans font-medium text-ink italic leading-relaxed pr-5">
-                                "BIZRAAI feels like having a wealth manager in my WhatsApp. It analyzed my profile and built a goal-based SIP roadmap in minutes."
+                                "FINEXAAI feels like having a wealth manager in my WhatsApp. It analyzed my profile and built a goal-based SIP roadmap in minutes."
                             </p>
                             <span className="block text-[9.5px] sm:text-[10px] font-bold text-burgundy uppercase tracking-widest mt-3">
                                 — Rohan M., Bangalore

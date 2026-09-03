@@ -69,7 +69,7 @@ const NewsDetailModal = ({ article, onClose }) => {
                     </a>
                 </div>
 
-                {/* Right Side: BIZRA AI Insights */}
+                {/* Right Side: FINEXA AI Insights */}
                 <div className="w-full md:w-[40%] bg-[#FDF8F3] p-8 md:p-10 relative">
                     <button
                         onClick={onClose}
@@ -80,7 +80,7 @@ const NewsDetailModal = ({ article, onClose }) => {
 
                     <div className="flex items-center gap-2 mb-6 text-burgundy">
                         <Sparkles size={18} className="animate-pulse" />
-                        <h3 className="font-serif font-extrabold text-lg tracking-tight uppercase">BIZRA AI Analysis</h3>
+                        <h3 className="font-serif font-extrabold text-lg tracking-tight uppercase">FINEXA AI Analysis</h3>
                     </div>
 
                     {article.aiExplanation ? (
@@ -109,8 +109,8 @@ const NewsDetailModal = ({ article, onClose }) => {
                         <div className="mt-6 bg-white p-5 rounded-2xl border border-beige/40 shadow-sm">
                             <h4 className="text-[10px] font-extrabold uppercase tracking-widest text-taupe mb-3">Market Impact</h4>
                             <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider ${article.sentiment === 'Positive' ? 'bg-teal/10 text-teal-800' :
-                                    article.sentiment === 'Negative' ? 'bg-red-50 text-red-900' :
-                                        'bg-beige/30 text-ink'
+                                article.sentiment === 'Negative' ? 'bg-red-50 text-red-900' :
+                                    'bg-beige/30 text-ink'
                                 }`}>
                                 {article.sentiment === 'Positive' && <TrendingUp size={16} />}
                                 {article.sentiment === 'Negative' && <TrendingDown size={16} />}

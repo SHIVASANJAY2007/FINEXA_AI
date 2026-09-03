@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: BIZRA-ai-backend
+    name: FINEXA-ai-backend
     env: node
     buildCommand: npm install
     startCommand: npm run start

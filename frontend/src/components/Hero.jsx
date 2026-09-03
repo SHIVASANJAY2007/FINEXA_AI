@@ -364,7 +364,7 @@ const Hero = () => {
                             {/* Interactive Footer */}
                             <div className="p-3 border-t border-beige/10 bg-ink/80 backdrop-blur-md flex items-center gap-2">
                                 <div className="flex-1 bg-beige/10 rounded-full h-8 px-3.5 flex items-center text-xs text-cream/40">
-                                    Send message to BIZRA...
+                                    Send message to FINEXA...
                                 </div>
                                 <div className="w-8 h-8 rounded-full bg-burgundy flex items-center justify-center text-ivory shadow-md">
                                     <ArrowRight size={14} />

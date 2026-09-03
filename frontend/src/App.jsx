@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
+import { SpeedInsights } from '@vercel/speed-insights/react'
 import GlobalMenu from './components/ui/GlobalMenu'
 import './App.css'
 
@@ -40,6 +41,7 @@ function App() {
         <Route path="/calculator" element={<Calculator />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+      <SpeedInsights />
     </Suspense>
   )
 }

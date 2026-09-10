@@ -8,32 +8,9 @@ import {
 } from 'lucide-react';
 import AnimatedIconBackground from './AnimatedIconBackground';
 import ResponseRenderer from './ResponseRenderer';
+import { getApiBaseUrl } from '../utils/api';
 
-const getBackendUrl = () => {
-    let url = import.meta.env.VITE_API_BASE_URL;
-
-    if (!url) {
-        if (typeof window !== 'undefined' && window.location.hostname.includes('vercel.app')) {
-            url = 'https://FINEXA-ai-xama.onrender.com/api';
-        } else {
-            url = 'http://localhost:5000/api';
-        }
-    }
-
-    // Normalize URL
-    url = url.trim();
-    // 1. Remove trailing slashes
-    url = url.replace(/\/+$/, '');
-
-    // 2. Ensure it ends with /api
-    if (!url.endsWith('/api')) {
-        url = url + '/api';
-    }
-
-    return url;
-};
-
-const BACKEND_API_URL = getBackendUrl();
+const BACKEND_API_URL = getApiBaseUrl();
 const N8N_WEBHOOK_URL = import.meta.env.VITE_N8N_WEBHOOK_URL || `${BACKEND_API_URL}/chat/send`;
 const WHATSAPP_API_URL = import.meta.env.VITE_WHATSAPP_API_URL || 'https://wa.me/15551382180';
 const TELEGRAM_API_URL = import.meta.env.VITE_TELEGRAM_API_URL || 'https://t.me/FINEXAAIBot';

@@ -4,8 +4,9 @@ import { Search, Info, AlertTriangle } from 'lucide-react';
 import MarketPulse from './MarketPulse';
 import NewsFeed from './NewsFeed';
 import Movers from './Movers';
+import { getApiBaseUrl } from '../../utils/api';
 
-const API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api'}/explore`;
+const API_BASE_URL = `${getApiBaseUrl()}/explore`;
 
 const CATEGORIES = [
     "All", "Indian Markets", "Global Markets", "Stocks", "Companies",

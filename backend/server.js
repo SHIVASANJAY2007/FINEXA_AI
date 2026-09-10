@@ -15,6 +15,7 @@ import authRoutes from './routes/authRoutes.js';
 import travelRoutes from './routes/travelRoutes.js';
 import chatRoutes from './routes/chatRoutes.js';
 import pexelsRoutes from './routes/pexelsRoutes.js';
+import exploreRoutes from './routes/exploreRoutes.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -37,6 +38,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/travel', travelRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/pexels', pexelsRoutes);
+app.use('/api/explore', exploreRoutes);
 
 // 404 handler for unmatched routes
 app.use((req, res, next) => {

@@ -3,13 +3,18 @@ import { motion } from 'framer-motion';
 import { X, ExternalLink, Sparkles, TrendingUp, TrendingDown, Minus } from 'lucide-react';
 
 const NewsDetailModal = ({ article, onClose }) => {
-    // Prevent body scroll when modal is open
+    // Prevent body scroll when modal is open and handle Escape key
     useEffect(() => {
         document.body.style.overflow = 'hidden';
+        const handleKeyDown = (e) => {
+            if (e.key === 'Escape') onClose();
+        };
+        window.addEventListener('keydown', handleKeyDown);
         return () => {
             document.body.style.overflow = 'unset';
+            window.removeEventListener('keydown', handleKeyDown);
         };
-    }, []);
+    }, [onClose]);
 
     if (!article) return null;
 

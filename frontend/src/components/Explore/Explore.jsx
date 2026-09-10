@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Search, Info, AlertTriangle } from 'lucide-react';
 import MarketPulse from './MarketPulse';
 import NewsFeed from './NewsFeed';
@@ -13,6 +14,7 @@ const CATEGORIES = [
 ];
 
 const Explore = () => {
+    const navigate = useNavigate();
     const [marketPulse, setMarketPulse] = useState([]);
     const [news, setNews] = useState([]);
     const [movers, setMovers] = useState({ gainers: [], losers: [] });
@@ -69,7 +71,7 @@ const Explore = () => {
             <div className="bg-ivory border-b border-beige/40 px-6 sm:px-12 py-8 pt-24 sticky top-0 z-40">
                 <div className="max-w-7xl mx-auto mb-6">
                     <button
-                        onClick={() => window.location.href = '/'}
+                        onClick={() => navigate('/')}
                         className="flex items-center gap-2 text-taupe hover:text-ink transition-colors text-sm font-semibold uppercase tracking-wider cursor-pointer"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>

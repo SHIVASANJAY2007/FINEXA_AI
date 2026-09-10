@@ -52,6 +52,14 @@ const GlobalMenu = () => {
                                 <FlowingMenu
                                     items={[
                                         { 
+                                            link: '/chatbot', 
+                                            text: 'Chatbot', 
+                                            image: 'https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?w=600&q=80',
+                                            textColor: '#3A2E25',
+                                            marqueeBgColor: '#C9A227',
+                                            marqueeTextColor: '#3A2E25'
+                                        },
+                                        { 
                                             link: '/explore', 
                                             text: 'Explore', 
                                             image: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600&q=80',
@@ -66,14 +74,6 @@ const GlobalMenu = () => {
                                             textColor: '#3A2E25',
                                             marqueeBgColor: '#6B1E2B',
                                             marqueeTextColor: '#FDF6ED'
-                                        },
-                                        { 
-                                            link: '/chatbot', 
-                                            text: 'Chatbot', 
-                                            image: 'https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?w=600&q=80',
-                                            textColor: '#3A2E25',
-                                            marqueeBgColor: '#C9A227',
-                                            marqueeTextColor: '#3A2E25'
                                         },
                                         { 
                                             link: '/calculator', 

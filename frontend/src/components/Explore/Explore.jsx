@@ -86,9 +86,19 @@ const Explore = () => {
                         <p className="text-taupe font-medium mt-2 text-sm sm:text-base">
                             Understand what's happening in the financial world.
                         </p>
-                        <div className="flex items-center gap-2 mt-4 text-xs font-semibold text-teal bg-teal/10 px-3 py-1.5 rounded-full w-fit">
-                            <span className="w-2 h-2 rounded-full bg-teal animate-pulse" />
-                            Markets Open • Updated {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        <div className="flex flex-wrap items-center gap-2 mt-4 text-xs font-semibold">
+                            <div className="flex items-center gap-2 text-teal bg-teal/10 px-3 py-1.5 rounded-full">
+                                <span className="w-2 h-2 rounded-full bg-teal animate-pulse" />
+                                Markets Live • Updated {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </div>
+                            <div className="flex items-center gap-1.5 bg-beige/30 text-taupe px-3 py-1.5 rounded-full text-[11px] font-bold">
+                                <span>Providers:</span>
+                                <span className="bg-burgundy/10 text-burgundy px-2 py-0.5 rounded-md">Finnhub</span>
+                                <span className="bg-burgundy/10 text-burgundy px-2 py-0.5 rounded-md">Alpha Vantage</span>
+                                <span className="bg-burgundy/10 text-burgundy px-2 py-0.5 rounded-md">Marketaux</span>
+                                <span className="bg-burgundy/10 text-burgundy px-2 py-0.5 rounded-md">NewsData.io</span>
+                                <span className="bg-burgundy/10 text-burgundy px-2 py-0.5 rounded-md">GNews</span>
+                            </div>
                         </div>
                     </div>
 

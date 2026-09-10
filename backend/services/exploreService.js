@@ -24,6 +24,41 @@ function setCache(key, data) {
     cache.set(key, { data, timestamp: Date.now() });
 }
 
+// Pexels API Image Enrichment Helper
+const pexelsCache = new Map();
+
+async function getPexelsImage(query = 'finance market') {
+    const cleanQuery = query.toLowerCase().replace(/[^a-z0-9\s]/g, '').trim().split(/\s+/).slice(0, 4).join(' ') || 'finance stock market';
+
+    if (pexelsCache.has(cleanQuery)) {
+        return pexelsCache.get(cleanQuery);
+    }
+
+    const apiKey = process.env.PEXELS_API_KEY || 'pIUydHHQR8zGXfFvEEwSBgA3N4dQqbYr4vK0Zx5EoPKAhb2TlQEg4GAU';
+
+    try {
+        const res = await fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(cleanQuery)}&per_page=1`, {
+            headers: { Authorization: apiKey }
+        });
+        if (res.ok) {
+            const data = await res.json();
+            if (data.photos && data.photos.length > 0) {
+                const img = data.photos[0].src?.medium || data.photos[0].src?.large || data.photos[0].src?.original;
+                if (img) {
+                    pexelsCache.set(cleanQuery, img);
+                    return img;
+                }
+            }
+        }
+    } catch (err) {
+        console.error('Pexels API fetch error:', err.message);
+    }
+
+    const fallbackImg = 'https://images.pexels.com/photos/6801648/pexels-photo-6801648.jpeg?auto=compress&cs=tinysrgb&w=800';
+    pexelsCache.set(cleanQuery, fallbackImg);
+    return fallbackImg;
+}
+
 // Strict Financial Relevance & Non-Financial / Geopolitical War Exclusion Filter
 const NON_FINANCE_EXCLUSION_KEYWORDS = [
     'war', 'military', 'missile', 'soldier', 'soldiers', 'troops', 'troop', 'bomb', 'bombing',
@@ -626,6 +661,21 @@ export async function getAggregatedNews(categoryFilter = 'All', searchQuery = ''
             art.relatedSectors?.some(s => s.toLowerCase().includes(q))
         );
     }
+
+    // Ensure EVERY news article has a topic-relevant image via Pexels API
+    finalNews = await Promise.all(finalNews.map(async (art) => {
+        const isGenericImage = !art.image ||
+            typeof art.image !== 'string' ||
+            !art.image.startsWith('http') ||
+            art.image.includes('unsplash.com');
+
+        if (isGenericImage) {
+            const searchQuery = `${art.category} ${art.title}`;
+            const pexelsImg = await getPexelsImage(searchQuery);
+            return { ...art, image: pexelsImg };
+        }
+        return art;
+    }));
 
     setCache(cacheKey, finalNews);
     return finalNews;

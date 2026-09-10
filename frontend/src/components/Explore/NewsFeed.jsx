@@ -12,18 +12,16 @@ const NewsCard = memo(({ article, onClick }) => {
             className="bg-white rounded-3xl border border-beige/40 overflow-hidden shadow-sm hover:shadow-lg transition-all cursor-pointer group flex flex-col h-full"
         >
             <div className="relative h-48 sm:h-56 overflow-hidden bg-cream">
-                {article.image ? (
-                    <img
-                        src={article.image}
-                        alt={article.title}
-                        loading="lazy"
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                    />
-                ) : (
-                    <div className="w-full h-full flex items-center justify-center text-taupe/40 font-serif text-2xl font-extrabold italic bg-gradient-to-br from-beige/20 to-burgundy/5">
-                        FINEXA
-                    </div>
-                )}
+                <img
+                    src={article.image || 'https://images.pexels.com/photos/6801648/pexels-photo-6801648.jpeg?auto=compress&cs=tinysrgb&w=800'}
+                    alt={article.title}
+                    loading="lazy"
+                    onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = 'https://images.pexels.com/photos/6801648/pexels-photo-6801648.jpeg?auto=compress&cs=tinysrgb&w=800';
+                    }}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                />
                 <div className="absolute top-4 left-4 bg-ink/80 backdrop-blur-md text-white text-[10px] font-extrabold uppercase tracking-widest px-3 py-1.5 rounded-full">
                     {article.category}
                 </div>

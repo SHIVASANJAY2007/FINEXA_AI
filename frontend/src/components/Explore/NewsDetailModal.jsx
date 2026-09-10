@@ -53,11 +53,17 @@ const NewsDetailModal = ({ article, onClose }) => {
                         {article.title}
                     </h2>
 
-                    {article.image && (
-                        <div className="w-full h-64 rounded-2xl overflow-hidden mb-6">
-                            <img src={article.image} alt={article.title} className="w-full h-full object-cover" />
-                        </div>
-                    )}
+                    <div className="w-full h-64 rounded-2xl overflow-hidden mb-6">
+                        <img
+                            src={article.image || 'https://images.pexels.com/photos/6801648/pexels-photo-6801648.jpeg?auto=compress&cs=tinysrgb&w=800'}
+                            alt={article.title}
+                            onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src = 'https://images.pexels.com/photos/6801648/pexels-photo-6801648.jpeg?auto=compress&cs=tinysrgb&w=800';
+                            }}
+                            className="w-full h-full object-cover"
+                        />
+                    </div>
 
                     <p className="text-base text-ink/80 leading-relaxed font-medium mb-8">
                         {article.summary}

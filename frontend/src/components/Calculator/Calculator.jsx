@@ -1,7 +1,8 @@
 import React, { useState, useMemo, memo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, TrendingUp, Calculator as CalcIcon, Percent, Calendar, DollarSign, Sparkles, Scale, Info } from 'lucide-react';
+import { ArrowLeft, TrendingUp, Calculator as CalcIcon, AlertTriangle, Info, CheckCircle2, ShieldAlert } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, Tooltip as ChartTooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
+import { calculate } from './calculations/index.js';
 
 const CALCULATOR_TYPES = [
     { id: 'sip', name: 'SIP', description: 'Systematic Investment Plan' },
@@ -27,33 +28,6 @@ const formatRupees = (val) => {
     return `₹${Math.round(val).toLocaleString('en-IN')}`;
 };
 
-// IRR Solver using Newton-Raphson Method
-const solveIRR = (cashflows) => {
-    let r = 0.1; // Initial guess
-    const maxIterations = 100;
-    const precision = 1e-7;
-
-    for (let k = 0; k < maxIterations; k++) {
-        let npv = 0;
-        let dNpv = 0;
-
-        for (let t = 0; t < cashflows.length; t++) {
-            const cf = cashflows[t];
-            npv += cf / Math.pow(1 + r, t);
-            dNpv -= t * cf / Math.pow(1 + r, t + 1);
-        }
-
-        if (Math.abs(dNpv) < 1e-12) break;
-
-        const nextR = r - npv / dNpv;
-        if (Math.abs(nextR - r) < precision) {
-            return nextR * 100; // Return as percentage
-        }
-        r = nextR;
-    }
-    return r * 100;
-};
-
 const CustomTooltip = ({ active, payload, calcType }) => {
     if (active && payload && payload.length) {
         const data = payload[0].payload;
@@ -63,7 +37,7 @@ const CustomTooltip = ({ active, payload, calcType }) => {
                 <div className="space-y-1.5 font-semibold">
                     {calcType === 'swp' ? (
                         <>
-                            <p className="text-ivory/80">Remaining Balance: <span className="font-extrabold text-ivory">{formatRupees(data.value)}</span></p>
+                            <p className="text-ivory/80">Remaining Balance: <span className="font-extrabold text-ivory">{formatRupees(data.balance)}</span></p>
                             <p className="text-ivory/80">Total Withdrawn: <span className="font-bold text-teal">{formatRupees(data.invested)}</span></p>
                         </>
                     ) : calcType === 'inflation' ? (
@@ -154,281 +128,55 @@ const Calculator = () => {
     const [taxQty, setTaxQty] = useState(1000);
     const [taxMonths, setTaxMonths] = useState(18);
 
-    // Calculation Engine
+    // High-Precision Decoupled Financial Calculation Engine
     const result = useMemo(() => {
-        const chartData = [];
+        let params = {};
 
         switch (calcType) {
-            case 'sip': {
-                const P = sipMonthly;
-                const i = (sipRate / 100) / 12;
-
-                for (let y = 0; y <= sipYears; y++) {
-                    const months = y * 12;
-                    const val = y === 0 ? 0 : P * ((Math.pow(1 + i, months) - 1) / i) * (1 + i);
-                    const invested = P * months;
-                    chartData.push({
-                        year: `Year ${y}`,
-                        value: Math.round(val),
-                        invested,
-                        returns: Math.max(0, Math.round(val - invested))
-                    });
-                }
-                const last = chartData[chartData.length - 1];
-                return { invested: last.invested, value: last.value, returns: last.returns, chartData };
-            }
-
-            case 'lumpsum': {
-                const P = lumpAmount;
-                const r = lumpRate / 100;
-                for (let y = 0; y <= lumpYears; y++) {
-                    const val = P * Math.pow(1 + r, y);
-                    chartData.push({
-                        year: `Year ${y}`,
-                        value: Math.round(val),
-                        invested: P,
-                        returns: Math.max(0, Math.round(val - P))
-                    });
-                }
-                const last = chartData[chartData.length - 1];
-                return { invested: last.invested, value: last.value, returns: last.returns, chartData };
-            }
-
-            case 'stepup': {
-                const P = stepMonthly;
-                const r = stepRate / 100;
-                const step = stepPercent / 100;
-
-                let currentVal = 0;
-                let totalInvested = 0;
-                let currentMonthly = P;
-
-                chartData.push({ year: 'Year 0', value: 0, invested: 0, returns: 0 });
-
-                for (let y = 1; y <= stepYears; y++) {
-                    for (let m = 1; m <= 12; m++) {
-                        totalInvested += currentMonthly;
-                        currentVal = (currentVal + currentMonthly) * (1 + r / 12);
-                    }
-                    chartData.push({
-                        year: `Year ${y}`,
-                        value: Math.round(currentVal),
-                        invested: totalInvested,
-                        returns: Math.max(0, Math.round(currentVal - totalInvested))
-                    });
-                    // Step up monthly SIP at start of next year
-                    currentMonthly = currentMonthly * (1 + step);
-                }
-                const last = chartData[chartData.length - 1];
-                return { invested: last.invested, value: last.value, returns: last.returns, chartData };
-            }
-
-            case 'swp': {
-                const initial = swpLump;
-                const w = swpWithdrawal;
-                const r = swpRate / 100;
-
-                let balance = initial;
-                let totalWithdrawn = 0;
-
-                chartData.push({ year: 'Year 0', value: initial, invested: 0 });
-
-                for (let y = 1; y <= swpYears; y++) {
-                    for (let m = 1; m <= 12; m++) {
-                        if (balance <= 0) {
-                            balance = 0;
-                            break;
-                        }
-                        const interest = balance * (r / 12);
-                        balance = balance + interest - w;
-                        totalWithdrawn += w;
-                    }
-                    chartData.push({
-                        year: `Year ${y}`,
-                        value: Math.round(balance),
-                        invested: totalWithdrawn // Using 'invested' field to display withdrawn amount in tooltip
-                    });
-                }
-                return { invested: totalWithdrawn, value: Math.round(balance), returns: Math.max(0, Math.round(balance + totalWithdrawn - initial)), chartData };
-            }
-
-            case 'goal': {
-                const target = goalTarget;
-                const i = (goalRate / 100) / 12;
-                const months = goalYears * 12;
-
-                // FV = MonthlySIP * [((1 + i)^n - 1) / i] * (1 + i)
-                const monthlyRequired = target / (((Math.pow(1 + i, months) - 1) / i) * (1 + i));
-                const totalInvested = monthlyRequired * months;
-
-                for (let y = 0; y <= goalYears; y++) {
-                    const currentMonths = y * 12;
-                    const val = y === 0 ? 0 : monthlyRequired * (((Math.pow(1 + i, currentMonths) - 1) / i) * (1 + i));
-                    const currentInvested = monthlyRequired * currentMonths;
-                    chartData.push({
-                        year: `Year ${y}`,
-                        value: Math.round(val),
-                        invested: Math.round(currentInvested),
-                        returns: Math.max(0, Math.round(val - currentInvested))
-                    });
-                }
-
-                return { invested: Math.round(totalInvested), value: target, returns: Math.max(0, Math.round(target - totalInvested)), monthlyRequired: Math.round(monthlyRequired), chartData };
-            }
-
-            case 'cagr': {
-                const start = cagrInitial;
-                const end = cagrFinal;
-                const yrs = cagrYears;
-
-                // CAGR = (End / Start)^(1/Years) - 1
-                const cagrVal = start > 0 && end > 0 ? (Math.pow(end / start, 1 / yrs) - 1) * 100 : 0;
-
-                for (let y = 0; y <= yrs; y++) {
-                    const currentVal = start * Math.pow(1 + (cagrVal / 100), y);
-                    chartData.push({
-                        year: `Year ${y}`,
-                        value: Math.round(currentVal),
-                        invested: start,
-                        returns: Math.max(0, Math.round(currentVal - start))
-                    });
-                }
-
-                return { invested: start, value: end, returns: Math.max(0, end - start), cagr: cagrVal.toFixed(2), chartData };
-            }
-
-            case 'xirr': {
-                const cashflows = [cf0, cf1, cf2, cf3, cf4, cf5];
-                const calculatedIrr = solveIRR(cashflows);
-
-                let balance = -cf0;
-                chartData.push({ year: 'Year 0', value: Math.round(balance), invested: -cf0, returns: 0 });
-
-                for (let y = 1; y <= 5; y++) {
-                    // Compound existing balance, and add the current year cash flow
-                    const interest = balance * (calculatedIrr / 100);
-                    balance = balance + interest + cashflows[y];
-
-                    const cumOutflow = -cf0; // Cumulative investment is Year 0 outflow
-                    chartData.push({
-                        year: `Year ${y}`,
-                        value: Math.round(balance),
-                        invested: cumOutflow,
-                        returns: Math.max(0, Math.round(balance - cumOutflow))
-                    });
-                }
-
-                const totalOut = -cf0;
-                const totalIn = cf1 + cf2 + cf3 + cf4 + cf5;
-
-                return { invested: totalOut, value: totalIn, returns: Math.max(0, totalIn - totalOut), irr: calculatedIrr.toFixed(2), chartData };
-            }
-
-            case 'inflation': {
-                const amount = infAmount;
-                const rate = infRate / 100;
-
-                for (let y = 0; y <= infYears; y++) {
-                    const futureCost = amount * Math.pow(1 + rate, y);
-                    // Purchasing power = amount / (1+rate)^y
-                    const power = amount / Math.pow(1 + rate, y);
-
-                    chartData.push({
-                        year: `Year ${y}`,
-                        value: Math.round(futureCost), // Future Cost of Item
-                        invested: Math.round(power) // Purchasing Power of original amount (using 'invested' to map tooltip)
-                    });
-                }
-                const last = chartData[chartData.length - 1];
-                return { invested: last.invested, value: last.value, returns: Math.max(0, last.value - amount), chartData };
-            }
-
-            case 'retirement': {
-                const yearsToRetire = retRetireAge - retAge;
-                const retirementYears = retLife - retRetireAge;
-
-                if (yearsToRetire <= 0 || retirementYears <= 0) {
-                    return { invested: 0, value: 0, returns: 0, corpus: 0, monthlySaving: 0, chartData: [] };
-                }
-
-                // Inflated monthly expenses at retirement
-                const inflatedExpense = retExpenses * Math.pow(1 + retInflation / 100, yearsToRetire);
-
-                // Real rate of return in retirement
-                const realRate = ((1 + retPostReturn / 100) / (1 + retInflation / 100)) - 1;
-                const iReal = realRate / 12;
-                const monthsInRetirement = retirementYears * 12;
-
-                // Corpus needed (present value of inflation-adjusted retirement annuity)
-                const corpus = inflatedExpense * ((1 - Math.pow(1 + iReal, -monthsInRetirement)) / iReal);
-
-                // Required Monthly Savings (SIP) prior to retirement
-                const iPre = (retPreReturn / 100) / 12;
-                const monthsToRetire = yearsToRetire * 12;
-                const monthlySaving = corpus / (((Math.pow(1 + iPre, monthsToRetire) - 1) / iPre) * (1 + iPre));
-                const totalSaved = monthlySaving * monthsToRetire;
-
-                // Chart out pre-retirement accumulation phase
-                for (let y = 0; y <= yearsToRetire; y++) {
-                    const months = y * 12;
-                    const val = y === 0 ? 0 : monthlySaving * (((Math.pow(1 + iPre, months) - 1) / iPre) * (1 + iPre));
-                    chartData.push({
-                        year: `Age ${retAge + y}`,
-                        value: Math.round(val),
-                        invested: Math.round(monthlySaving * months),
-                        returns: Math.max(0, Math.round(val - (monthlySaving * months)))
-                    });
-                }
-
-                return {
-                    invested: Math.round(totalSaved),
-                    value: Math.round(corpus),
-                    returns: Math.max(0, Math.round(corpus - totalSaved)),
-                    corpus: Math.round(corpus),
-                    monthlySaving: Math.round(monthlySaving),
-                    inflatedExpense: Math.round(inflatedExpense),
-                    chartData
+            case 'sip':
+                params = { monthlyInvestment: sipMonthly, expectedReturnRate: sipRate, investmentHorizon: sipYears };
+                break;
+            case 'lumpsum':
+                params = { lumpsumAmount: lumpAmount, expectedReturnRate: lumpRate, investmentHorizon: lumpYears };
+                break;
+            case 'stepup':
+                params = { initialMonthlySIP: stepMonthly, annualStepUpPercent: stepPercent, expectedReturnRate: stepRate, investmentHorizon: stepYears };
+                break;
+            case 'swp':
+                params = { lumpsumInvestment: swpLump, monthlyWithdrawal: swpWithdrawal, expectedReturnRate: swpRate, swpTenureYears: swpYears };
+                break;
+            case 'goal':
+                params = { targetGoalAmount: goalTarget, expectedReturnRate: goalRate, yearsToGoal: goalYears };
+                break;
+            case 'cagr':
+                params = { initialInvestment: cagrInitial, finalPortfolioValue: cagrFinal, durationYears: cagrYears };
+                break;
+            case 'xirr':
+            case 'irr':
+                params = { cashflows: [cf0, cf1, cf2, cf3, cf4, cf5] };
+                break;
+            case 'inflation':
+                params = { currentAmount: infAmount, inflationRate: infRate, timeHorizonYears: infYears };
+                break;
+            case 'retirement':
+                params = {
+                    currentAge: retAge,
+                    retirementAge: retRetireAge,
+                    lifeExpectancy: retLife,
+                    currentMonthlyExpenses: retExpenses,
+                    expectedInflationRate: retInflation,
+                    preRetirementReturnRate: retPreReturn,
+                    postRetirementReturnRate: retPostReturn
                 };
-            }
-
-            case 'tax': {
-                const buy = taxPurchase;
-                const sell = taxSale;
-                const qty = taxQty;
-                const months = taxMonths;
-
-                const invested = buy * qty;
-                const saleValue = sell * qty;
-                const gain = saleValue - invested;
-
-                let tax = 0;
-                let taxType = 'STCG';
-                let rate = 20; // STCG is 20% on equity in India
-
-                if (months >= 12) {
-                    taxType = 'LTCG';
-                    rate = 12.5; // LTCG is 12.5% on gains exceeding 1.25L
-                    const taxableGain = Math.max(0, gain - 125000);
-                    tax = taxableGain * 0.125;
-                } else {
-                    tax = Math.max(0, gain) * 0.20;
-                }
-
-                const netProfit = gain - tax;
-
-                // Simple 2-point visual representing Buy and Sell values
-                chartData.push(
-                    { year: 'Purchase', value: invested, invested, returns: 0 },
-                    { year: 'Sale (Pre-Tax)', value: saleValue, invested, returns: gain },
-                    { year: 'Net Value (Post-Tax)', value: saleValue - tax, invested, returns: Math.max(0, netProfit) }
-                );
-
-                return { invested, value: netProfit + invested, returns: Math.max(0, netProfit), tax: Math.round(tax), taxType, rate, chartData };
-            }
-
+                break;
+            case 'tax':
+                params = { purchasePrice: taxPurchase, sellingPrice: taxSale, quantity: taxQty, holdingMonths: taxMonths, assetType: 'equity' };
+                break;
             default:
-                return { invested: 0, value: 0, returns: 0, chartData: [] };
+                break;
         }
+
+        return calculate(calcType, params);
     }, [
         calcType, sipMonthly, sipRate, sipYears, lumpAmount, lumpRate, lumpYears,
         stepMonthly, stepRate, stepYears, stepPercent, swpLump, swpWithdrawal, swpRate, swpYears,
@@ -457,7 +205,7 @@ const Calculator = () => {
                         Financial <span className="text-burgundy">Calculators</span>
                     </h1>
                     <p className="mt-4 text-taupe text-lg max-w-2xl font-normal leading-relaxed">
-                        Accurately project your wealth trajectory. Adjust parameters in real-time to visualize the impact of compound growth.
+                        Accurately project your wealth trajectory. Powered by Finexa’s decoupled calculation engine.
                     </p>
                 </div>
 
@@ -478,6 +226,19 @@ const Calculator = () => {
                     ))}
                 </div>
 
+                {/* Warnings / Notifications Banner */}
+                {result.warnings && result.warnings.length > 0 && (
+                    <div className="mb-8 p-4 rounded-2xl bg-burgundy/10 border border-burgundy/30 flex items-start gap-3 text-burgundy text-xs font-semibold text-left shadow-xs">
+                        <AlertTriangle size={18} className="shrink-0 mt-0.5 text-burgundy" />
+                        <div className="space-y-1">
+                            <h5 className="font-bold uppercase tracking-wider">Calculation Advisory</h5>
+                            {result.warnings.map((warn, idx) => (
+                                <p key={idx} className="text-ink/90 font-normal">{warn}</p>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
                 {/* Calculator Panel */}
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
                     {/* Left Column: Parameter controls (5 cols) */}
@@ -491,7 +252,7 @@ const Calculator = () => {
                                     <h3 className="font-serif font-extrabold text-base sm:text-lg text-ink uppercase tracking-tight">
                                         {CALCULATOR_TYPES.find(t => t.id === calcType)?.name} Parameters
                                     </h3>
-                                    <span className="text-[9px] font-mono text-taupe uppercase tracking-wider">Compounding Engine Active</span>
+                                    <span className="text-[9px] font-mono text-taupe uppercase tracking-wider">Engine: v2.0 Modular Math</span>
                                 </div>
                             </div>
 
@@ -512,11 +273,11 @@ const Calculator = () => {
                                         <div className="flex justify-between items-center">
                                             <label className="text-xs font-bold uppercase tracking-wider text-taupe">Expected Return (p.a.)</label>
                                             <div className="flex items-center gap-1 bg-white border border-beige/40 px-3 py-1 rounded-xl shadow-xs">
-                                                <input type="number" min="1" max="30" step="0.5" value={sipRate} onChange={(e) => setSipRate(Math.max(0, Number(e.target.value)))} className="w-12 bg-transparent text-ink font-bold text-xs outline-none text-right" />
+                                                <input type="number" min="0" max="30" step="0.5" value={sipRate} onChange={(e) => setSipRate(Math.max(0, Number(e.target.value)))} className="w-12 bg-transparent text-ink font-bold text-xs outline-none text-right" />
                                                 <span className="text-taupe font-bold text-xs">%</span>
                                             </div>
                                         </div>
-                                        <input type="range" min="1" max="30" step="0.5" value={sipRate} onChange={(e) => setSipRate(Number(e.target.value))} className="w-full h-1.5 bg-beige/30 rounded-lg appearance-none cursor-pointer accent-burgundy" />
+                                        <input type="range" min="0" max="30" step="0.5" value={sipRate} onChange={(e) => setSipRate(Number(e.target.value))} className="w-full h-1.5 bg-beige/30 rounded-lg appearance-none cursor-pointer accent-burgundy" />
                                     </div>
                                     <div className="flex flex-col gap-2">
                                         <div className="flex justify-between items-center">
@@ -548,11 +309,11 @@ const Calculator = () => {
                                         <div className="flex justify-between items-center">
                                             <label className="text-xs font-bold uppercase tracking-wider text-taupe">Expected Return (p.a.)</label>
                                             <div className="flex items-center gap-1 bg-white border border-beige/40 px-3 py-1 rounded-xl shadow-xs">
-                                                <input type="number" min="1" max="30" step="0.5" value={lumpRate} onChange={(e) => setLumpRate(Math.max(0, Number(e.target.value)))} className="w-12 bg-transparent text-ink font-bold text-xs outline-none text-right" />
+                                                <input type="number" min="0" max="30" step="0.5" value={lumpRate} onChange={(e) => setLumpRate(Math.max(0, Number(e.target.value)))} className="w-12 bg-transparent text-ink font-bold text-xs outline-none text-right" />
                                                 <span className="text-taupe font-bold text-xs">%</span>
                                             </div>
                                         </div>
-                                        <input type="range" min="1" max="30" step="0.5" value={lumpRate} onChange={(e) => setLumpRate(Number(e.target.value))} className="w-full h-1.5 bg-beige/30 rounded-lg appearance-none cursor-pointer accent-burgundy" />
+                                        <input type="range" min="0" max="30" step="0.5" value={lumpRate} onChange={(e) => setLumpRate(Number(e.target.value))} className="w-full h-1.5 bg-beige/30 rounded-lg appearance-none cursor-pointer accent-burgundy" />
                                     </div>
                                     <div className="flex flex-col gap-2">
                                         <div className="flex justify-between items-center">
@@ -584,21 +345,21 @@ const Calculator = () => {
                                         <div className="flex justify-between items-center">
                                             <label className="text-xs font-bold uppercase tracking-wider text-taupe">Annual Step-Up (%)</label>
                                             <div className="flex items-center gap-1 bg-white border border-beige/40 px-3 py-1 rounded-xl shadow-xs">
-                                                <input type="number" min="1" max="50" value={stepPercent} onChange={(e) => setStepPercent(Math.max(0, Number(e.target.value)))} className="w-12 bg-transparent text-ink font-bold text-xs outline-none text-right" />
+                                                <input type="number" min="0" max="50" value={stepPercent} onChange={(e) => setStepPercent(Math.max(0, Number(e.target.value)))} className="w-12 bg-transparent text-ink font-bold text-xs outline-none text-right" />
                                                 <span className="text-taupe font-bold text-xs">%</span>
                                             </div>
                                         </div>
-                                        <input type="range" min="1" max="50" value={stepPercent} onChange={(e) => setStepPercent(Number(e.target.value))} className="w-full h-1.5 bg-beige/30 rounded-lg appearance-none cursor-pointer accent-burgundy" />
+                                        <input type="range" min="0" max="50" value={stepPercent} onChange={(e) => setStepPercent(Number(e.target.value))} className="w-full h-1.5 bg-beige/30 rounded-lg appearance-none cursor-pointer accent-burgundy" />
                                     </div>
                                     <div className="flex flex-col gap-2">
                                         <div className="flex justify-between items-center">
                                             <label className="text-xs font-bold uppercase tracking-wider text-taupe">Expected Return (p.a.)</label>
                                             <div className="flex items-center gap-1 bg-white border border-beige/40 px-3 py-1 rounded-xl shadow-xs">
-                                                <input type="number" min="1" max="30" step="0.5" value={stepRate} onChange={(e) => setStepRate(Math.max(0, Number(e.target.value)))} className="w-12 bg-transparent text-ink font-bold text-xs outline-none text-right" />
+                                                <input type="number" min="0" max="30" step="0.5" value={stepRate} onChange={(e) => setStepRate(Math.max(0, Number(e.target.value)))} className="w-12 bg-transparent text-ink font-bold text-xs outline-none text-right" />
                                                 <span className="text-taupe font-bold text-xs">%</span>
                                             </div>
                                         </div>
-                                        <input type="range" min="1" max="30" step="0.5" value={stepRate} onChange={(e) => setStepRate(Number(e.target.value))} className="w-full h-1.5 bg-beige/30 rounded-lg appearance-none cursor-pointer accent-burgundy" />
+                                        <input type="range" min="0" max="30" step="0.5" value={stepRate} onChange={(e) => setStepRate(Number(e.target.value))} className="w-full h-1.5 bg-beige/30 rounded-lg appearance-none cursor-pointer accent-burgundy" />
                                     </div>
                                     <div className="flex flex-col gap-2">
                                         <div className="flex justify-between items-center">
@@ -640,11 +401,11 @@ const Calculator = () => {
                                         <div className="flex justify-between items-center">
                                             <label className="text-xs font-bold uppercase tracking-wider text-taupe">Expected Return (p.a.)</label>
                                             <div className="flex items-center gap-1 bg-white border border-beige/40 px-3 py-1 rounded-xl shadow-xs">
-                                                <input type="number" min="2" max="20" step="0.5" value={swpRate} onChange={(e) => setSwpRate(Math.max(0, Number(e.target.value)))} className="w-12 bg-transparent text-ink font-bold text-xs outline-none text-right" />
+                                                <input type="number" min="0" max="20" step="0.5" value={swpRate} onChange={(e) => setSwpRate(Math.max(0, Number(e.target.value)))} className="w-12 bg-transparent text-ink font-bold text-xs outline-none text-right" />
                                                 <span className="text-taupe font-bold text-xs">%</span>
                                             </div>
                                         </div>
-                                        <input type="range" min="2" max="20" step="0.5" value={swpRate} onChange={(e) => setSwpRate(Number(e.target.value))} className="w-full h-1.5 bg-beige/30 rounded-lg appearance-none cursor-pointer accent-burgundy" />
+                                        <input type="range" min="0" max="20" step="0.5" value={swpRate} onChange={(e) => setSwpRate(Number(e.target.value))} className="w-full h-1.5 bg-beige/30 rounded-lg appearance-none cursor-pointer accent-burgundy" />
                                     </div>
                                     <div className="flex flex-col gap-2">
                                         <div className="flex justify-between items-center">
@@ -676,11 +437,11 @@ const Calculator = () => {
                                         <div className="flex justify-between items-center">
                                             <label className="text-xs font-bold uppercase tracking-wider text-taupe">Expected Return (p.a.)</label>
                                             <div className="flex items-center gap-1 bg-white border border-beige/40 px-3 py-1 rounded-xl shadow-xs">
-                                                <input type="number" min="1" max="30" step="0.5" value={goalRate} onChange={(e) => setGoalRate(Math.max(0, Number(e.target.value)))} className="w-12 bg-transparent text-ink font-bold text-xs outline-none text-right" />
+                                                <input type="number" min="0" max="30" step="0.5" value={goalRate} onChange={(e) => setGoalRate(Math.max(0, Number(e.target.value)))} className="w-12 bg-transparent text-ink font-bold text-xs outline-none text-right" />
                                                 <span className="text-taupe font-bold text-xs">%</span>
                                             </div>
                                         </div>
-                                        <input type="range" min="1" max="30" step="0.5" value={goalRate} onChange={(e) => setGoalRate(Number(e.target.value))} className="w-full h-1.5 bg-beige/30 rounded-lg appearance-none cursor-pointer accent-burgundy" />
+                                        <input type="range" min="0" max="30" step="0.5" value={goalRate} onChange={(e) => setGoalRate(Number(e.target.value))} className="w-full h-1.5 bg-beige/30 rounded-lg appearance-none cursor-pointer accent-burgundy" />
                                     </div>
                                     <div className="flex flex-col gap-2">
                                         <div className="flex justify-between items-center">
@@ -735,7 +496,7 @@ const Calculator = () => {
                             {calcType === 'xirr' && (
                                 <div className="space-y-4">
                                     <div className="text-[10px] font-bold text-burgundy uppercase tracking-wider mb-2 flex items-center gap-1">
-                                        <Info size={12} /> Cash Outflow (-) & Inflows (+)
+                                        <Info size={12} /> Outflows (-) & Inflows (+)
                                     </div>
                                     <div className="grid grid-cols-2 gap-3.5">
                                         <div className="flex flex-col gap-1">
@@ -783,11 +544,11 @@ const Calculator = () => {
                                         <div className="flex justify-between items-center">
                                             <label className="text-xs font-bold uppercase tracking-wider text-taupe">Inflation Rate (p.a.)</label>
                                             <div className="flex items-center gap-1 bg-white border border-beige/40 px-3 py-1.5 rounded-xl shadow-xs">
-                                                <input type="number" min="1" max="20" step="0.5" value={infRate} onChange={(e) => setInfRate(Math.max(0, Number(e.target.value)))} className="w-12 bg-transparent text-ink font-bold text-xs outline-none text-right" />
+                                                <input type="number" min="0" max="20" step="0.5" value={infRate} onChange={(e) => setInfRate(Math.max(0, Number(e.target.value)))} className="w-12 bg-transparent text-ink font-bold text-xs outline-none text-right" />
                                                 <span className="text-taupe font-bold text-xs">%</span>
                                             </div>
                                         </div>
-                                        <input type="range" min="1" max="20" step="0.5" value={infRate} onChange={(e) => setInfRate(Number(e.target.value))} className="w-full h-1.5 bg-beige/30 rounded-lg appearance-none cursor-pointer accent-burgundy" />
+                                        <input type="range" min="0" max="20" step="0.5" value={infRate} onChange={(e) => setInfRate(Number(e.target.value))} className="w-full h-1.5 bg-beige/30 rounded-lg appearance-none cursor-pointer accent-burgundy" />
                                     </div>
                                     <div className="flex flex-col gap-2">
                                         <div className="flex justify-between items-center">
@@ -829,7 +590,7 @@ const Calculator = () => {
                                             <label className="text-[10px] font-bold text-taupe uppercase">Expected Inflation</label>
                                             <span className="text-xs font-bold text-ink">{retInflation}%</span>
                                         </div>
-                                        <input type="range" min="1" max="15" value={retInflation} onChange={(e) => setRetInflation(Number(e.target.value))} className="w-full h-1.5 bg-beige/30 rounded-lg appearance-none cursor-pointer accent-burgundy" />
+                                        <input type="range" min="0" max="15" value={retInflation} onChange={(e) => setRetInflation(Number(e.target.value))} className="w-full h-1.5 bg-beige/30 rounded-lg appearance-none cursor-pointer accent-burgundy" />
                                     </div>
 
                                     <div className="flex flex-col gap-1.5">
@@ -837,7 +598,7 @@ const Calculator = () => {
                                             <label className="text-[10px] font-bold text-taupe uppercase">Pre-Retire Return (p.a.)</label>
                                             <span className="text-xs font-bold text-ink">{retPreReturn}%</span>
                                         </div>
-                                        <input type="range" min="5" max="20" value={retPreReturn} onChange={(e) => setRetPreReturn(Number(e.target.value))} className="w-full h-1.5 bg-beige/30 rounded-lg appearance-none cursor-pointer accent-burgundy" />
+                                        <input type="range" min="0" max="20" value={retPreReturn} onChange={(e) => setRetPreReturn(Number(e.target.value))} className="w-full h-1.5 bg-beige/30 rounded-lg appearance-none cursor-pointer accent-burgundy" />
                                     </div>
 
                                     <div className="flex flex-col gap-1.5">
@@ -845,7 +606,7 @@ const Calculator = () => {
                                             <label className="text-[10px] font-bold text-taupe uppercase">Post-Retire Return (p.a.)</label>
                                             <span className="text-xs font-bold text-ink">{retPostReturn}%</span>
                                         </div>
-                                        <input type="range" min="4" max="15" value={retPostReturn} onChange={(e) => setRetPostReturn(Number(e.target.value))} className="w-full h-1.5 bg-beige/30 rounded-lg appearance-none cursor-pointer accent-burgundy" />
+                                        <input type="range" min="0" max="15" value={retPostReturn} onChange={(e) => setRetPostReturn(Number(e.target.value))} className="w-full h-1.5 bg-beige/30 rounded-lg appearance-none cursor-pointer accent-burgundy" />
                                     </div>
                                 </div>
                             )}
@@ -892,7 +653,7 @@ const Calculator = () => {
                                         </div>
                                         <input type="range" min="1" max="60" value={taxMonths} onChange={(e) => setTaxMonths(Number(e.target.value))} className="w-full h-1.5 bg-beige/30 rounded-lg appearance-none cursor-pointer accent-burgundy" />
                                         <span className="text-[9px] font-mono text-taupe block text-left">
-                                            * Equity held &ge; 12 months is LTCG. Otherwise, STCG applies.
+                                            * Equity held &ge; 12 months is LTCG (12.5% above ₹1.25L exemption). Otherwise, STCG (20%) applies.
                                         </span>
                                     </div>
                                 </div>
@@ -901,7 +662,7 @@ const Calculator = () => {
 
                         {/* Stats bottom */}
                         <div className="mt-8 pt-6 border-t border-beige/35 text-[10px] font-mono text-taupe uppercase tracking-wider">
-                            CALC_ENGINE: FINEXA_calculators_v2.0
+                            CALC_ENGINE: FINEXA_calculators_v2.0_DECOUPLED
                         </div>
                     </div>
 
@@ -913,120 +674,120 @@ const Calculator = () => {
                                 <>
                                     <div className="bg-cream border border-beige/40 p-6 rounded-3xl text-left shadow-sm">
                                         <span className="text-[10px] font-bold uppercase tracking-widest text-taupe block mb-1">Original Capital</span>
-                                        <div className="text-xl sm:text-2xl font-serif font-black text-ink">{formatRupees(infAmount)}</div>
+                                        <div className="text-xl sm:text-2xl font-serif font-black text-ink">{formatRupees(result.metrics?.originalCapital || infAmount)}</div>
                                     </div>
                                     <div className="bg-cream border border-beige/40 p-6 rounded-3xl text-left shadow-sm">
                                         <span className="text-[10px] font-bold uppercase tracking-widest text-taupe block mb-1">Purchasing Power</span>
-                                        <div className="text-xl sm:text-2xl font-serif font-black text-burgundy">{formatRupees(result.invested)}</div>
+                                        <div className="text-xl sm:text-2xl font-serif font-black text-burgundy">{formatRupees(result.summary.totalInvested)}</div>
                                     </div>
                                     <div className="bg-cream border border-beige/40 p-6 rounded-3xl text-left shadow-sm">
                                         <span className="text-[10px] font-bold uppercase tracking-widest text-taupe block mb-1">Future Cost</span>
-                                        <div className="text-xl sm:text-2xl font-serif font-black text-teal">{formatRupees(result.value)}</div>
+                                        <div className="text-xl sm:text-2xl font-serif font-black text-teal">{formatRupees(result.summary.finalValue)}</div>
                                     </div>
                                 </>
                             ) : calcType === 'cagr' ? (
                                 <>
                                     <div className="bg-cream border border-beige/40 p-6 rounded-3xl text-left shadow-sm">
                                         <span className="text-[10px] font-bold uppercase tracking-widest text-taupe block mb-1">Initial Value</span>
-                                        <div className="text-xl sm:text-2xl font-serif font-black text-ink">{formatRupees(result.invested)}</div>
+                                        <div className="text-xl sm:text-2xl font-serif font-black text-ink">{formatRupees(result.summary.totalInvested)}</div>
                                     </div>
                                     <div className="bg-cream border border-beige/40 p-6 rounded-3xl text-left shadow-sm">
                                         <span className="text-[10px] font-bold uppercase tracking-widest text-taupe block mb-1">Final Value</span>
-                                        <div className="text-xl sm:text-2xl font-serif font-black text-teal">{formatRupees(result.value)}</div>
+                                        <div className="text-xl sm:text-2xl font-serif font-black text-teal">{formatRupees(result.summary.finalValue)}</div>
                                     </div>
                                     <div className="bg-cream border border-beige/40 p-6 rounded-3xl text-left shadow-sm">
                                         <span className="text-[10px] font-bold uppercase tracking-widest text-taupe block mb-1">Calculated CAGR</span>
-                                        <div className="text-xl sm:text-2xl font-serif font-black text-burgundy">{result.cagr}% p.a.</div>
+                                        <div className="text-xl sm:text-2xl font-serif font-black text-burgundy">{result.summary.cagr}% p.a.</div>
                                     </div>
                                 </>
                             ) : calcType === 'xirr' ? (
                                 <>
                                     <div className="bg-cream border border-beige/40 p-6 rounded-3xl text-left shadow-sm">
                                         <span className="text-[10px] font-bold uppercase tracking-widest text-taupe block mb-1">Total Outflow</span>
-                                        <div className="text-xl sm:text-2xl font-serif font-black text-ink">{formatRupees(result.invested)}</div>
+                                        <div className="text-xl sm:text-2xl font-serif font-black text-ink">{formatRupees(result.summary.totalInvested)}</div>
                                     </div>
                                     <div className="bg-cream border border-beige/40 p-6 rounded-3xl text-left shadow-sm">
                                         <span className="text-[10px] font-bold uppercase tracking-widest text-taupe block mb-1">Total Inflow</span>
-                                        <div className="text-xl sm:text-2xl font-serif font-black text-teal">{formatRupees(result.value)}</div>
+                                        <div className="text-xl sm:text-2xl font-serif font-black text-teal">{formatRupees(result.summary.finalValue)}</div>
                                     </div>
                                     <div className="bg-cream border border-beige/40 p-6 rounded-3xl text-left shadow-sm">
                                         <span className="text-[10px] font-bold uppercase tracking-widest text-taupe block mb-1">Internal IRR</span>
-                                        <div className="text-xl sm:text-2xl font-serif font-black text-burgundy">{result.irr}% p.a.</div>
+                                        <div className="text-xl sm:text-2xl font-serif font-black text-burgundy">{result.summary.irr}% p.a.</div>
                                     </div>
                                 </>
                             ) : calcType === 'goal' ? (
                                 <>
                                     <div className="bg-cream border border-beige/40 p-6 rounded-3xl text-left shadow-sm">
                                         <span className="text-[10px] font-bold uppercase tracking-widest text-taupe block mb-1">Required Monthly SIP</span>
-                                        <div className="text-xl sm:text-2xl font-serif font-black text-burgundy">{formatRupees(result.monthlyRequired)}</div>
+                                        <div className="text-xl sm:text-2xl font-serif font-black text-burgundy">{formatRupees(result.summary.monthlyRequired)}</div>
                                     </div>
                                     <div className="bg-cream border border-beige/40 p-6 rounded-3xl text-left shadow-sm">
-                                        <span className="text-[10px] font-bold uppercase tracking-widest text-taupe block mb-1">Total Invested</span>
-                                        <div className="text-xl sm:text-2xl font-serif font-black text-ink">{formatRupees(result.invested)}</div>
+                                        <span className="text-[10px] font-bold uppercase tracking-widest text-taupe block mb-1">Total Outlay</span>
+                                        <div className="text-xl sm:text-2xl font-serif font-black text-ink">{formatRupees(result.summary.totalInvested)}</div>
                                     </div>
                                     <div className="bg-cream border border-beige/40 p-6 rounded-3xl text-left shadow-sm">
                                         <span className="text-[10px] font-bold uppercase tracking-widest text-taupe block mb-1">Target Goal</span>
-                                        <div className="text-xl sm:text-2xl font-serif font-black text-teal">{formatRupees(result.value)}</div>
+                                        <div className="text-xl sm:text-2xl font-serif font-black text-teal">{formatRupees(result.summary.finalValue)}</div>
                                     </div>
                                 </>
                             ) : calcType === 'swp' ? (
                                 <>
                                     <div className="bg-cream border border-beige/40 p-6 rounded-3xl text-left shadow-sm">
                                         <span className="text-[10px] font-bold uppercase tracking-widest text-taupe block mb-1">Total Withdrawn</span>
-                                        <div className="text-xl sm:text-2xl font-serif font-black text-teal">{formatRupees(result.invested)}</div>
+                                        <div className="text-xl sm:text-2xl font-serif font-black text-teal">{formatRupees(result.summary.totalInvested)}</div>
                                     </div>
                                     <div className="bg-cream border border-beige/40 p-6 rounded-3xl text-left shadow-sm">
                                         <span className="text-[10px] font-bold uppercase tracking-widest text-taupe block mb-1">Final Balance</span>
-                                        <div className="text-xl sm:text-2xl font-serif font-black text-burgundy">{formatRupees(result.value)}</div>
+                                        <div className="text-xl sm:text-2xl font-serif font-black text-burgundy">{formatRupees(result.summary.finalValue)}</div>
                                     </div>
                                     <div className="bg-cream border border-beige/40 p-6 rounded-3xl text-left shadow-sm">
-                                        <span className="text-[10px] font-bold uppercase tracking-widest text-taupe block mb-1">Estimated Returns</span>
-                                        <div className="text-xl sm:text-2xl font-serif font-black text-ink">{formatRupees(result.returns)}</div>
+                                        <span className="text-[10px] font-bold uppercase tracking-widest text-taupe block mb-1">Total Growth Earned</span>
+                                        <div className="text-xl sm:text-2xl font-serif font-black text-ink">{formatRupees(result.metrics?.totalGrowthEarned || 0)}</div>
                                     </div>
                                 </>
                             ) : calcType === 'retirement' ? (
                                 <>
                                     <div className="bg-cream border border-beige/40 p-6 rounded-3xl text-left shadow-sm">
                                         <span className="text-[10px] font-bold uppercase tracking-widest text-taupe block mb-1">Monthly Cost at Retire</span>
-                                        <div className="text-xl sm:text-2xl font-serif font-black text-ink">{formatRupees(result.inflatedExpense)}</div>
+                                        <div className="text-xl sm:text-2xl font-serif font-black text-ink">{formatRupees(result.summary.inflatedExpense)}</div>
                                     </div>
                                     <div className="bg-cream border border-beige/40 p-6 rounded-3xl text-left shadow-sm">
                                         <span className="text-[10px] font-bold uppercase tracking-widest text-taupe block mb-1">Target Corpus Needed</span>
-                                        <div className="text-xl sm:text-2xl font-serif font-black text-burgundy">{formatRupees(result.corpus)}</div>
+                                        <div className="text-xl sm:text-2xl font-serif font-black text-burgundy">{formatRupees(result.summary.corpus)}</div>
                                     </div>
                                     <div className="bg-cream border border-beige/40 p-6 rounded-3xl text-left shadow-sm">
                                         <span className="text-[10px] font-bold uppercase tracking-widest text-taupe block mb-1">Required Monthly Savings</span>
-                                        <div className="text-xl sm:text-2xl font-serif font-black text-teal">{formatRupees(result.monthlySaving)}</div>
+                                        <div className="text-xl sm:text-2xl font-serif font-black text-teal">{formatRupees(result.summary.monthlySaving)}</div>
                                     </div>
                                 </>
                             ) : calcType === 'tax' ? (
                                 <>
                                     <div className="bg-cream border border-beige/40 p-6 rounded-3xl text-left shadow-sm">
-                                        <span className="text-[10px] font-bold uppercase tracking-widest text-taupe block mb-1">Total Profits (Pre-Tax)</span>
-                                        <div className="text-xl sm:text-2xl font-serif font-black text-ink">{formatRupees(result.returns + result.tax)}</div>
+                                        <span className="text-[10px] font-bold uppercase tracking-widest text-taupe block mb-1">Pre-Tax Profits</span>
+                                        <div className="text-xl sm:text-2xl font-serif font-black text-ink">{formatRupees(result.metrics?.grossCapitalGain || 0)}</div>
                                     </div>
                                     <div className="bg-cream border border-beige/40 p-6 rounded-3xl text-left shadow-sm">
-                                        <span className="text-[10px] font-bold uppercase tracking-widest text-taupe block mb-1">{result.taxType} Liability ({result.rate}%)</span>
-                                        <div className="text-xl sm:text-2xl font-serif font-black text-burgundy">{formatRupees(result.tax)}</div>
+                                        <span className="text-[10px] font-bold uppercase tracking-widest text-taupe block mb-1">{result.summary.taxType} Liability ({result.summary.rate}%)</span>
+                                        <div className="text-xl sm:text-2xl font-serif font-black text-burgundy">{formatRupees(result.summary.tax)}</div>
                                     </div>
                                     <div className="bg-cream border border-beige/40 p-6 rounded-3xl text-left shadow-sm">
                                         <span className="text-[10px] font-bold uppercase tracking-widest text-taupe block mb-1">Net Gain (Post-Tax)</span>
-                                        <div className="text-xl sm:text-2xl font-serif font-black text-teal">{formatRupees(result.returns)}</div>
+                                        <div className="text-xl sm:text-2xl font-serif font-black text-teal">{formatRupees(result.summary.totalReturns)}</div>
                                     </div>
                                 </>
                             ) : (
                                 <>
                                     <div className="bg-cream border border-beige/40 p-6 rounded-3xl text-left shadow-sm">
                                         <span className="text-[10px] font-bold uppercase tracking-widest text-taupe block mb-1">Total Invested</span>
-                                        <div className="text-xl sm:text-2xl font-serif font-black text-ink">{formatRupees(result.invested)}</div>
+                                        <div className="text-xl sm:text-2xl font-serif font-black text-ink">{formatRupees(result.summary.totalInvested)}</div>
                                     </div>
                                     <div className="bg-cream border border-beige/40 p-6 rounded-3xl text-left shadow-sm">
                                         <span className="text-[10px] font-bold uppercase tracking-widest text-taupe block mb-1">Est. Returns</span>
-                                        <div className="text-xl sm:text-2xl font-serif font-black text-teal">{formatRupees(result.returns)}</div>
+                                        <div className="text-xl sm:text-2xl font-serif font-black text-teal">{formatRupees(result.summary.totalReturns)}</div>
                                     </div>
                                     <div className="bg-cream border border-beige/40 p-6 rounded-3xl text-left shadow-sm">
                                         <span className="text-[10px] font-bold uppercase tracking-widest text-taupe block mb-1">Future Value</span>
-                                        <div className="text-xl sm:text-2xl font-serif font-black text-burgundy">{formatRupees(result.value)}</div>
+                                        <div className="text-xl sm:text-2xl font-serif font-black text-burgundy">{formatRupees(result.summary.finalValue)}</div>
                                     </div>
                                 </>
                             )}
@@ -1044,7 +805,7 @@ const Calculator = () => {
                                     Growth Trajectory Graph
                                 </h4>
                                 <span className="px-2.5 py-0.5 bg-gold/20 text-gold text-[9px] font-bold rounded uppercase tracking-wider font-mono">
-                                    {result.chartData.length} Nodes
+                                    {result.projection?.length || 0} Nodes
                                 </span>
                             </div>
 
@@ -1052,7 +813,7 @@ const Calculator = () => {
                             <div className="w-full flex-grow relative z-10 select-none">
                                 <ResponsiveContainer width="100%" height="100%">
                                     <AreaChart
-                                        data={result.chartData}
+                                        data={result.projection}
                                         margin={{ top: 10, right: 5, left: -20, bottom: 0 }}
                                     >
                                         <CartesianGrid strokeDasharray="3 3" stroke="rgba(253,246,237,0.04)" />

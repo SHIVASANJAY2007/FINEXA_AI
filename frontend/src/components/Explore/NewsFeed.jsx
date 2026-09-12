@@ -1,6 +1,6 @@
-import React, { useState, memo } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, ChevronDown } from 'lucide-react';
 import NewsDetailModal from './NewsDetailModal';
 
 const NewsCard = memo(({ article, onClick }) => {
@@ -69,11 +69,21 @@ const NewsCard = memo(({ article, onClick }) => {
 
 const NewsFeed = ({ news, isLoading }) => {
     const [selectedArticle, setSelectedArticle] = useState(null);
+    const [visibleCount, setVisibleCount] = useState(10);
+
+    // Reset card limit to 10 when category or search changes
+    useEffect(() => {
+        setVisibleCount(10);
+    }, [news]);
+
+    const handleLoadMore = () => {
+        setVisibleCount(prev => prev + 10);
+    };
 
     if (isLoading && news.length === 0) {
         return (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {[1, 2, 3, 4].map(i => (
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(i => (
                     <div key={i} className="h-96 bg-white/50 animate-pulse rounded-3xl border border-beige/40" />
                 ))}
             </div>
@@ -90,15 +100,33 @@ const NewsFeed = ({ news, isLoading }) => {
         );
     }
 
+    const visibleNews = news.slice(0, visibleCount);
+    const hasMore = visibleCount < news.length;
+
     return (
         <>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <AnimatePresence>
-                    {news.map(article => (
+                    {visibleNews.map(article => (
                         <NewsCard key={article.id} article={article} onClick={setSelectedArticle} />
                     ))}
                 </AnimatePresence>
             </div>
+
+            {hasMore && (
+                <div className="mt-10 text-center flex flex-col items-center gap-3">
+                    <button
+                        onClick={handleLoadMore}
+                        className="bg-ink hover:bg-burgundy text-white px-8 py-3.5 rounded-full font-extrabold text-xs uppercase tracking-widest flex items-center gap-2 shadow-lg hover:shadow-xl active:scale-95 transition-all cursor-pointer group"
+                    >
+                        <span>Load More Articles</span>
+                        <ChevronDown size={16} className="group-hover:translate-y-0.5 transition-transform" />
+                    </button>
+                    <span className="text-xs font-semibold text-taupe">
+                        Showing <strong className="text-ink">{visibleNews.length}</strong> of <strong className="text-ink">{news.length}</strong> articles
+                    </span>
+                </div>
+            )}
 
             <AnimatePresence>
                 {selectedArticle && (

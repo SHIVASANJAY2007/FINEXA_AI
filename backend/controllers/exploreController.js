@@ -27,7 +27,8 @@ export const getMovers = async (req, res) => {
 export const getNews = async (req, res) => {
     try {
         const category = req.query.category || 'All';
-        const news = await getAggregatedNews(category, '');
+        const page = parseInt(req.query.page || '1', 10);
+        const news = await getAggregatedNews(category, '', page);
         res.status(200).json(news);
     } catch (error) {
         console.error('Error in getNews controller:', error);
@@ -38,7 +39,8 @@ export const getNews = async (req, res) => {
 export const searchNews = async (req, res) => {
     try {
         const query = req.query.q || '';
-        const news = await getAggregatedNews('All', query);
+        const page = parseInt(req.query.page || '1', 10);
+        const news = await getAggregatedNews('All', query, page);
         res.status(200).json(news);
     } catch (error) {
         console.error('Error in searchNews controller:', error);

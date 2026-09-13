@@ -31,12 +31,12 @@ const isVideoUrl = (url) => {
 };
 
 // Regex constants for the parsing engine
-const dayHeaderRegex = /^(?:#+\s+|\*\*|)\b(Day\s+\d+|DAY\s+\d+)\b(?:\s*[:\-]\s*|\s+)(.*?)(?:\*\*|)$/i;
-const timeSegmentRegex = /^\s*[\-\*\d\.\+\s]*\*\*?(Morning|Afternoon|Evening|Night)(?:\s*\([^)]+\))?\*\*?:?\s*(.*?)\s*$/i;
+const dayHeaderRegex = /^(?:#+\s+|\*\*|)\b(Day\s+\d+|DAY\s+\d+)\b(?:\s*[:-]\s*|\s+)(.*?)(?:\*\*|)$/i;
+const timeSegmentRegex = /^\s*[-*\d.+\s]*\*\*?(Morning|Afternoon|Evening|Night)(?:\s*\([^)]+\))?\*\*?:?\s*(.*?)\s*$/i;
 const calloutRegex = /^(?:💡|⚠️|🚨|ℹ️|🛑|📌|👉)?\s*\*\*?(Tip|Warning|Important|Note|Remember|Caution|Alert|Success|Info)\*\*?\s*:\s*(.*?)$/i;
-const planHeaderRegex = /^(?:#+\s+|\*\*|)\b(Plan\s+\d+|Option\s+[A-Z])\b(?:\s*[:\-]\s*|\s+)(.*?)(?:\*\*|)$/i;
-const sourcesHeaderRegex = /^(?:#+\s+|\*\*|)(Sources|References|Citations)(?:\s*[:\-]\s*|\s*)(?:\*\*|)$/i;
-const sourceLinkRegex = /^\s*[\-\*\d\.\+\s]*(?:\[(.*?)\]\((.*?)\)|(https?:\/\/[^\s]+))\s*$/i;
+const planHeaderRegex = /^(?:#+\s+|\*\*|)\b(Plan\s+\d+|Option\s+[A-Z])\b(?:\s*[:-]\s*|\s+)(.*?)(?:\*\*|)$/i;
+const sourcesHeaderRegex = /^(?:#+\s+|\*\*|)(Sources|References|Citations)(?:\s*[:-]\s*|\s*)(?:\*\*|)$/i;
+const sourceLinkRegex = /^\s*[-*\d.+\s]*(?:\[(.*?)\]\((.*?)\)|(https?:\/\/[^\s]+))\s*$/i;
 
 // Preprocessing text (separates lists that are squeezed together with emojis)
 const preprocessBotReplyText = (text) => {
@@ -1391,7 +1391,7 @@ const parseSubBlocks = (lines) => {
                 continue;
             }
             
-            const timeHeaderMatch = line.match(/^[#\s\*]*\s*(Morning|Afternoon|Evening|Night)\s*$/i);
+            const timeHeaderMatch = line.match(/^[#\s*]*\s*(Morning|Afternoon|Evening|Night)\s*$/i);
             if (timeHeaderMatch) {
                 currentSegment = { time: timeHeaderMatch[1], details: '' };
                 currentDay.segments.push(currentSegment);
@@ -1400,15 +1400,15 @@ const parseSubBlocks = (lines) => {
             
             if (line.trim() !== '') {
                 if (currentSegment) {
-                    currentSegment.details += (currentSegment.details ? '\n' : '') + line.replace(/^\s*[\-\*\+\s]*/, '');
+                    currentSegment.details += (currentSegment.details ? '\n' : '') + line.replace(/^\s*[-*+\s]*/, '');
                 } else {
-                    currentDay.description += (currentDay.description ? '\n' : '') + line.replace(/^\s*[\-\*\+\s]*/, '');
+                    currentDay.description += (currentDay.description ? '\n' : '') + line.replace(/^\s*[-*+\s]*/, '');
                 }
                 continue;
             }
         }
         
-        const urlRegex = /(https?:\/\/[^\s\)]+)/g;
+        const urlRegex = /(https?:\/\/[^\s)]+)/g;
         const urls = line.match(urlRegex);
         if (urls && urls.length === 1 && line.trim() === urls[0]) {
             const url = urls[0];

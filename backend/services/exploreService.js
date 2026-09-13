@@ -59,38 +59,91 @@ async function getPexelsImage(query = 'finance market') {
     return fallbackImg;
 }
 
-// Strict Financial Relevance & Non-Financial / Geopolitical War Exclusion Filter
+function containsWordOrPhrase(text, wordOrPhrase) {
+    const escaped = wordOrPhrase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = new RegExp(`\\b${escaped}\\b`, 'i');
+    return regex.test(text);
+}
+
+// Strict Financial Relevance & Non-Financial Exclusion Filter
 const NON_FINANCE_EXCLUSION_KEYWORDS = [
+    // War, Military & Geopolitical Conflict
     'war', 'military', 'missile', 'soldier', 'soldiers', 'troops', 'troop', 'bomb', 'bombing',
     'attack', 'attacks', 'airstrike', 'air strike', 'combat', 'conflict', 'weapon', 'weapons', 'armaments',
     'defense force', 'tehran', 'gaza', 'hamas', 'hezbollah', 'drone', 'drones',
     'casualty', 'casualties', 'hostage', 'hostages', 'killed', 'killing', 'invasion', 'pickaxe mountain',
-    'air force one', 'prosecutor', 'criminal enterprise', 'rail abandonment', 'military force'
+    'air force one', 'prosecutor', 'criminal enterprise', 'rail abandonment', 'military force',
+
+    // Psychology, Personal Advice, Relationships, Dating & Family
+    'psychologist', 'psychology', 'psychiatrist', 'therapist', 'therapy', 'couples', 'couple',
+    'emotionally', 'emotional', 'partner', 'partners', 'relationship', 'relationships',
+    'marriage', 'divorce', 'dating', 'parenting', 'family', 'love', 'morning routine',
+    'capacity check', 'mental health', 'mindfulness', 'meditation', 'happiness', 'personal growth',
+    'self help', 'advice for couples', 'life coach', 'loneliness', 'friendship',
+
+    // Medicine, Fitness, Diet & Health
+    'doctor', 'medical', 'medicine', 'diet', 'nutrition', 'workout', 'fitness', 'weight loss',
+    'recipe', 'cooking', 'chef', 'wellness', 'skin care', 'skincare', 'symptoms', 'disease',
+    'cancer', 'virus', 'hospital', 'surgery', 'health tips',
+
+    // Entertainment, Pop Culture, Music, Celebrities & Sports
+    'movie', 'movies', 'actor', 'actress', 'hollywood', 'bollywood', 'celebrity', 'celebrities',
+    'music', 'album', 'song', 'singer', 'concert', 'tv show', 'netflix', 'film', 'box office',
+    'awards', 'grammy', 'oscar', 'emmy', 'sports', 'football', 'basketball', 'cricket',
+    'nfl', 'nba', 'soccer', 'tennis', 'golf', 'athlete', 'athletes', 'stadium', 'tournament',
+    'match', 'league', 'world cup', 'olympics', 'playoffs', 'champion',
+
+    // Gaming, Fashion, Travel, Sightseeing & Hobbies
+    'game', 'games', 'gaming', 'esports', 'video game', 'playstation', 'xbox', 'nintendo',
+    'fashion', 'style', 'outfit', 'clothing', 'horoscope', 'astrology', 'foodie',
+    'restaurant', 'travel', 'vacation', 'resort', 'cruise', 'hotel', 'tourist',
+    'favourite spots', 'secret spots', 'city guide', 'sightseeing', 'itinerary',
+
+    // Crime & Non-Financial Law Enforcement
+    'murder', 'shooting', 'robbery', 'homicide', 'kidnapping', 'arson'
 ];
 
 const STRICT_FINANCE_KEYWORDS = [
-    'stock', 'stocks', 'market', 'markets', 'economy', 'economic', 'bank', 'banking',
-    'rbi', 'fed', 'federal reserve', 'rate', 'rates', 'inflation', 'revenue', 'profit',
-    'profits', 'earning', 'earnings', 'share', 'shares', 'investment', 'investments',
-    'fund', 'funds', 'crypto', 'bitcoin', 'ethereum', 'gold', 'oil', 'crude', 'nifty',
-    'sensex', 'nasdaq', 'sp500', 's&p', 'trade', 'trading', 'tax', 'taxes', 'ipo',
-    'gdp', 'sector', 'sectors', 'valuation', 'dividend', 'brokerage', 'sebi', 'bond',
-    'bonds', 'yield', 'yields', 'cap', 'capex', 'corporate', 'wealth', 'finance', 'financial',
-    'dollar', 'rupee', 'currency', 'treasury', 'semiconductor', 'microchip', 'quarterly',
-    'wall street', 'net worth', 'billion', 'trillion', 'mutual fund', 'sip'
+    'stock', 'stocks', 'equity', 'equities', 'market', 'markets', 'economy', 'economic',
+    'macroeconomic', 'macroeconomics', 'bank', 'banks', 'banking', 'rbi', 'fed',
+    'federal reserve', 'central bank', 'interest rate', 'interest rates', 'repo rate',
+    'inflation', 'deflation', 'revenue', 'revenues', 'profit', 'profits', 'profitability',
+    'earnings', 'share price', 'share prices', 'equity shares', 'shares surge', 'shares drop',
+    'shares rally', 'shares fall', 'shares plunge', 'shares jump', 'shares rise', 'shares gain',
+    'shares slump', 'market share', 'shareholder', 'shareholders', 'shares buyback',
+    'stock market', 'investment', 'investments', 'investor', 'investors', 'fund', 'funds',
+    'crypto', 'bitcoin', 'ethereum', 'gold price', 'crude oil', 'nifty', 'nifty50', 'sensex',
+    'nasdaq', 'sp500', 's&p', 'trading', 'trader', 'traders', 'taxation',
+    'taxes', 'ipo', 'ipos', 'gdp', 'valuation', 'valuations',
+    'dividend', 'dividends', 'brokerage', 'sebi', 'bond', 'bonds', 'yield',
+    'yields', 'market cap', 'capex', 'corporate', 'wealth', 'finance', 'financial',
+    'fintech', 'dollar', 'rupee', 'currency', 'treasuries', 'treasury', 'semiconductor',
+    'microchip', 'quarterly', 'wall street', 'dalal street', 'net worth', 'billion',
+    'trillion', 'mutual fund', 'mutual funds', 'sip', 'etf', 'etfs', 'venture capital',
+    'private equity', 'bull market', 'bear market', 'fiscal', 'monetary', 'bse', 'nse'
 ];
 
 function isStrictlyFinanceAndEconomy(title = '', summary = '') {
-    const text = (title + ' ' + summary).toLowerCase();
+    const text = (title + ' ' + summary).toLowerCase().replace(/[—–-]/g, ' ');
 
-    // 1. Instantly reject any non-finance / war / military article
-    const hasExclusion = NON_FINANCE_EXCLUSION_KEYWORDS.some(kw => text.includes(kw));
-    if (hasExclusion) {
-        return false;
+    if (!text || text.trim().length < 15) return false;
+
+    // 1. Exceptions where exclusion words might genuinely appear in financial contexts
+    const hasFinancialException = [
+        'defense sector', 'defense stocks', 'defense industry', 'healthcare sector',
+        'healthcare stocks', 'pharma', 'family office', 'family wealth'
+    ].some(exception => containsWordOrPhrase(text, exception));
+
+    // 2. Instantly reject any non-finance / lifestyle / war / relationship article
+    if (!hasFinancialException) {
+        const hasExclusion = NON_FINANCE_EXCLUSION_KEYWORDS.some(kw => containsWordOrPhrase(text, kw));
+        if (hasExclusion) {
+            return false;
+        }
     }
 
-    // 2. Require at least one strict financial keyword
-    const hasFinanceKeyword = STRICT_FINANCE_KEYWORDS.some(kw => text.includes(kw));
+    // 3. Require at least one strict financial keyword with word boundary matching
+    const hasFinanceKeyword = STRICT_FINANCE_KEYWORDS.some(kw => containsWordOrPhrase(text, kw));
     return hasFinanceKeyword;
 }
 
@@ -804,7 +857,7 @@ export async function getLiveMovers() {
 }
 
 export async function getAggregatedNews(categoryFilter = 'All', searchQuery = '', page = 1, limit = 10) {
-    const cacheKey = `news_live_v4_${categoryFilter.toLowerCase()}_${searchQuery.toLowerCase()}_p${page}_l${limit}`;
+    const cacheKey = `news_live_v6_${categoryFilter.toLowerCase()}_${searchQuery.toLowerCase()}_p${page}_l${limit}`;
     const cached = getCached(cacheKey);
     if (cached) return cached;
 

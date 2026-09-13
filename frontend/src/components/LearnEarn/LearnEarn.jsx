@@ -5,10 +5,6 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { 
   PlayCircle, 
-  TrendingUp, 
-  Shield, 
-  BarChart2, 
-  DollarSign, 
   ArrowLeft, 
   Clock, 
   Award, 

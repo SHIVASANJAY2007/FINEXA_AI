@@ -42,7 +42,7 @@ Notice how over 75% of your total wealth at Year 30 comes purely from compoundin
         id: 'f2',
         title: '2. The 50/30/20 Budgeting Matrix',
         subtitle: 'A simple framework for financial freedom',
-        content: `Managing your cash flow doesn\'t require complex spreadsheets. The **50/30/20 Rule** provides an intuitive division of your net (after-tax) income:
+        content: `Managing your cash flow doesn't require complex spreadsheets. The **50/30/20 Rule** provides an intuitive division of your net (after-tax) income:
 
 - **50% Needs**: Essential survival expenses (Housing, utilities, basic groceries, insurance, minimum debt payments).
 - **30% Wants**: Lifestyle choices (Dining out, streaming services, travel, hobbies).
@@ -468,7 +468,7 @@ Liquidity providers deposit paired assets into smart contracts and earn a propor
         subtitle: 'Evaluating digital asset scarcity',
         content: `**Tokenomics** analyzes the supply, distribution, and utility model of a crypto token:
 
-- **Max Supply**: Hard cap on total tokens that can ever exist (e.g., Bitcoin\'s 21 Million cap).
+- **Max Supply**: Hard cap on total tokens that can ever exist (e.g., Bitcoin's 21 Million cap).
 - **Halving Events**: In Bitcoin, the block reward paid to miners cuts in half every 210,000 blocks (~4 years), programmatically reducing new supply emission.
 - **Burn Mechanics**: Permanently destroying tokens from circulation during usage to introduce deflationary pressure.`,
         keyTakeaway: 'Always analyze circulating supply versus fully diluted valuation (FDV) before investing in digital assets.'

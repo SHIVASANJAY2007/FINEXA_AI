@@ -67,9 +67,41 @@ const NewsCard = memo(({ article, onClick }) => {
     );
 });
 
+const NON_FINANCE_EXCLUSION_KEYWORDS = [
+    'psychologist', 'psychology', 'psychiatrist', 'therapist', 'therapy', 'couples', 'couple',
+    'emotionally', 'emotional', 'partner', 'partners', 'relationship', 'relationships',
+    'marriage', 'divorce', 'dating', 'parenting', 'family', 'love', 'morning routine',
+    'capacity check', 'mental health', 'mindfulness', 'meditation', 'happiness', 'personal growth',
+    'self help', 'advice for couples', 'life coach', 'loneliness', 'friendship',
+    'doctor', 'medical', 'medicine', 'diet', 'nutrition', 'workout', 'fitness', 'weight loss',
+    'recipe', 'cooking', 'chef', 'wellness', 'skin care', 'skincare', 'symptoms', 'disease',
+    'cancer', 'virus', 'hospital', 'surgery', 'health tips',
+    'movie', 'movies', 'actor', 'actress', 'hollywood', 'bollywood', 'celebrity', 'celebrities',
+    'music', 'album', 'song', 'singer', 'concert', 'tv show', 'netflix', 'film', 'box office',
+    'awards', 'grammy', 'oscar', 'emmy', 'sports', 'football', 'basketball', 'cricket',
+    'nfl', 'nba', 'soccer', 'tennis', 'golf', 'athlete', 'athletes', 'stadium', 'tournament',
+    'match', 'league', 'world cup', 'olympics', 'playoffs', 'champion',
+    'game', 'games', 'gaming', 'esports', 'video game', 'playstation', 'xbox', 'nintendo',
+    'fashion', 'style', 'outfit', 'clothing', 'horoscope', 'astrology', 'foodie',
+    'restaurant', 'travel', 'vacation', 'resort', 'cruise', 'hotel', 'tourist',
+    'favourite spots', 'secret spots', 'city guide', 'sightseeing', 'itinerary',
+    'murder', 'shooting', 'robbery', 'homicide', 'kidnapping', 'arson'
+];
+
+function isStrictlyFinanceArticle(article) {
+    if (!article || !article.title) return false;
+    const text = (article.title + ' ' + (article.summary || '')).toLowerCase().replace(/[—–-]/g, ' ');
+    return !NON_FINANCE_EXCLUSION_KEYWORDS.some(kw => {
+        const regex = new RegExp(`\\b${kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i');
+        return regex.test(text);
+    });
+}
+
 const NewsFeed = ({ news, isLoading }) => {
     const [selectedArticle, setSelectedArticle] = useState(null);
     const [visibleCount, setVisibleCount] = useState(10);
+
+    const filteredNews = (news || []).filter(isStrictlyFinanceArticle);
 
     // Reset card limit to 10 when category or search changes
     useEffect(() => {
@@ -80,7 +112,7 @@ const NewsFeed = ({ news, isLoading }) => {
         setVisibleCount(prev => prev + 10);
     };
 
-    if (isLoading && news.length === 0) {
+    if (isLoading && filteredNews.length === 0) {
         return (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(i => (
@@ -90,7 +122,7 @@ const NewsFeed = ({ news, isLoading }) => {
         );
     }
 
-    if (news.length === 0) {
+    if (filteredNews.length === 0) {
         return (
             <div className="text-center py-20 bg-white rounded-3xl border border-beige/40 border-dashed">
                 <AlertCircle size={32} className="mx-auto text-taupe/50 mb-3" />
@@ -100,8 +132,8 @@ const NewsFeed = ({ news, isLoading }) => {
         );
     }
 
-    const visibleNews = news.slice(0, visibleCount);
-    const hasMore = visibleCount < news.length;
+    const visibleNews = filteredNews.slice(0, visibleCount);
+    const hasMore = visibleCount < filteredNews.length;
 
     return (
         <>

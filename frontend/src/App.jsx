@@ -11,6 +11,8 @@ const Explore = lazy(() => import('./components/Explore/Explore'))
 const LearnEarn = lazy(() => import('./components/LearnEarn/LearnEarn'))
 const FlowingMenuPage = lazy(() => import('./components/ui/FlowingMenuPage'))
 const Calculator = lazy(() => import('./components/Calculator/Calculator'))
+const BusinessIntelligence = lazy(() => import('./components/BusinessIntelligence/BusinessIntelligence'))
+const GreyWolfOptimizer = lazy(() => import('./components/GWO/GreyWolfOptimizer'))
 
 const PageLoader = () => (
   <div className="min-h-screen w-full bg-ivory flex flex-col items-center justify-center gap-4 dot-grid">
@@ -38,6 +40,9 @@ function App() {
         <Route path="/learn" element={<LearnEarn />} />
         <Route path="/menu" element={<FlowingMenuPage />} />
         <Route path="/calculator" element={<Calculator />} />
+        <Route path="/business-intelligence" element={<BusinessIntelligence />} />
+        <Route path="/gwo" element={<GreyWolfOptimizer />} />
+        <Route path="/alpha-pack" element={<GreyWolfOptimizer />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Suspense>

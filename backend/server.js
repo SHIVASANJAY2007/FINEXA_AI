@@ -14,8 +14,10 @@ dotenv.config({ path: join(__dirname, '.env') });
 import authRoutes from './routes/authRoutes.js';
 import travelRoutes from './routes/travelRoutes.js';
 import chatRoutes from './routes/chatRoutes.js';
+import biRoutes from './routes/biRoutes.js';
 import pexelsRoutes from './routes/pexelsRoutes.js';
 import exploreRoutes from './routes/exploreRoutes.js';
+import gwoRoutes from './routes/gwoRoutes.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -37,6 +39,8 @@ app.get('/api/health', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/travel', travelRoutes);
 app.use('/api/chat', chatRoutes);
+app.use('/api/bi', biRoutes);
+app.use('/api/gwo', gwoRoutes);
 app.use('/api/pexels', pexelsRoutes);
 app.use('/api/explore', exploreRoutes);
 

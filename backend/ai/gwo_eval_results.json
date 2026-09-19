@@ -1,0 +1,440 @@
+{
+  "safe": {
+    "ground_truth": {
+      "score": 1.6912,
+      "weights": [
+        0.0747,
+        0.1723,
+        0.403,
+        0.2691,
+        0.0809
+      ],
+      "metrics": {
+        "weights": [
+          0.0747,
+          0.1723,
+          0.403,
+          0.2691,
+          0.0809
+        ],
+        "expectedReturn": 11.04,
+        "volatility": 6.66,
+        "sharpeRatio": 0.68
+      }
+    },
+    "gwo_stats": {
+      "mean_score": 1.7568759999999997,
+      "std_score": 0.0028207133849436003,
+      "min_score": 1.7376,
+      "max_score": 1.7576,
+      "accuracy_pct": 96.11660359508043,
+      "weight_l2_error": 0.18867567449841108,
+      "mean_sharpe": 0.7000000000000002,
+      "mean_return": 11.909200000000004,
+      "mean_volatility": 7.780299999999999,
+      "mean_runtime_ms": 89.17590900000503
+    },
+    "pso": {
+      "score": 1.7576,
+      "weights": [
+        0.0787,
+        0.1457,
+        0.2653,
+        0.3047,
+        0.2057
+      ],
+      "metrics": {
+        "weights": [
+          0.0787,
+          0.1457,
+          0.2653,
+          0.3047,
+          0.2057
+        ],
+        "expectedReturn": 11.92,
+        "volatility": 7.79,
+        "sharpeRatio": 0.7
+      }
+    },
+    "ga": {
+      "score": 1.7572999999999999,
+      "weights": [
+        0.0862,
+        0.1422,
+        0.2653,
+        0.3027,
+        0.2036
+      ],
+      "metrics": {
+        "weights": [
+          0.0862,
+          0.1422,
+          0.2653,
+          0.3027,
+          0.2036
+        ],
+        "expectedReturn": 11.91,
+        "volatility": 7.78,
+        "sharpeRatio": 0.7
+      }
+    },
+    "random_search": {
+      "score": 1.7551999999999999,
+      "weights": [
+        0.0933,
+        0.1298,
+        0.2749,
+        0.2934,
+        0.2085
+      ],
+      "metrics": {
+        "weights": [
+          0.0933,
+          0.1298,
+          0.2749,
+          0.2934,
+          0.2085
+        ],
+        "expectedReturn": 11.84,
+        "volatility": 7.68,
+        "sharpeRatio": 0.7
+      }
+    },
+    "equal_weight": {
+      "score": 1.5065000000000004,
+      "weights": [
+        0.2,
+        0.2,
+        0.2,
+        0.2,
+        0.2
+      ],
+      "metrics": {
+        "weights": [
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ],
+        "expectedReturn": 12.8,
+        "volatility": 9.45,
+        "sharpeRatio": 0.67
+      }
+    },
+    "traditional_60_40": {
+      "score": 1.2672999999999996,
+      "weights": [
+        0.35,
+        0.25,
+        0.3,
+        0.1,
+        0.0
+      ],
+      "metrics": {
+        "weights": [
+          0.3465,
+          0.2475,
+          0.297,
+          0.099,
+          0.0099
+        ],
+        "expectedReturn": 12.31,
+        "volatility": 9.88,
+        "sharpeRatio": 0.59
+      }
+    }
+  },
+  "balanced": {
+    "ground_truth": {
+      "score": 2.8628000000000005,
+      "weights": [
+        0.0747,
+        0.1723,
+        0.403,
+        0.2691,
+        0.0809
+      ],
+      "metrics": {
+        "weights": [
+          0.0747,
+          0.1723,
+          0.403,
+          0.2691,
+          0.0809
+        ],
+        "expectedReturn": 11.04,
+        "volatility": 6.66,
+        "sharpeRatio": 0.68
+      }
+    },
+    "gwo_stats": {
+      "mean_score": 2.948956,
+      "std_score": 0.003972324760137345,
+      "min_score": 2.9094499999999996,
+      "max_score": 2.94945,
+      "accuracy_pct": 96.99049881235156,
+      "weight_l2_error": 0.2150046930098416,
+      "mean_sharpe": 0.7000000000000002,
+      "mean_return": 10.046699999999998,
+      "mean_volatility": 5.087,
+      "mean_runtime_ms": 26.125660999994125
+    },
+    "pso": {
+      "score": 2.94945,
+      "weights": [
+        0.0367,
+        0.0832,
+        0.5741,
+        0.1828,
+        0.1233
+      ],
+      "metrics": {
+        "weights": [
+          0.0367,
+          0.0832,
+          0.574,
+          0.1828,
+          0.1233
+        ],
+        "expectedReturn": 10.05,
+        "volatility": 5.09,
+        "sharpeRatio": 0.7
+      }
+    },
+    "ga": {
+      "score": 2.94785,
+      "weights": [
+        0.0237,
+        0.087,
+        0.4749,
+        0.2669,
+        0.1475
+      ],
+      "metrics": {
+        "weights": [
+          0.0237,
+          0.087,
+          0.4749,
+          0.2669,
+          0.1475
+        ],
+        "expectedReturn": 10.45,
+        "volatility": 5.67,
+        "sharpeRatio": 0.7
+      }
+    },
+    "random_search": {
+      "score": 2.94815,
+      "weights": [
+        0.0451,
+        0.0917,
+        0.4769,
+        0.2525,
+        0.1339
+      ],
+      "metrics": {
+        "weights": [
+          0.0451,
+          0.0917,
+          0.4769,
+          0.2525,
+          0.1339
+        ],
+        "expectedReturn": 10.47,
+        "volatility": 5.68,
+        "sharpeRatio": 0.7
+      }
+    },
+    "equal_weight": {
+      "score": 2.811,
+      "weights": [
+        0.2,
+        0.2,
+        0.2,
+        0.2,
+        0.2
+      ],
+      "metrics": {
+        "weights": [
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ],
+        "expectedReturn": 12.8,
+        "volatility": 9.45,
+        "sharpeRatio": 0.67
+      }
+    },
+    "traditional_60_40": {
+      "score": 2.47015,
+      "weights": [
+        0.35,
+        0.25,
+        0.3,
+        0.1,
+        0.0
+      ],
+      "metrics": {
+        "weights": [
+          0.3465,
+          0.2475,
+          0.297,
+          0.099,
+          0.0099
+        ],
+        "expectedReturn": 12.31,
+        "volatility": 9.88,
+        "sharpeRatio": 0.59
+      }
+    }
+  },
+  "aggressive": {
+    "ground_truth": {
+      "score": 1.7057,
+      "weights": [
+        0.0274,
+        0.2194,
+        0.136,
+        0.2546,
+        0.3626
+      ],
+      "metrics": {
+        "weights": [
+          0.0274,
+          0.2194,
+          0.136,
+          0.2546,
+          0.3626
+        ],
+        "expectedReturn": 13.41,
+        "volatility": 10.39,
+        "sharpeRatio": 0.67
+      }
+    },
+    "gwo_stats": {
+      "mean_score": 1.7394189999999994,
+      "std_score": 0.0002869477304318364,
+      "min_score": 1.7386000000000001,
+      "max_score": 1.74,
+      "accuracy_pct": 98.02315764788653,
+      "weight_l2_error": 0.17575446682242685,
+      "mean_sharpe": 0.6700000000000002,
+      "mean_return": 14.202,
+      "mean_volatility": 11.573999999999998,
+      "mean_runtime_ms": 30.91967600000544
+    },
+    "pso": {
+      "score": 1.7391,
+      "weights": [
+        0.0035,
+        0.3023,
+        0.0035,
+        0.3446,
+        0.3462
+      ],
+      "metrics": {
+        "weights": [
+          0.0099,
+          0.2984,
+          0.0099,
+          0.3401,
+          0.3417
+        ],
+        "expectedReturn": 14.15,
+        "volatility": 11.49,
+        "sharpeRatio": 0.67
+      }
+    },
+    "ga": {
+      "score": 1.7391,
+      "weights": [
+        0.0551,
+        0.2836,
+        0.0041,
+        0.319,
+        0.3381
+      ],
+      "metrics": {
+        "weights": [
+          0.0548,
+          0.282,
+          0.0099,
+          0.3172,
+          0.3362
+        ],
+        "expectedReturn": 14.15,
+        "volatility": 11.49,
+        "sharpeRatio": 0.67
+      }
+    },
+    "random_search": {
+      "score": 1.7378,
+      "weights": [
+        0.054,
+        0.2715,
+        0.0136,
+        0.3149,
+        0.346
+      ],
+      "metrics": {
+        "weights": [
+          0.054,
+          0.2715,
+          0.0136,
+          0.3149,
+          0.346
+        ],
+        "expectedReturn": 14.12,
+        "volatility": 11.44,
+        "sharpeRatio": 0.67
+      }
+    },
+    "equal_weight": {
+      "score": 1.6785,
+      "weights": [
+        0.2,
+        0.2,
+        0.2,
+        0.2,
+        0.2
+      ],
+      "metrics": {
+        "weights": [
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ],
+        "expectedReturn": 12.8,
+        "volatility": 9.45,
+        "sharpeRatio": 0.67
+      }
+    },
+    "traditional_60_40": {
+      "score": 1.5248000000000002,
+      "weights": [
+        0.35,
+        0.25,
+        0.3,
+        0.1,
+        0.0
+      ],
+      "metrics": {
+        "weights": [
+          0.3465,
+          0.2475,
+          0.297,
+          0.099,
+          0.0099
+        ],
+        "expectedReturn": 12.31,
+        "volatility": 9.88,
+        "sharpeRatio": 0.59
+      }
+    }
+  }
+}

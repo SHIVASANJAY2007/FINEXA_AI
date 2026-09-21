@@ -64,16 +64,16 @@ const WorkflowCard = memo(({ title, subtext, color, shape, index, Icon, textColo
     const cardRef = useRef(null);
 
     const getCardStyle = () => {
-        let borderRadius = '32px';
-        let width = '380px';
-        let height = '380px';
+        let borderRadius = '24px';
+        let width = 'clamp(260px, 70vw, 380px)';
+        let height = 'clamp(260px, 70vw, 380px)';
 
         if (shape === 'circle') {
             borderRadius = '50%';
         } else if (shape === 'd-shape') {
-            borderRadius = '80px 220px 220px 80px';
+            borderRadius = '60px 180px 180px 60px';
         } else if (shape === 'square-rounded') {
-            borderRadius = '60px';
+            borderRadius = '45px';
         }
 
         return {
@@ -88,21 +88,21 @@ const WorkflowCard = memo(({ title, subtext, color, shape, index, Icon, textColo
         <div className="flex-shrink-0 relative group">
             <motion.div
                 ref={cardRef}
-                whileHover={{ scale: 1.05, rotate: index % 2 === 0 ? 2 : -2 }}
-                className="flex flex-col items-center justify-center p-12 transition-all duration-500 shadow-[0_20px_50px_rgba(11,79,74,0.3)] border border-ivory/8 relative overflow-hidden"
+                whileHover={{ scale: 1.04, rotate: index % 2 === 0 ? 2 : -2 }}
+                className="flex flex-col items-center justify-center p-6 sm:p-10 md:p-12 transition-all duration-500 shadow-[0_20px_50px_rgba(11,79,74,0.3)] border border-ivory/8 relative overflow-hidden"
                 style={getCardStyle()}
             >
                 {/* Icon Container */}
-                <div className="mb-6 flex items-center justify-center p-4 bg-ivory/5 rounded-2xl group-hover:scale-110 transition-transform duration-500">
-                    <Icon size={72} strokeWidth={1.5} style={{ color: iconColor }} className="drop-shadow-md" />
+                <div className="mb-4 sm:mb-6 flex items-center justify-center p-3 sm:p-4 bg-ivory/5 rounded-2xl group-hover:scale-110 transition-transform duration-500">
+                    <Icon className="w-12 h-12 sm:w-16 sm:h-16 md:w-18 md:h-18 drop-shadow-md" strokeWidth={1.5} style={{ color: iconColor }} />
                 </div>
 
                 {/* Text Content */}
-                <div className="text-center">
-                    <h3 className="font-serif text-3xl font-bold leading-none mb-3" style={{ color: textColor }}>
+                <div className="text-center px-2">
+                    <h3 className="font-serif text-xl sm:text-2xl md:text-3xl font-bold leading-none mb-2 sm:mb-3" style={{ color: textColor }}>
                         {title}
                     </h3>
-                    <p className="text-[10px] font-bold uppercase tracking-[0.25em]" style={{ color: `${textColor}c0` }}>
+                    <p className="text-[8.5px] sm:text-[10px] font-bold uppercase tracking-[0.2em] sm:tracking-[0.25em]" style={{ color: `${textColor}c0` }}>
                         {subtext}
                     </p>
                 </div>
@@ -124,13 +124,13 @@ const HowItWorks = () => {
             if (!container) return;
             const totalWidth = container.scrollWidth - window.innerWidth;
 
-            // Pinned timeline with extended hold after reaching Portfolio Monitor card
+            // Pinned timeline with extended hold
             const tl = gsap.timeline({
                 scrollTrigger: {
                     trigger: sectionRef.current,
                     pin: true,
                     start: "top top",
-                    end: () => `+=${totalWidth + 2400}`,
+                    end: () => `+=${Math.max(1200, totalWidth + 1800)}`,
                     scrub: 1,
                     invalidateOnRefresh: true,
                 }
@@ -138,15 +138,14 @@ const HowItWorks = () => {
 
             // 1. Horizontal Scroll across all agent pipeline cards
             tl.to(container, {
-                x: -totalWidth,
+                x: -Math.max(0, totalWidth),
                 ease: "none",
                 duration: 3,
             });
 
-            // 2. Extended Lock/Hold after arrival of the Portfolio Monitor card
-            // Holds the section locked while user scrolls through this duration
+            // 2. Extended Lock/Hold
             tl.to({}, {
-                duration: 2.2,
+                duration: 1.8,
             });
 
             // Gentle float effect for particles
@@ -169,7 +168,7 @@ const HowItWorks = () => {
         <section
             id="how-it-works"
             ref={sectionRef}
-            className="w-full bg-teal h-screen overflow-hidden relative flex flex-col justify-center py-20"
+            className="w-full bg-teal h-screen overflow-hidden relative flex flex-col justify-center py-12 sm:py-20"
         >
             {/* Background Aesthetics */}
             <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
@@ -185,8 +184,8 @@ const HowItWorks = () => {
                 ))}
             </div>
 
-            <div className="px-8 md:px-16 mb-12 relative z-10 text-left">
-                <h2 className="text-ivory text-[clamp(2.5rem,6vw,8rem)] font-serif font-bold uppercase tracking-tight leading-[0.9] select-none">
+            <div className="px-4 sm:px-8 md:px-16 mb-6 sm:mb-10 relative z-10 text-left">
+                <h2 className="text-ivory text-[clamp(2.2rem,5vw,7rem)] font-serif font-bold uppercase tracking-tight leading-[0.9] select-none">
                     Agent <br />
                     <span className="text-cream/10 uppercase italic">Architecture</span>
                 </h2>
@@ -195,7 +194,7 @@ const HowItWorks = () => {
             <div className="relative z-10 w-full overflow-hidden flex items-center">
                 <div
                     ref={scrollContainerRef}
-                    className="flex items-center gap-12 md:gap-16 h-max px-8 md:px-16 pr-[20vw] sm:pr-[25vw]"
+                    className="flex items-center gap-6 sm:gap-10 md:gap-16 h-max px-4 sm:px-8 md:px-16 pr-[20vw] sm:pr-[25vw]"
                 >
                     {AGENTS.map((step, index) => (
                         <WorkflowCard
@@ -208,12 +207,12 @@ const HowItWorks = () => {
             </div>
 
             {/* Side Label */}
-            <div className="absolute right-12 top-1/2 -translate-y-1/2 rotate-90 z-10 select-none">
+            <div className="absolute right-4 sm:right-12 top-1/2 -translate-y-1/2 rotate-90 z-10 select-none hidden sm:block">
                 <span className="text-ivory/5 font-mono text-[9px] tracking-[2em] whitespace-nowrap">AGENT_PIPELINE_ACTIVE</span>
             </div>
 
             {/* Interaction Hint */}
-            <div className="absolute bottom-10 left-1/2 -translate-x-1/2 opacity-20 text-ivory uppercase font-bold text-[9px] tracking-[0.5em] animate-pulse select-none">
+            <div className="absolute bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 opacity-25 text-ivory uppercase font-bold text-[8.5px] sm:text-[9px] tracking-[0.3em] sm:tracking-[0.5em] animate-pulse select-none whitespace-nowrap">
                 Scroll to explore the pipeline
             </div>
         </section>

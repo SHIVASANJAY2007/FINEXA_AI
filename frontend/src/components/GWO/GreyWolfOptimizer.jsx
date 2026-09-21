@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import {
   ArrowLeft, Sparkles, TrendingUp,
   RefreshCw, Zap, Award,
-  Info, Edit3
+  Info, Edit3, Shield, Crown, Target, CheckCircle2
 } from 'lucide-react';
 import { getApiBaseUrl } from '../../utils/api';
 
@@ -85,39 +85,49 @@ export default function GreyWolfOptimizer() {
   const activeLeader = gwoData?.packLeaders?.[selectedLeader] || gwoData?.packLeaders?.alpha;
 
   return (
-    <div className="min-h-screen bg-[#FDF6ED] text-[#3A2E25] font-sans pt-16 pb-24 px-4 sm:px-6 lg:px-8 dot-grid">
-      <div className="max-w-5xl mx-auto space-y-8">
+    <div className="min-h-screen bg-[#FDF6ED] text-[#3A2E25] font-sans pt-10 sm:pt-16 pb-20 sm:pb-24 px-4 sm:px-6 lg:px-8 dot-grid">
+      <div className="max-w-5xl mx-auto space-y-6 sm:space-y-8">
 
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#3A2E25]/10">
-          <div>
+        {/* Top Header & Navigation */}
+        <div className="space-y-4 pb-6 border-b border-[#3A2E25]/10">
+          <div className="flex items-center justify-between">
             <Link
               to="/"
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#6B1E2B] hover:text-[#0B4F4A] transition-colors mb-2 uppercase tracking-wider"
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 hover:bg-white text-xs font-semibold text-[#6B1E2B] hover:text-[#521620] border border-[#3A2E25]/15 shadow-sm backdrop-blur-md transition-all hover:shadow hover:-translate-x-0.5 group cursor-pointer"
             >
-              <ArrowLeft className="w-3.5 h-3.5" /> Back to Dashboard
+              <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" />
+              <span>Back to Dashboard</span>
             </Link>
-            <div className="flex items-center gap-3">
-              <h1 className="text-3xl sm:text-4xl font-serif font-bold text-[#1A1615]">
-                FINEXA <span className="text-[#6B1E2B]">AlphaPack™</span>
-              </h1>
-              <span className="px-3 py-1 rounded-full text-xs font-semibold bg-[#6B1E2B]/10 text-[#6B1E2B] border border-[#6B1E2B]/20">
-                🐺 AI Portfolio Optimizer
-              </span>
-            </div>
-            <p className="text-sm text-[#3A2E25]/80 mt-1 max-w-2xl font-serif italic">
-              AI simulated wolf pack finds the highest-return, lowest-risk investment allocation customized for your financial goal.
-            </p>
+
+            <span className="hidden sm:inline-flex items-center gap-1 text-[10px] uppercase font-bold tracking-widest text-[#3A2E25]/60 bg-stone-100/90 px-3 py-1 rounded-full border border-stone-200">
+              FINEXA Engine v2.4
+            </span>
           </div>
 
-          <button
-            onClick={() => runGWOHunt(monthlyInvestment, horizonYears, riskPreference)}
-            disabled={loading}
-            className="px-4 py-2.5 rounded-xl bg-[#6B1E2B] text-[#FDF6ED] font-semibold text-xs tracking-wider uppercase hover:bg-[#521620] active:scale-95 transition-all shadow-md flex items-center gap-2 cursor-pointer disabled:opacity-50 self-start sm:self-auto"
-          >
-            <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
-            {loading ? 'Optimizing...' : 'Recalculate'}
-          </button>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pr-12 sm:pr-0">
+            <div>
+              <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                <h1 className="text-2xl sm:text-4xl font-serif font-bold text-[#1A1615]">
+                  FINEXA <span className="text-[#6B1E2B]">Portfolio Engine™</span>
+                </h1>
+                <span className="px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full text-[10px] sm:text-xs font-semibold bg-[#6B1E2B]/10 text-[#6B1E2B] border border-[#6B1E2B]/20">
+                  ⚡ Swarm Portfolio Optimizer
+                </span>
+              </div>
+              <p className="text-xs sm:text-sm text-[#3A2E25]/80 mt-1 max-w-2xl font-serif italic">
+                Advanced quantitative swarm optimization engineered to discover maximum Sharpe ratio asset allocations customized for your financial horizon.
+              </p>
+            </div>
+
+            <button
+              onClick={() => runGWOHunt(monthlyInvestment, horizonYears, riskPreference)}
+              disabled={loading}
+              className="px-4 py-2.5 rounded-xl bg-[#6B1E2B] text-[#FDF6ED] font-semibold text-xs tracking-wider uppercase hover:bg-[#521620] active:scale-95 transition-all shadow-md flex items-center gap-2 cursor-pointer disabled:opacity-50 self-start sm:self-auto shrink-0"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
+              {loading ? 'Optimizing...' : 'Recalculate'}
+            </button>
+          </div>
         </div>
 
         {/* Step 1: Goal Inputs (Direct Manual Input & Sliders) */}
@@ -276,58 +286,99 @@ export default function GreyWolfOptimizer() {
           </div>
         </div>
 
-        {/* Step 4: Strategy Cards (Alpha, Beta, Delta) */}
+        {/* Step 4: Quantitative Strategy Cards */}
         {gwoData?.packLeaders && (
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h3 className="font-serif font-bold text-lg text-[#1A1615] flex items-center gap-2">
-                <Award className="w-5 h-5 text-[#C9A227]" /> Step 4: Choose Your Recommended Strategy
-              </h3>
-              <span className="text-xs text-stone-500">Pick the best fit for you</span>
+          <div className="space-y-4 pt-2">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+              <div>
+                <span className="text-xs font-bold uppercase tracking-wider text-[#6B1E2B]">Step 4</span>
+                <h3 className="font-serif font-bold text-xl text-[#1A1615] flex items-center gap-2">
+                  <Award className="w-5 h-5 text-[#C9A227]" /> Select Quantitative Strategy
+                </h3>
+              </div>
+              <p className="text-xs text-stone-500 italic">Compare Sharpe ratios & portfolio characteristics</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 items-stretch">
               {Object.entries(gwoData.packLeaders).map(([key, leader]) => {
                 const isSelected = selectedLeader === key;
+                const iconMeta = key === 'alpha' 
+                  ? { icon: Crown, bg: 'bg-amber-500/10 text-amber-700 border-amber-200' }
+                  : key === 'beta'
+                  ? { icon: Shield, bg: 'bg-emerald-500/10 text-emerald-700 border-emerald-200' }
+                  : { icon: Target, bg: 'bg-rose-500/10 text-rose-700 border-rose-200' };
+                
+                const IconComponent = iconMeta.icon;
+
                 return (
-                  <div
+                  <motion.div
                     key={key}
+                    whileHover={{ y: -4 }}
+                    transition={{ duration: 0.2 }}
                     onClick={() => setSelectedLeader(key)}
-                    className={`p-5 rounded-3xl bg-white border transition-all cursor-pointer relative ${
+                    className={`p-6 rounded-3xl transition-all duration-300 cursor-pointer relative flex flex-col justify-between h-full ${
                       isSelected
-                        ? 'border-[#6B1E2B] shadow-lg ring-2 ring-[#6B1E2B]/20 scale-[1.02]'
-                        : 'border-[#3A2E25]/10 shadow-sm hover:border-stone-300'
+                        ? 'bg-white border-2 border-[#6B1E2B] shadow-xl ring-4 ring-[#6B1E2B]/10'
+                        : 'bg-white/80 backdrop-blur-md border border-[#3A2E25]/10 shadow-sm hover:border-[#6B1E2B]/40 hover:bg-white hover:shadow-md'
                     }`}
                   >
-                    <div className="flex justify-between items-start mb-2">
-                      <span className="text-xs font-bold uppercase tracking-wider text-stone-500">
+                    {/* Selected Active Indicator Badge */}
+                    {isSelected && (
+                      <div className="absolute -top-3 right-5 px-3 py-0.5 rounded-full bg-[#6B1E2B] text-white text-[10px] font-bold uppercase tracking-wider shadow-sm flex items-center gap-1">
+                        <CheckCircle2 className="w-3 h-3" /> Active Strategy
+                      </div>
+                    )}
+
+                    <div>
+                      {/* Top Header Row inside Card */}
+                      <div className="flex items-center justify-between gap-2 mb-3">
+                        <div className={`p-2 rounded-2xl border ${iconMeta.bg} flex items-center justify-center shrink-0`}>
+                          <IconComponent className="w-4.5 h-4.5" />
+                        </div>
+                        {key === 'alpha' ? (
+                          <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-amber-100 text-amber-900 border border-amber-200 shrink-0">
+                            ⭐ Recommended
+                          </span>
+                        ) : (
+                          <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-stone-100 text-stone-600 border border-stone-200 shrink-0">
+                            Sharpe {leader.metrics.sharpeRatio}
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Strategy Role Label */}
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block mb-1">
                         {leader.role}
                       </span>
-                      {key === 'alpha' && (
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-200">
-                          👑 Recommended
-                        </span>
-                      )}
+
+                      <h4 className="font-serif font-bold text-lg text-[#1A1615] leading-snug">{leader.title}</h4>
+                      <p className="text-xs text-stone-600 mt-2 leading-relaxed font-normal min-h-[36px]">{leader.tagline}</p>
                     </div>
 
-                    <h4 className="font-serif font-bold text-base text-[#1A1615]">{leader.title}</h4>
-                    <p className="text-xs text-stone-500 mt-1">{leader.tagline}</p>
-
-                    <div className="mt-4 pt-3 border-t border-stone-100 flex items-center justify-between">
-                      <div>
-                        <div className="text-[10px] text-stone-400 uppercase">Avg Return</div>
-                        <div className="text-lg font-serif font-bold text-[#0B4F4A]">
-                          {leader.metrics.expectedReturn}% <span className="text-xs font-normal text-stone-500">/ yr</span>
+                    {/* Footer Metrics Grid */}
+                    <div className="mt-6 pt-4 border-t border-stone-100/80 space-y-3">
+                      <div className="grid grid-cols-2 gap-2 bg-stone-50/80 p-3 rounded-2xl border border-stone-100">
+                        <div>
+                          <span className="text-[10px] font-semibold text-stone-400 uppercase tracking-wider block">Expected CAGR</span>
+                          <span className="text-base font-serif font-bold text-[#0B4F4A]">
+                            {leader.metrics.expectedReturn}%<span className="text-[10px] font-normal text-stone-500">/yr</span>
+                          </span>
+                        </div>
+                        <div className="text-right">
+                          <span className="text-[10px] font-semibold text-stone-400 uppercase tracking-wider block">Est. ({horizonYears}y)</span>
+                          <span className="text-base font-serif font-bold text-[#6B1E2B]">
+                            ₹{(leader.projection.estimatedWealth / 100000).toFixed(2)}L
+                          </span>
                         </div>
                       </div>
-                      <div className="text-right">
-                        <div className="text-[10px] text-stone-400 uppercase">Est. Wealth ({horizonYears}y)</div>
-                        <div className="text-base font-serif font-bold text-[#6B1E2B]">
-                          ₹{(leader.projection.estimatedWealth / 100000).toFixed(2)} Lakhs
-                        </div>
+
+                      {/* Detailed Metric Badges */}
+                      <div className="flex items-center justify-between text-[11px] text-stone-500 px-1">
+                        <span>Risk Volatility: <strong className="text-stone-800 font-semibold">{leader.metrics.volatility}%</strong></span>
+                        <span>Sharpe: <strong className="text-stone-800 font-semibold">{leader.metrics.sharpeRatio}</strong></span>
                       </div>
                     </div>
-                  </div>
+                  </motion.div>
                 );
               })}
             </div>

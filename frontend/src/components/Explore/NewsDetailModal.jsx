@@ -35,25 +35,25 @@ const NewsDetailModal = ({ article, onClose }) => {
                 className="bg-ivory w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-[32px] shadow-2xl relative z-10 no-scrollbar flex flex-col md:flex-row"
             >
                 {/* Left Side: Article Details */}
-                <div className="flex-1 p-8 md:p-10 border-b md:border-b-0 md:border-r border-beige/40">
+                <div className="flex-1 p-5 sm:p-8 md:p-10 border-b md:border-b-0 md:border-r border-beige/40">
                     <button
                         onClick={onClose}
-                        className="absolute top-6 right-6 md:hidden w-10 h-10 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center text-ink shadow-sm border border-beige/40 cursor-pointer"
+                        className="absolute top-4 right-4 sm:top-6 sm:right-6 md:hidden w-9 h-9 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center text-ink shadow-sm border border-beige/40 cursor-pointer z-20"
                     >
-                        <X size={20} />
+                        <X size={18} />
                     </button>
 
-                    <div className="flex items-center gap-2 text-xs font-bold text-taupe uppercase tracking-wider mb-4">
+                    <div className="flex items-center gap-2 text-[11px] sm:text-xs font-bold text-taupe uppercase tracking-wider mb-3 sm:mb-4 pr-8 md:pr-0">
                         <span>{article.source}</span>
                         <span className="w-1 h-1 rounded-full bg-taupe/40" />
                         <span>{new Date(article.publishedAt).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
                     </div>
 
-                    <h2 className="text-2xl md:text-3xl font-serif font-extrabold text-ink leading-tight mb-6">
+                    <h2 className="text-xl sm:text-2xl md:text-3xl font-serif font-extrabold text-ink leading-tight mb-4 sm:mb-6">
                         {article.title}
                     </h2>
 
-                    <div className="w-full h-64 rounded-2xl overflow-hidden mb-6">
+                    <div className="w-full h-48 sm:h-64 rounded-2xl overflow-hidden mb-4 sm:mb-6">
                         <img
                             src={article.image || 'https://images.pexels.com/photos/6801648/pexels-photo-6801648.jpeg?auto=compress&cs=tinysrgb&w=800'}
                             alt={article.title}
@@ -65,7 +65,7 @@ const NewsDetailModal = ({ article, onClose }) => {
                         />
                     </div>
 
-                    <p className="text-base text-ink/80 leading-relaxed font-medium mb-8">
+                    <p className="text-sm sm:text-base text-ink/80 leading-relaxed font-medium mb-6 sm:mb-8">
                         {article.summary}
                     </p>
 
@@ -73,7 +73,7 @@ const NewsDetailModal = ({ article, onClose }) => {
                         href={article.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 bg-ink hover:bg-burgundy text-white px-6 py-3 rounded-full text-xs font-extrabold uppercase tracking-widest transition-colors shadow-md cursor-pointer"
+                        className="inline-flex items-center gap-2 bg-ink hover:bg-burgundy text-white px-5 py-2.5 sm:px-6 sm:py-3 rounded-full text-xs font-extrabold uppercase tracking-widest transition-colors shadow-md cursor-pointer"
                     >
                         <span>Read Original Article</span>
                         <ExternalLink size={14} />
@@ -81,7 +81,7 @@ const NewsDetailModal = ({ article, onClose }) => {
                 </div>
 
                 {/* Right Side: FINEXA AI Insights */}
-                <div className="w-full md:w-[40%] bg-[#FDF8F3] p-8 md:p-10 relative">
+                <div className="w-full md:w-[40%] bg-[#FDF8F3] p-5 sm:p-8 md:p-10 relative">
                     <button
                         onClick={onClose}
                         className="hidden md:flex absolute top-6 right-6 w-10 h-10 bg-white rounded-full items-center justify-center text-ink shadow-sm border border-beige/40 hover:bg-beige/20 transition-colors cursor-pointer"

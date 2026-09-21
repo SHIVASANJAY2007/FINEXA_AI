@@ -65,21 +65,23 @@ const WhyFINEXA = () => {
 
     useEffect(() => {
         const ctx = gsap.context(() => {
-            const pinDuration = "+=1300";
+            const mm = gsap.matchMedia();
 
-            // 1. Subtle Section Pin Lock with Release After Scroll
-            ScrollTrigger.create({
-                trigger: sectionRef.current,
-                start: "top top",
-                end: pinDuration,
-                pin: true,
-                anticipatePin: 1,
-                scrub: 0.8
+            // Desktop layout (1024px+): Pinning with scrub
+            mm.add("(min-width: 1024px)", () => {
+                ScrollTrigger.create({
+                    trigger: sectionRef.current,
+                    start: "top top",
+                    end: "+=1300",
+                    pin: true,
+                    anticipatePin: 1,
+                    scrub: 0.8
+                });
             });
 
-            // 2. Content Reveal inside the pinned section
+            // Content Reveal
             gsap.fromTo(contentRef.current,
-                { opacity: 0, y: 40 },
+                { opacity: 0, y: 30 },
                 {
                     opacity: 1,
                     y: 0,
@@ -87,12 +89,12 @@ const WhyFINEXA = () => {
                     ease: "power3.out",
                     scrollTrigger: {
                         trigger: sectionRef.current,
-                        start: "top 60%",
+                        start: "top 70%",
                     }
                 }
             );
 
-            // 3. Counting Effect for Progress Card
+            // Counting Effect for Progress Card
             const countObj = { val: 0 };
             gsap.to(countObj, {
                 val: 94,
@@ -101,7 +103,7 @@ const WhyFINEXA = () => {
                 ease: "power3.out",
                 scrollTrigger: {
                     trigger: sectionRef.current,
-                    start: "top 50%",
+                    start: "top 60%",
                 },
                 onStart: () => {
                     gsap.to(".status-text", { opacity: 0.5, repeat: 4, yoyo: true, duration: 0.15 });
@@ -119,7 +121,7 @@ const WhyFINEXA = () => {
                 }
             });
 
-            // 4. Count Up Stats triggers
+            // Count Up Stats triggers
             const stat1Val = { val: 0 };
             gsap.to(stat1Val, {
                 val: 2.4,
@@ -127,7 +129,7 @@ const WhyFINEXA = () => {
                 ease: "power2.out",
                 scrollTrigger: {
                     trigger: sectionRef.current,
-                    start: "top 40%",
+                    start: "top 50%",
                 },
                 onUpdate: () => {
                     if (stat1Ref.current) {
@@ -143,7 +145,7 @@ const WhyFINEXA = () => {
                 ease: "power2.out",
                 scrollTrigger: {
                     trigger: sectionRef.current,
-                    start: "top 40%",
+                    start: "top 50%",
                 },
                 onUpdate: () => {
                     if (stat2Ref.current) {
@@ -159,7 +161,7 @@ const WhyFINEXA = () => {
                 ease: "power2.out",
                 scrollTrigger: {
                     trigger: sectionRef.current,
-                    start: "top 40%",
+                    start: "top 50%",
                 },
                 onUpdate: () => {
                     if (stat3Ref.current) {
@@ -168,7 +170,7 @@ const WhyFINEXA = () => {
                 }
             });
 
-            // 5. Subtle Entrance for Stats Cards
+            // Entrance for Stats Cards
             gsap.fromTo(".stats-cards-container",
                 { opacity: 0, y: 30 },
                 {
@@ -178,7 +180,7 @@ const WhyFINEXA = () => {
                     ease: "power2.out",
                     scrollTrigger: {
                         trigger: sectionRef.current,
-                        start: "top 50%",
+                        start: "top 60%",
                     }
                 }
             );
@@ -192,7 +194,7 @@ const WhyFINEXA = () => {
         <section
             id="why-FINEXA"
             ref={sectionRef}
-            className="w-full min-h-screen bg-teal relative overflow-hidden flex flex-col justify-center py-16 px-6 md:px-12 lg:px-20"
+            className="w-full min-h-screen bg-teal relative overflow-hidden flex flex-col justify-center py-12 sm:py-16 px-4 sm:px-6 md:px-12 lg:px-20"
         >
             {/* The Slowed & Smoothed Diagonal Ribbon Wipe Transition */}
             <SectionWipe containerRef={sectionRef} />
@@ -204,30 +206,30 @@ const WhyFINEXA = () => {
                 </svg>
             </div>
 
-            <div ref={contentRef} className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center max-w-7xl mx-auto w-full">
+            <div ref={contentRef} className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center max-w-7xl mx-auto w-full">
                 {/* Left Column (Span 7) */}
-                <div className="lg:col-span-7 flex flex-col items-start text-left space-y-8">
-                    <span className="text-ivory/60 font-semibold uppercase tracking-[0.4em] text-[10.5px]">
+                <div className="lg:col-span-7 flex flex-col items-start text-left space-y-6 sm:space-y-8">
+                    <span className="text-ivory/60 font-semibold uppercase tracking-[0.3em] sm:tracking-[0.4em] text-[10px] sm:text-[10.5px]">
                         Your Advisor
                     </span>
 
-                    <h2 className="text-ivory text-4xl md:text-5xl lg:text-6xl font-serif font-bold uppercase tracking-tight leading-[1.1] select-none">
+                    <h2 className="text-ivory text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-serif font-bold uppercase tracking-tight leading-[1.15] select-none">
                         <DecryptedText text="Expert financial advice" animateOn="view" revealDirection="start" speed={40} className="text-ivory" encryptedClassName="text-ivory/30" /> <br />
-                        <span className="text-ink bg-ivory px-3 py-1 inline-block my-1.5 rounded-lg border border-beige/40">
+                        <span className="text-ink bg-ivory px-2.5 sm:px-3 py-0.5 sm:py-1 inline-block my-1.5 rounded-lg border border-beige/40">
                             <DecryptedText text="now on WhatsApp." animateOn="view" revealDirection="start" speed={40} delay={0.4} className="text-ink" encryptedClassName="text-ink/30" />
                         </span> <br />
                         <DecryptedText text="Powered by Agentic AI." animateOn="view" revealDirection="start" speed={40} delay={0.8} className="text-ivory" encryptedClassName="text-ivory/30" />
                     </h2>
 
                     <div className="w-full max-w-md">
-                        <div className="bg-camel border border-beige/30 p-6 rounded-2xl shadow-[0_12px_40px_rgba(58,46,37,0.1)]">
-                            <div className="flex justify-between items-end mb-4">
-                                <span ref={counterRef} className="text-ink font-sans font-extrabold text-5xl">0%</span>
-                                <span className="status-text text-ink/75 font-semibold text-[9.5px] uppercase tracking-wider text-right leading-relaxed select-none">
+                        <div className="bg-camel border border-beige/30 p-5 sm:p-6 rounded-2xl shadow-[0_12px_40px_rgba(58,46,37,0.1)]">
+                            <div className="flex justify-between items-end mb-3 sm:mb-4">
+                                <span ref={counterRef} className="text-ink font-sans font-extrabold text-4xl sm:text-5xl">0%</span>
+                                <span className="status-text text-ink/75 font-semibold text-[9px] sm:text-[9.5px] uppercase tracking-wider text-right leading-relaxed select-none">
                                     Save <br />your goals...
                                 </span>
                             </div>
-                            <div className="w-full h-3 bg-ink/10 rounded-full overflow-hidden border border-ink/20">
+                            <div className="w-full h-2.5 sm:h-3 bg-ink/10 rounded-full overflow-hidden border border-ink/20">
                                 <div ref={progressRef} className="h-full bg-ink w-[0%]" />
                             </div>
                         </div>

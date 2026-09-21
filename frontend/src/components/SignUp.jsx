@@ -16,12 +16,12 @@ const SignUp = () => {
     };
 
     return (
-        <div className="flex flex-col min-h-screen w-full bg-ivory items-center justify-center p-4 sm:p-6 dot-grid relative">
+        <div className="flex flex-col min-h-screen w-full bg-ivory items-center justify-center p-4 sm:p-6 pt-16 sm:pt-6 dot-grid relative">
             {/* Top link to return home */}
-            <div className="absolute top-6 left-6 z-20">
+            <div className="absolute top-4 left-4 sm:top-6 sm:left-6 z-20">
                 <button
                     onClick={() => navigate('/')}
-                    className="flex items-center gap-2 text-xs font-semibold text-taupe hover:text-ink transition-colors cursor-pointer bg-white/80 backdrop-blur-md px-4 py-2 rounded-full border border-beige/40 shadow-sm"
+                    className="flex items-center gap-2 text-xs font-semibold text-taupe hover:text-ink transition-colors cursor-pointer bg-white/80 backdrop-blur-md px-3.5 sm:px-4 py-2 rounded-full border border-beige/40 shadow-sm"
                 >
                     <ArrowLeft size={16} />
                     <span>Back to Home</span>
@@ -66,13 +66,13 @@ const SignUp = () => {
                 </div>
 
                 {/* Right Column - Content */}
-                <div className="w-full md:w-1/2 flex flex-col justify-center px-8 md:px-14 py-12 text-center md:text-left">
-                    <div className="mb-10 text-left">
-                        <h1 className="font-serif text-4xl lg:text-5xl font-bold text-ink leading-tight mb-4">
+                <div className="w-full md:w-1/2 flex flex-col justify-center px-6 sm:px-8 md:px-14 py-8 sm:py-12 text-center md:text-left">
+                    <div className="mb-8 sm:mb-10 text-left">
+                        <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-ink leading-tight mb-3 sm:mb-4">
                             Welcome to <br />
                             <span className="text-burgundy">FINEXAAI</span>
                         </h1>
-                        <p className="text-sm font-semibold text-taupe">
+                        <p className="text-xs sm:text-sm font-semibold text-taupe">
                             Access your private wealth concierge & autonomous AI assistant.
                         </p>
                     </div>
@@ -81,7 +81,7 @@ const SignUp = () => {
                         <button
                             onClick={signUpWithGoogle}
                             disabled={isLoading}
-                            className={`w-full bg-white text-ink font-extrabold text-xs uppercase tracking-widest py-4 rounded-full border border-beige hover:border-burgundy/40 flex items-center justify-center gap-3 shadow-[0_4px_16px_rgba(58,46,37,0.06)] active:scale-98 transition-all cursor-pointer ${isLoading ? 'opacity-60 cursor-not-allowed' : 'hover:bg-ivory/60'
+                            className={`w-full bg-white text-ink font-extrabold text-xs uppercase tracking-widest py-3.5 sm:py-4 rounded-full border border-beige hover:border-burgundy/40 flex items-center justify-center gap-3 shadow-[0_4px_16px_rgba(58,46,37,0.06)] active:scale-98 transition-all cursor-pointer ${isLoading ? 'opacity-60 cursor-not-allowed' : 'hover:bg-ivory/60'
                                 }`}
                         >
                             <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-5 h-5" />
@@ -89,7 +89,7 @@ const SignUp = () => {
                         </button>
                     </div>
 
-                    <p className="text-[10px] text-taupe mt-12 text-center font-medium leading-relaxed max-w-xs mx-auto">
+                    <p className="text-[10px] text-taupe mt-8 sm:mt-12 text-center font-medium leading-relaxed max-w-xs mx-auto">
                         By connecting to FINEXAAI you agree to our <span className="text-ink font-bold cursor-pointer hover:text-burgundy">Terms of use</span> and <span className="text-ink font-bold cursor-pointer hover:text-burgundy">Privacy Policy</span>.
                     </p>
                 </div>

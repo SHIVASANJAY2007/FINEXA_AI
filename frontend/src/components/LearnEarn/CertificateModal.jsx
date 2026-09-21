@@ -376,12 +376,12 @@ const CertificateModal = ({ isOpen, onClose, userXP = 1350 }) => {
           </div>
 
           {/* Scrollable Preview Section */}
-          <div className="p-4 sm:p-8 overflow-y-auto flex-grow bg-ink/5 flex items-center justify-center">
+          <div className="p-2 sm:p-8 overflow-y-auto overflow-x-auto flex-grow bg-ink/5 flex items-center justify-start sm:justify-center">
             
             {/* Live Visual Certificate Component */}
             <div 
               id="certificate-print-area"
-              className="relative w-full max-w-[900px] aspect-[1.414/1] bg-cream rounded-2xl shadow-2xl border-8 border-burgundy/20 p-8 sm:p-12 flex flex-col justify-between overflow-hidden relative print:w-full print:max-w-none print:shadow-none print:border-4 print:border-gold"
+              className="relative w-full min-w-[540px] sm:min-w-0 max-w-[900px] aspect-[1.414/1] bg-cream rounded-2xl shadow-2xl border-4 sm:border-8 border-burgundy/20 p-6 sm:p-12 flex flex-col justify-between overflow-hidden relative print:w-full print:max-w-none print:shadow-none print:border-4 print:border-gold my-2"
               style={{
                 backgroundImage: `linear-gradient(rgba(253, 246, 237, 0.92), rgba(253, 246, 237, 0.94)), url('/certificate_bg.png')`,
                 backgroundSize: 'cover',

@@ -137,9 +137,9 @@ const runJsGwoFallback = (payload) => {
     algorithm: 'Grey Wolf Optimization (GWO - JS Resilient Solver)',
     inputs: { monthlyInvestment: monthly, horizonYears: years, riskPreference: risk, packSize: 25, iterations: 40 },
     packLeaders: {
-      alpha: calcLeader(alphaWeights, 'Alpha Portfolio (👑 The Champion)', 'Global Optimal Balance', 'Highest risk-adjusted Sharpe ratio engineered for your exact goal.', 13.8, 12.4, 1.15),
-      beta: calcLeader(betaWeights, 'Beta Portfolio (🛡️ The Shield)', 'Defensive Advisor Alternative', 'Lower volatility cushion with steady capital preservation.', 10.5, 7.8, 1.02),
-      delta: calcLeader(deltaWeights, 'Delta Portfolio (🏹 The Hunter)', 'Aggressive Alpha Alternative', 'Maximum equity velocity designed to capture market upside.', 16.2, 18.5, 0.98)
+      alpha: calcLeader(alphaWeights, 'Optimal Sharpe Portfolio', 'Maximum Risk-Adjusted Return', 'Mathematically optimized asset allocation maximizing portfolio Sharpe ratio for steady compounding.', 13.8, 12.4, 1.15),
+      beta: calcLeader(betaWeights, 'Defensive Capital Preservation', 'Low-Volatility Buffer', 'Prioritizes capital protection with higher debt and gold allocation to cushion downside market risk.', 10.5, 7.8, 1.02),
+      delta: calcLeader(deltaWeights, 'Aggressive Capital Appreciation', 'High-Growth Equity Focus', 'Weighted toward mid-cap equity and global tech indices designed to capture maximum long-term upside.', 16.2, 18.5, 0.98)
     },
     convergence: [
       { iteration: 31, alphaFitness: 3.45, expectedReturn: 13.8, volatility: 12.4, sharpeRatio: 1.15 },

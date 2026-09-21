@@ -153,29 +153,29 @@ const Footer = () => {
                 {/* ═══ PHASE 1: Hero Text ═══ */}
                 <div
                     ref={heroTextRef}
-                    className="absolute z-10 flex flex-col items-center text-center px-4 will-change-transform"
+                    className="absolute z-10 flex flex-col items-center text-center px-4 will-change-transform max-w-full"
                     style={{ transformOrigin: 'center center' }}
                 >
-                    <h1 className="text-ivory text-6xl md:text-8xl lg:text-9xl font-serif font-bold uppercase tracking-tight leading-[0.9]">
+                    <h1 className="text-ivory text-4xl sm:text-6xl md:text-8xl lg:text-9xl font-serif font-bold uppercase tracking-tight leading-[0.95]">
                         Your Wealth <br /> Never <br /> Sleeps.
                     </h1>
 
                     {/* Floating Badges */}
                     <div
                         ref={badge1Ref}
-                        className="absolute top-0 -left-10 bg-burgundy px-4 py-1.5 rounded-lg flex items-center gap-2 text-[10px] font-bold text-ivory tracking-widest rotate-[-5deg] shadow-lg border border-ivory/5 select-none"
+                        className="absolute top-0 -left-4 sm:-left-10 bg-burgundy px-3 sm:px-4 py-1 sm:py-1.5 rounded-lg flex items-center gap-1.5 sm:gap-2 text-[8.5px] sm:text-[10px] font-bold text-ivory tracking-widest rotate-[-5deg] shadow-lg border border-ivory/5 select-none"
                     >
                         <Activity size={12} /> PORTFOLIO_SYNC
                     </div>
                     <div
                         ref={badge2Ref}
-                        className="absolute bottom-1/4 -right-10 bg-teal px-4 py-1.5 rounded-lg flex items-center gap-2 text-[10px] font-bold text-ivory tracking-widest rotate-[8deg] shadow-lg border border-ivory/5 select-none"
+                        className="absolute bottom-1/4 -right-4 sm:-right-10 bg-teal px-3 sm:px-4 py-1 sm:py-1.5 rounded-lg flex items-center gap-1.5 sm:gap-2 text-[8.5px] sm:text-[10px] font-bold text-ivory tracking-widest rotate-[8deg] shadow-lg border border-ivory/5 select-none"
                     >
                         <ShieldCheck size={12} /> DPDP_SECURE
                     </div>
                     <div
                         ref={badge3Ref}
-                        className="absolute bottom-0 left-1/4 bg-gold px-4 py-1.5 rounded-lg flex items-center gap-2 text-[10px] font-bold text-ink tracking-widest border border-beige/10 select-none"
+                        className="absolute bottom-0 left-1/4 bg-gold px-3 sm:px-4 py-1 sm:py-1.5 rounded-lg flex items-center gap-1.5 sm:gap-2 text-[8.5px] sm:text-[10px] font-bold text-ink tracking-widest border border-beige/10 select-none"
                     >
                         <Cpu size={12} /> FINEXA_AI
                     </div>
@@ -184,7 +184,7 @@ const Footer = () => {
                 {/* Subtext */}
                 <p
                     ref={subtextRef}
-                    className="absolute bottom-10 max-w-md text-center text-cream/40 text-xs z-10 uppercase tracking-widest font-semibold"
+                    className="absolute bottom-10 max-w-md text-center text-cream/40 text-[10px] sm:text-xs z-10 uppercase tracking-widest font-semibold px-4"
                 >
                     Your Intelligent Financial Companion. <br /> Accessible directly through WhatsApp.
                 </p>
@@ -194,18 +194,18 @@ const Footer = () => {
                     ref={transitionRef}
                     className="absolute inset-0 z-[12] flex flex-col items-center justify-center text-center px-6 pointer-events-none will-change-transform"
                 >
-                    <span className="px-4 py-1.5 bg-teal/15 text-teal text-[10px] font-bold rounded-full uppercase tracking-widest mb-8 border border-teal/20">
+                    <span className="px-3 sm:px-4 py-1 sm:py-1.5 bg-teal/15 text-teal text-[9px] sm:text-[10px] font-bold rounded-full uppercase tracking-widest mb-6 sm:mb-8 border border-teal/20">
                         Protocol Initialized
                     </span>
-                    <h2 className="text-ivory text-4xl md:text-6xl lg:text-8xl font-serif font-bold uppercase tracking-tight leading-[0.95]">
+                    <h2 className="text-ivory text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-serif font-bold uppercase tracking-tight leading-[0.95]">
                         The Future Is <br />
                         <span className="text-gold">Autonomous</span>
                     </h2>
-                    <p className="mt-8 text-cream/40 text-xs md:text-sm uppercase tracking-[0.35em] font-semibold max-w-lg">
+                    <p className="mt-6 sm:mt-8 text-cream/40 text-xs md:text-sm uppercase tracking-[0.25em] sm:tracking-[0.35em] font-semibold max-w-lg px-4">
                         Smarter wealth decisions. <br />
                         Powered by Agentic AI in WhatsApp.
                     </p>
-                    <div className="mt-10 flex items-center gap-3">
+                    <div className="mt-8 sm:mt-10 flex items-center gap-3">
                         <div className="w-2 h-2 rounded-full bg-teal animate-pulse" />
                         <span className="text-[10px] font-mono text-teal/70 uppercase tracking-widest">
                             Initializing Wealth Nodes...
@@ -235,11 +235,11 @@ const Footer = () => {
                 {/* ═══ PHASE 4: Final Content ═══ */}
                 <div
                     ref={finalContentRef}
-                    className="absolute inset-0 z-30 bg-ivory flex flex-col p-6 md:p-12 text-ink justify-between will-change-transform"
+                    className="absolute inset-0 z-30 bg-ivory flex flex-col p-4 sm:p-6 md:p-12 text-ink justify-between will-change-transform overflow-y-auto"
                 >
-                    <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center max-w-7xl mx-auto w-full pt-16">
+                    <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 items-center max-w-7xl mx-auto w-full pt-12 sm:pt-16">
                         {/* Chart Card */}
-                        <div className="bg-ink rounded-3xl h-[35vh] lg:h-[450px] p-8 flex flex-col justify-between overflow-hidden border border-beige/40 shadow-[0_8px_32px_rgba(58,46,37,0.06)] relative group select-none">
+                        <div className="bg-ink rounded-3xl h-auto min-h-[440px] lg:h-[460px] p-5 sm:p-8 flex flex-col justify-between overflow-hidden border border-beige/40 shadow-[0_8px_32px_rgba(58,46,37,0.06)] relative group select-none">
                             {/* Video Background */}
                             <video
                                 src="/Compounded.mp4"
@@ -253,37 +253,37 @@ const Footer = () => {
                             {/* Top header */}
                             <div className="relative z-10 flex justify-between items-start">
                                 <div>
-                                    <span className="px-2.5 py-0.5 bg-gold/20 text-gold text-[9px] font-bold rounded uppercase tracking-wider">
+                                    <span className="px-2.5 py-0.5 bg-gold/20 text-gold text-[8.5px] sm:text-[9px] font-bold rounded uppercase tracking-wider">
                                         Growth Matrix
                                     </span>
-                                    <h3 className="font-serif text-2xl font-bold text-ivory mt-2.5">Compounded Trajectory</h3>
+                                    <h3 className="font-serif text-xl sm:text-2xl font-bold text-ivory mt-2">Compounded Trajectory</h3>
                                 </div>
                                 <div className="text-right">
-                                    <span className="text-[9.5px] uppercase font-bold text-ivory/50 block">Future Value</span>
-                                    <span className="font-serif text-xl sm:text-2xl font-black text-gold select-all">{formatRupees(fv)}</span>
+                                    <span className="text-[8.5px] sm:text-[9.5px] uppercase font-bold text-ivory/50 block">Future Value</span>
+                                    <span className="font-serif text-lg sm:text-2xl font-black text-gold select-all">{formatRupees(fv)}</span>
                                 </div>
                             </div>
 
                             {/* Dynamic stats values */}
-                            <div className="relative z-10 grid grid-cols-3 gap-2 bg-black/40 backdrop-blur-xs p-3 rounded-2xl border border-ivory/5 text-left my-auto mt-4">
+                            <div className="relative z-10 grid grid-cols-3 gap-2 bg-black/40 backdrop-blur-xs p-2.5 sm:p-3 rounded-2xl border border-ivory/5 text-left my-auto mt-3 sm:mt-4">
                                 <div>
-                                    <span className="text-[8px] sm:text-[9px] uppercase font-bold text-ivory/50 block">Investment</span>
-                                    <span className="text-xs sm:text-sm font-extrabold text-ivory">
+                                    <span className="text-[7.5px] sm:text-[9px] uppercase font-bold text-ivory/50 block">Investment</span>
+                                    <span className="text-[11px] sm:text-sm font-extrabold text-ivory">
                                         ₹{Math.round(investment).toLocaleString('en-IN')}/mo
                                     </span>
                                 </div>
                                 <div>
-                                    <span className="text-[8px] sm:text-[9px] uppercase font-bold text-ivory/50 block">Total Invested</span>
-                                    <span className="text-xs sm:text-sm font-extrabold text-ivory/90">{formatRupees(totalInvested)}</span>
+                                    <span className="text-[7.5px] sm:text-[9px] uppercase font-bold text-ivory/50 block">Total Invested</span>
+                                    <span className="text-[11px] sm:text-sm font-extrabold text-ivory/90">{formatRupees(totalInvested)}</span>
                                 </div>
                                 <div>
-                                    <span className="text-[8px] sm:text-[9px] uppercase font-bold text-ivory/50 block">Duration</span>
-                                    <span className="text-xs sm:text-sm font-extrabold text-gold">{years} Years</span>
+                                    <span className="text-[7.5px] sm:text-[9px] uppercase font-bold text-ivory/50 block">Duration</span>
+                                    <span className="text-[11px] sm:text-sm font-extrabold text-gold">{years} Years</span>
                                 </div>
                             </div>
 
                             {/* Interactive Sliders */}
-                            <div className="relative z-10 mt-4 flex flex-col gap-3 text-left">
+                            <div className="relative z-10 mt-3 sm:mt-4 flex flex-col gap-2.5 sm:gap-3 text-left">
                                 {/* Monthly Investment Control */}
                                 <div className="flex flex-col gap-1">
                                     <div className="flex justify-between items-center text-[8px] sm:text-[9px] font-bold text-ivory/50 uppercase tracking-widest">
@@ -330,7 +330,7 @@ const Footer = () => {
                             </div>
 
                             {/* Dynamic Recharts AreaChart */}
-                            <div className="w-full h-24 sm:h-28 relative z-10 overflow-visible mt-4 mb-2">
+                            <div className="w-full h-20 sm:h-28 relative z-10 overflow-visible mt-3 mb-1">
                                 <ResponsiveContainer width="100%" height="100%">
                                     <AreaChart data={chartData} margin={{ top: 5, right: 5, left: 5, bottom: 5 }}>
                                         <defs>
@@ -355,42 +355,42 @@ const Footer = () => {
                             </div>
 
                             {/* Timeline bottom */}
-                            <div className="flex justify-between items-center text-[9px] font-mono text-ivory/50 border-t border-ivory/10 pt-3 relative z-10">
+                            <div className="flex justify-between items-center text-[8.5px] sm:text-[9px] font-mono text-ivory/50 border-t border-ivory/10 pt-2.5 relative z-10">
                                 <span>YEAR_0</span>
                                 <span>YEAR_{years}</span>
                             </div>
                         </div>
 
                         {/* CTA Card */}
-                        <div className="bg-burgundy rounded-3xl p-8 lg:p-12 text-ivory flex flex-col justify-between h-[35vh] lg:h-[450px] shadow-2xl relative overflow-hidden group">
+                        <div className="bg-burgundy rounded-3xl p-6 sm:p-8 lg:p-12 text-ivory flex flex-col justify-between h-auto min-h-[340px] lg:h-[460px] shadow-2xl relative overflow-hidden group">
                             <div className="absolute top-0 right-0 w-64 h-64 bg-gold/10 rounded-full blur-[64px] pointer-events-none" />
 
                             <div>
-                                <h2 className="font-serif text-4xl lg:text-6xl font-bold mb-4 tracking-tight leading-none">
+                                <h2 className="font-serif text-3xl sm:text-4xl lg:text-6xl font-bold mb-3 sm:mb-4 tracking-tight leading-none">
                                     Ready to <br /> Begin?
                                 </h2>
-                                <p className="text-ivory/80 font-normal text-sm md:text-base max-w-md">
+                                <p className="text-ivory/80 font-normal text-xs sm:text-sm md:text-base max-w-md leading-relaxed">
                                     Join the elite network of investors steering assets with autonomous intelligence.
                                 </p>
                             </div>
 
                             <Link
                                 to="/signup"
-                                className="mt-8 bg-ink text-ivory rounded-full py-4 px-6 flex items-center justify-between font-bold text-xs uppercase tracking-widest hover:bg-teal transition-all duration-300 shadow-[0_4px_16px_rgba(0,0,0,0.15)] group/btn"
+                                className="mt-6 sm:mt-8 bg-ink text-ivory rounded-full py-3.5 sm:py-4 px-5 sm:px-6 flex items-center justify-between font-bold text-[11px] sm:text-xs uppercase tracking-widest hover:bg-teal transition-all duration-300 shadow-[0_4px_16px_rgba(0,0,0,0.15)] group/btn"
                             >
-                                <span className="flex items-center gap-3">
-                                    <User className="bg-ivory/10 rounded-full p-2" size={32} />
+                                <span className="flex items-center gap-2.5 sm:gap-3">
+                                    <User className="bg-ivory/10 rounded-full p-1.5 sm:p-2" size={28} />
                                     START NOW
                                 </span>
-                                <span className="group-hover/btn:translate-x-2 transition-transform text-lg">→</span>
+                                <span className="group-hover/btn:translate-x-2 transition-transform text-base sm:text-lg">→</span>
                             </Link>
                         </div>
                     </div>
 
                     {/* Footer Links */}
-                    <footer className="mt-12 grid grid-cols-1 md:grid-cols-4 gap-8 border-t border-beige/45 pt-8 text-ink w-full max-w-7xl mx-auto mb-6">
+                    <footer className="mt-8 sm:mt-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 border-t border-beige/45 pt-6 sm:pt-8 text-ink w-full max-w-7xl mx-auto mb-4 sm:mb-6">
                         <div className="text-left">
-                            <h4 className="font-bold text-taupe uppercase text-[9.5px] tracking-widest mb-4">Platform</h4>
+                            <h4 className="font-bold text-taupe uppercase text-[9.5px] tracking-widest mb-3 sm:mb-4">Platform</h4>
                             <ul className="space-y-2 font-bold text-xs uppercase tracking-wider text-ink/80">
                                 <li><a href="#features" className="hover:text-burgundy">Features</a></li>
                                 <li><a href="#pricing" className="hover:text-burgundy">Pricing</a></li>
@@ -398,33 +398,33 @@ const Footer = () => {
                         </div>
 
                         <div className="text-left">
-                            <h4 className="font-bold text-taupe uppercase text-[9.5px] tracking-widest mb-4">Connect with us</h4>
-                            <div className="flex flex-col gap-3">
+                            <h4 className="font-bold text-taupe uppercase text-[9.5px] tracking-widest mb-3 sm:mb-4">Connect with us</h4>
+                            <div className="flex flex-col gap-2.5 sm:gap-3">
                                 <button
                                     onClick={handleSubscribe}
-                                    className="bg-ink text-ivory px-5 py-2.5 rounded-full font-bold text-[10px] uppercase tracking-wider hover:bg-teal transition-colors flex items-center gap-2 w-fit group cursor-pointer"
+                                    className="bg-ink text-ivory px-4 sm:px-5 py-2 sm:py-2.5 rounded-full font-bold text-[9.5px] sm:text-[10px] uppercase tracking-wider hover:bg-teal transition-colors flex items-center gap-2 w-fit group cursor-pointer"
                                 >
                                     <Bell size={12} className="group-hover:rotate-12 transition-transform" />
                                     Subscribe
                                 </button>
-                                <p className="text-[9.5px] uppercase font-bold text-taupe max-w-[170px] leading-relaxed">
+                                <p className="text-[9px] sm:text-[9.5px] uppercase font-bold text-taupe max-w-[170px] leading-relaxed">
                                     Get key market and protocol reports.
                                 </p>
                             </div>
                         </div>
 
-                        <div className="md:col-span-2 flex flex-col md:items-end gap-6 justify-between text-left md:text-right">
-                            <div className="flex gap-2">
+                        <div className="sm:col-span-2 flex flex-col sm:items-end gap-4 sm:gap-6 justify-between text-left sm:text-right">
+                            <div className="flex flex-wrap gap-2">
                                 {['LinkedIn', 'Telegram', 'X'].map(social => (
                                     <button
                                         key={social}
-                                        className="px-5 py-2 border border-beige/40 rounded-full font-bold text-[9px] tracking-widest hover:bg-ink hover:text-ivory transition-all uppercase cursor-pointer"
+                                        className="px-4 sm:px-5 py-1.5 sm:py-2 border border-beige/40 rounded-full font-bold text-[8.5px] sm:text-[9px] tracking-widest hover:bg-ink hover:text-ivory transition-all uppercase cursor-pointer"
                                     >
                                         {social}
                                     </button>
                                 ))}
                             </div>
-                            <p className="text-[9.5px] font-mono text-taupe uppercase tracking-widest">© 2026 FINEXA_AI</p>
+                            <p className="text-[9px] sm:text-[9.5px] font-mono text-taupe uppercase tracking-widest">© 2026 FINEXA_AI</p>
                         </div>
                     </footer>
                 </div>

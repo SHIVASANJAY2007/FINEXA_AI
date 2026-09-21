@@ -384,11 +384,11 @@ const Chatbot = () => {
     return (
         <div className="flex flex-col h-screen w-full bg-ivory text-ink overflow-hidden font-sans dot-grid">
             {/* Top Header Navigation */}
-            <header className="h-16 px-6 bg-ivory/90 backdrop-blur-md border-b border-beige/40 flex items-center justify-between z-20 shrink-0">
-                <div className="flex items-center gap-3">
+            <header className="h-16 px-3 sm:px-6 bg-ivory/90 backdrop-blur-md border-b border-beige/40 flex items-center justify-between z-20 shrink-0">
+                <div className="flex items-center gap-2 sm:gap-3">
                     <Link
                         to="/"
-                        className="p-2 rounded-full hover:bg-beige/30 transition-colors text-taupe hover:text-ink flex items-center gap-1.5 text-xs font-semibold"
+                        className="p-1.5 sm:p-2 rounded-full hover:bg-beige/30 transition-colors text-taupe hover:text-ink flex items-center gap-1 text-xs font-semibold"
                         title="Back to Home"
                     >
                         <ArrowLeft size={16} />
@@ -397,30 +397,30 @@ const Chatbot = () => {
                     <div className="h-4 w-[1px] bg-beige/60 hidden sm:block" />
                     <Link
                         to="/explore"
-                        className="px-3 py-1.5 rounded-full hover:bg-beige/30 transition-colors text-taupe hover:text-ink flex items-center gap-1.5 text-xs font-semibold"
+                        className="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full hover:bg-beige/30 transition-colors text-taupe hover:text-ink flex items-center gap-1.5 text-xs font-semibold"
                         title="Explore Market News"
                     >
                         <Sparkles size={14} />
                         <span className="hidden sm:inline">Explore</span>
                     </Link>
                     <div className="h-4 w-[1px] bg-beige/60 hidden sm:block" />
-                    <div className="flex items-center gap-2">
-                        <span className="font-serif font-bold text-lg text-ink tracking-tight">
-                            FINEXA<sup className="text-gold font-sans font-extrabold text-[10px] ml-0.5">AI</sup>
+                    <div className="flex items-center gap-1.5 sm:gap-2">
+                        <span className="font-serif font-bold text-base sm:text-lg text-ink tracking-tight">
+                            FINEXA<sup className="text-gold font-sans font-extrabold text-[9px] sm:text-[10px] ml-0.5">AI</sup>
                         </span>
-                        <span className="text-[9px] uppercase tracking-widest font-extrabold bg-burgundy/10 text-burgundy px-2 py-0.5 rounded-full">
+                        <span className="text-[8px] sm:text-[9px] uppercase tracking-widest font-extrabold bg-burgundy/10 text-burgundy px-1.5 sm:px-2 py-0.5 rounded-full hidden sm:inline">
                             N8N DYNAMIC
                         </span>
                     </div>
                 </div>
 
-                <div className="flex items-center gap-3 pr-16">
+                <div className="flex items-center gap-2 sm:gap-3 pr-14 sm:pr-16">
                     <button
                         onClick={resetChat}
-                        className="flex items-center gap-1.5 text-xs font-semibold text-taupe hover:text-burgundy px-3 py-1.5 rounded-full hover:bg-beige/30 transition-colors cursor-pointer"
+                        className="flex items-center gap-1.5 text-xs font-semibold text-taupe hover:text-burgundy px-2.5 sm:px-3 py-1.5 rounded-full hover:bg-beige/30 transition-colors cursor-pointer"
                         title="Reset conversation session"
                     >
-                        <RefreshCw size={14} />
+                        <RefreshCw size={13} />
                         <span className="hidden sm:inline">Reset Session</span>
                     </button>
                 </div>
@@ -434,33 +434,58 @@ const Chatbot = () => {
 
                 {/* Left Side - Chat Window */}
                 <div className="w-full lg:w-[62%] flex flex-col bg-[#FDF8F3] border-r border-beige/40 z-10">
+                    {/* Mobile WhatsApp / Telegram quick bar */}
+                    <div className="flex lg:hidden items-center justify-between px-3 py-2 bg-cream border-b border-beige/40 text-xs">
+                        <span className="text-[10px] uppercase font-bold text-taupe tracking-wider">Direct Concierge:</span>
+                        <div className="flex items-center gap-2">
+                            <a
+                                href={WHATSAPP_API_URL}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#25D366]/15 border border-[#25D366]/30 text-[#1e964b] font-bold text-[10px] hover:bg-[#25D366]/25 transition-colors"
+                            >
+                                <WhatsAppIcon className="w-3.5 h-3.5" />
+                                <span>WhatsApp</span>
+                            </a>
+                            <a
+                                href={TELEGRAM_API_URL}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#0088cc]/15 border border-[#0088cc]/30 text-[#0088cc] font-bold text-[10px] hover:bg-[#0088cc]/25 transition-colors"
+                            >
+                                <TelegramIcon className="w-3.5 h-3.5" />
+                                <span>Telegram</span>
+                            </a>
+                        </div>
+                    </div>
+
                     {/* Chat Header */}
-                    <div className="p-4 sm:p-5 border-b border-beige/40 bg-white/90 flex items-center justify-between">
-                        <div className="flex items-center gap-3.5">
-                            <div className="w-11 h-11 bg-gradient-to-br from-burgundy to-[#8B263E] rounded-xl flex items-center justify-center shadow-md border border-burgundy/20">
-                                <Bot size={22} className="text-gold" />
+                    <div className="p-3 sm:p-5 border-b border-beige/40 bg-white/90 flex items-center justify-between">
+                        <div className="flex items-center gap-2.5 sm:gap-3.5">
+                            <div className="w-9 h-9 sm:w-11 sm:h-11 bg-gradient-to-br from-burgundy to-[#8B263E] rounded-xl flex items-center justify-center shadow-md border border-burgundy/20 shrink-0">
+                                <Bot size={18} className="text-gold" />
                             </div>
                             <div>
-                                <h2 className="font-serif font-extrabold text-base sm:text-lg text-ink tracking-tight uppercase">
+                                <h2 className="font-serif font-extrabold text-sm sm:text-lg text-ink tracking-tight uppercase">
                                     FINEXA AI AGENT
                                 </h2>
                                 <div className="mt-0.5">
                                     {chatStatus === 'online' && (
-                                        <div className="flex items-center gap-2">
+                                        <div className="flex items-center gap-1.5 sm:gap-2">
                                             <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(34,197,94,0.7)]"></span>
-                                            <span className="text-[10px] font-bold text-green-600 uppercase tracking-widest">Agent Online</span>
+                                            <span className="text-[9.5px] sm:text-[10px] font-bold text-green-600 uppercase tracking-widest">Agent Online</span>
                                         </div>
                                     )}
                                     {chatStatus === 'offline' && (
-                                        <div className="flex items-center gap-2">
+                                        <div className="flex items-center gap-1.5 sm:gap-2">
                                             <span className="w-2 h-2 bg-red-500 rounded-full animate-ping shadow-[0_0_10px_rgba(239,68,68,0.7)]"></span>
-                                            <span className="text-[10px] font-bold text-red-600 uppercase tracking-widest">Agent Offline</span>
+                                            <span className="text-[9.5px] sm:text-[10px] font-bold text-red-600 uppercase tracking-widest">Agent Offline</span>
                                         </div>
                                     )}
                                     {chatStatus === 'checking' && (
-                                        <div className="flex items-center gap-2">
+                                        <div className="flex items-center gap-1.5 sm:gap-2">
                                             <span className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(234,179,8,0.7)]"></span>
-                                            <span className="text-[10px] font-bold text-yellow-600 uppercase tracking-widest">Connecting...</span>
+                                            <span className="text-[9.5px] sm:text-[10px] font-bold text-yellow-600 uppercase tracking-widest">Connecting...</span>
                                         </div>
                                     )}
                                 </div>
@@ -471,7 +496,7 @@ const Chatbot = () => {
                         <div className="relative">
                             <button
                                 onClick={() => setShowDiagnostics(prev => !prev)}
-                                className={`flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-full border transition-all cursor-pointer select-none ${connectionStatus.status === 'connected'
+                                className={`flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs font-semibold px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full border transition-all cursor-pointer select-none ${connectionStatus.status === 'connected'
                                     ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20 hover:bg-emerald-500/25'
                                     : connectionStatus.status === 'degraded'
                                         ? 'bg-amber-500/10 text-amber-600 border-amber-500/20 hover:bg-amber-500/25'

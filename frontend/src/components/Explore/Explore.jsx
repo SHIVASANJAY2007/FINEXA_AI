@@ -69,36 +69,36 @@ const Explore = () => {
     return (
         <div className="min-h-screen bg-ivory text-ink font-sans pb-20">
             {/* Header */}
-            <div className="bg-ivory border-b border-beige/40 px-6 sm:px-12 py-8 pt-24 sticky top-0 z-40">
-                <div className="max-w-7xl mx-auto mb-6">
+            <div className="bg-ivory border-b border-beige/40 px-4 sm:px-12 py-6 sm:py-8 pt-16 sm:pt-24 sticky top-0 z-40">
+                <div className="max-w-7xl mx-auto mb-4 sm:mb-6 pr-12 sm:pr-0">
                     <button
                         onClick={() => navigate('/')}
-                        className="flex items-center gap-2 text-taupe hover:text-ink transition-colors text-sm font-semibold uppercase tracking-wider cursor-pointer"
+                        className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cream/80 hover:bg-cream text-taupe hover:text-ink border border-beige/60 shadow-sm backdrop-blur-md transition-all hover:shadow hover:-translate-x-0.5 text-xs font-semibold uppercase tracking-wider cursor-pointer group"
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:-translate-x-0.5 transition-transform"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
                         Back to Home
                     </button>
                 </div>
                 <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-end justify-between gap-6">
                     <div>
-                        <h1 className="text-4xl md:text-5xl font-serif font-extrabold text-ink tracking-tight uppercase">
+                        <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif font-extrabold text-ink tracking-tight uppercase">
                             Explore
                         </h1>
-                        <p className="text-taupe font-medium mt-2 text-sm sm:text-base">
+                        <p className="text-taupe font-medium mt-1.5 sm:mt-2 text-xs sm:text-base">
                             Understand what's happening in the financial world.
                         </p>
-                        <div className="flex flex-wrap items-center gap-2 mt-4 text-xs font-semibold">
-                            <div className="flex items-center gap-2 text-teal bg-teal/10 px-3 py-1.5 rounded-full">
+                        <div className="flex flex-wrap items-center gap-2 mt-3 sm:mt-4 text-xs font-semibold">
+                            <div className="flex items-center gap-2 text-teal bg-teal/10 px-3 py-1.5 rounded-full text-[11px] sm:text-xs">
                                 <span className="w-2 h-2 rounded-full bg-teal animate-pulse" />
                                 Markets Live • Updated {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                             </div>
-                            <div className="flex items-center gap-1.5 bg-beige/30 text-taupe px-3 py-1.5 rounded-full text-[11px] font-bold">
+                            <div className="flex flex-wrap items-center gap-1.5 bg-beige/30 text-taupe px-3 py-1.5 rounded-full text-[10px] sm:text-[11px] font-bold">
                                 <span>Providers:</span>
-                                <span className="bg-burgundy/10 text-burgundy px-2 py-0.5 rounded-md">Finnhub</span>
-                                <span className="bg-burgundy/10 text-burgundy px-2 py-0.5 rounded-md">Alpha Vantage</span>
-                                <span className="bg-burgundy/10 text-burgundy px-2 py-0.5 rounded-md">Marketaux</span>
-                                <span className="bg-burgundy/10 text-burgundy px-2 py-0.5 rounded-md">NewsData.io</span>
-                                <span className="bg-burgundy/10 text-burgundy px-2 py-0.5 rounded-md">GNews</span>
+                                <span className="bg-burgundy/10 text-burgundy px-1.5 py-0.5 rounded-md">Finnhub</span>
+                                <span className="bg-burgundy/10 text-burgundy px-1.5 py-0.5 rounded-md">Alpha Vantage</span>
+                                <span className="bg-burgundy/10 text-burgundy px-1.5 py-0.5 rounded-md">Marketaux</span>
+                                <span className="bg-burgundy/10 text-burgundy px-1.5 py-0.5 rounded-md">NewsData.io</span>
+                                <span className="bg-burgundy/10 text-burgundy px-1.5 py-0.5 rounded-md">GNews</span>
                             </div>
                         </div>
                     </div>
@@ -110,7 +110,7 @@ const Explore = () => {
                             placeholder="Search finance news... (e.g., Reliance, RBI)"
                             value={searchQuery}
                             onChange={handleSearch}
-                            className="w-full bg-white border border-beige/60 focus:border-burgundy focus:ring-1 focus:ring-burgundy rounded-full px-5 py-3 pl-11 text-sm outline-none transition-all"
+                            className="w-full bg-white border border-beige/60 focus:border-burgundy focus:ring-1 focus:ring-burgundy rounded-full px-5 py-2.5 sm:py-3 pl-11 text-xs sm:text-sm outline-none transition-all"
                         />
                         <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-taupe/70" />
                     </div>
@@ -118,7 +118,7 @@ const Explore = () => {
             </div>
 
             {error && (
-                <div className="max-w-7xl mx-auto mt-8 px-6 sm:px-12">
+                <div className="max-w-7xl mx-auto mt-6 sm:mt-8 px-4 sm:px-12">
                     <div className="bg-red-50 border border-red-200 text-red-800 p-4 rounded-2xl flex items-start gap-3">
                         <AlertTriangle size={20} className="shrink-0 mt-0.5" />
                         <div>
@@ -129,7 +129,7 @@ const Explore = () => {
                 </div>
             )}
 
-            <div className="max-w-7xl mx-auto px-6 sm:px-12 mt-8">
+            <div className="max-w-7xl mx-auto px-4 sm:px-12 mt-6 sm:mt-8">
                 {/* Market Pulse (Horizontal Scroll) */}
                 <MarketPulse data={marketPulse} isLoading={isLoading} />
 

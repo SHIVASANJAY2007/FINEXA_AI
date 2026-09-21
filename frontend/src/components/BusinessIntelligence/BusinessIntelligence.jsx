@@ -858,23 +858,23 @@ export default function BusinessIntelligence() {
 
   return (
     <div className="flex flex-col min-h-screen bg-ivory text-ink font-sans dot-grid">
-      <header className="h-16 px-6 bg-ivory/90 backdrop-blur-md border-b border-beige/40 flex items-center justify-between z-20 shrink-0 sticky top-0">
-        <div className="flex items-center gap-3">
-          <Link to="/" className="p-2 rounded-full hover:bg-beige/30 transition-colors text-taupe hover:text-ink flex items-center gap-1.5 text-xs font-semibold" title="Back to Home">
+      <header className="h-16 px-3 sm:px-6 bg-ivory/90 backdrop-blur-md border-b border-beige/40 flex items-center justify-between z-20 shrink-0 sticky top-0 pr-14 sm:pr-6">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+          <Link to="/" className="p-1.5 sm:p-2 rounded-full hover:bg-beige/30 transition-colors text-taupe hover:text-ink flex items-center gap-1.5 text-xs font-semibold shrink-0" title="Back to Home">
             <ArrowLeft size={16} /><span className="hidden sm:inline">Home</span>
           </Link>
           <div className="h-4 w-[1px] bg-beige/60 hidden sm:block" />
-          <div className="flex items-center gap-2">
-            <span className="font-serif font-bold text-lg text-ink tracking-tight">
+          <div className="flex items-center gap-1.5 sm:gap-2 truncate">
+            <span className="font-serif font-bold text-base sm:text-lg text-ink tracking-tight shrink-0">
               FINEXA<sup className="text-gold font-sans font-extrabold text-[10px] ml-0.5">AI</sup>
             </span>
-            <span className="text-[9px] uppercase tracking-widest font-extrabold bg-teal/10 text-teal px-2 py-0.5 rounded-full">
-              Business Intelligence
+            <span className="text-[8px] sm:text-[9px] uppercase tracking-widest font-extrabold bg-teal/10 text-teal px-1.5 sm:px-2 py-0.5 rounded-full truncate">
+              BI Engine
             </span>
           </div>
         </div>
 
-        <div className="flex items-center gap-2 pr-16">
+        <div className="flex items-center gap-1.5 sm:gap-2">
           <AnimatePresence>
             {resetPhase === 1 && (
               <motion.div
@@ -883,17 +883,17 @@ export default function BusinessIntelligence() {
                 animate={{ opacity: 1, x: 0, scale: 1 }}
                 exit={{ opacity: 0, x: 16, scale: 0.92 }}
                 transition={{ type: 'spring', stiffness: 420, damping: 28 }}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-camel/15 border border-camel/40 text-camel text-[11px] font-semibold whitespace-nowrap shadow-sm"
+                className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-camel/15 border border-camel/40 text-camel text-[10px] sm:text-[11px] font-semibold whitespace-nowrap shadow-sm"
               >
                 <AlertTriangle size={12} className="shrink-0" />
-                <span>Click again to clear all selections</span>
+                <span className="hidden xs:inline">Click again to clear</span>
               </motion.div>
             )}
           </AnimatePresence>
           <button
             onClick={handleReset}
             title={resetPhase === 1 ? 'Click again to clear all selections' : 'Return to form'}
-            className={`flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full transition-all cursor-pointer ${resetPhase === 1 ? 'bg-camel/10 text-camel border border-camel/30 hover:bg-camel/20 animate-pulse' : 'text-taupe hover:text-burgundy hover:bg-beige/30'}`}
+            className={`flex items-center gap-1.5 text-xs font-semibold px-2.5 sm:px-3 py-1.5 rounded-full transition-all cursor-pointer ${resetPhase === 1 ? 'bg-camel/10 text-camel border border-camel/30 hover:bg-camel/20 animate-pulse' : 'text-taupe hover:text-burgundy hover:bg-beige/30'}`}
           >
             <RotateCcw size={14} className={resetPhase === 1 ? 'animate-spin [animation-duration:3s]' : ''} />
             <span className="hidden sm:inline">{resetPhase === 1 ? 'Reset?' : 'Reset'}</span>

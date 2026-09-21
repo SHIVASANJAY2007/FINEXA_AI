@@ -30,7 +30,7 @@ const MENU_ITEMS = [
   },
   { 
       link: '/gwo', 
-      text: 'AlphaPack GWO', 
+      text: 'Portfolio Engine', 
       image: 'https://images.unsplash.com/photo-1579621970795-87facc2f976d?w=600&q=80',
       textColor: '#3A2E25',
       marqueeBgColor: '#0B4F4A',

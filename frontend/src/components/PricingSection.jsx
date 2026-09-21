@@ -104,14 +104,18 @@ const PricingSection = () => {
 
     useEffect(() => {
         const ctx = gsap.context(() => {
-            // Subtle Section Pinning with Release After Scroll
-            ScrollTrigger.create({
-                trigger: sectionRef.current,
-                start: "top top",
-                end: "+=1200",
-                pin: true,
-                anticipatePin: 1,
-                scrub: 0.8
+            const mm = gsap.matchMedia();
+
+            // Desktop layout (1024px+): Pinning with release
+            mm.add("(min-width: 1024px)", () => {
+                ScrollTrigger.create({
+                    trigger: sectionRef.current,
+                    start: "top top",
+                    end: "+=1200",
+                    pin: true,
+                    anticipatePin: 1,
+                    scrub: 0.8
+                });
             });
         }, sectionRef);
 
@@ -122,19 +126,19 @@ const PricingSection = () => {
         <section
             id="pricing"
             ref={sectionRef}
-            className="relative z-20 bg-cream min-h-screen flex flex-col justify-center items-center py-20 px-6 border-t border-beige text-ink font-sans overflow-hidden"
+            className="relative z-20 bg-cream min-h-screen flex flex-col justify-center items-center py-14 sm:py-20 px-4 sm:px-6 border-t border-beige text-ink font-sans overflow-hidden"
         >
             <div className="max-w-4xl mx-auto flex flex-col items-center w-full">
-                <div className="flex flex-col items-center mb-12 text-center">
-                    <h2 className="text-4xl md:text-5xl font-serif font-bold text-ink leading-tight mb-8">
+                <div className="flex flex-col items-center mb-8 sm:mb-12 text-center">
+                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-ink leading-tight mb-6 sm:mb-8">
                         Simple, honest <span className="text-burgundy">Pricing</span>
                     </h2>
 
                     {/* Billing Cycle Toggle */}
-                    <div className="flex items-center gap-2 bg-ivory p-1 rounded-full border border-beige shadow-[0_4px_12px_rgba(58,46,37,0.06)]">
+                    <div className="flex items-center gap-1.5 sm:gap-2 bg-ivory p-1 rounded-full border border-beige shadow-[0_4px_12px_rgba(58,46,37,0.06)]">
                         <button
                             onClick={() => setBillingCycle('monthly')}
-                            className={`px-6 py-2.5 rounded-full font-bold uppercase text-[9.5px] tracking-wider transition-all cursor-pointer ${
+                            className={`px-4 sm:px-6 py-2 sm:py-2.5 rounded-full font-bold uppercase text-[9px] sm:text-[9.5px] tracking-wider transition-all cursor-pointer ${
                                 billingCycle === 'monthly'
                                     ? 'bg-ink text-ivory'
                                     : 'text-taupe hover:text-ink'
@@ -144,7 +148,7 @@ const PricingSection = () => {
                         </button>
                         <button
                             onClick={() => setBillingCycle('yearly')}
-                            className={`px-6 py-2.5 rounded-full font-bold uppercase text-[9.5px] tracking-wider transition-all cursor-pointer flex items-center gap-1.5 ${
+                            className={`px-4 sm:px-6 py-2 sm:py-2.5 rounded-full font-bold uppercase text-[9px] sm:text-[9.5px] tracking-wider transition-all cursor-pointer flex items-center gap-1.5 ${
                                 billingCycle === 'yearly'
                                     ? 'bg-ink text-ivory'
                                     : 'text-taupe hover:text-ink'
@@ -155,7 +159,7 @@ const PricingSection = () => {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-2xl">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 w-full max-w-2xl">
                     {PRICING_DATA.map((plan) => (
                         <PricingCard
                             key={plan.title}

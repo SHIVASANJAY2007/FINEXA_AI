@@ -1,21 +1,117 @@
 import React, { useState, useMemo, memo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, TrendingUp, Calculator as CalcIcon, AlertTriangle, Info, CheckCircle2, ShieldAlert } from 'lucide-react';
+import { ArrowLeft, TrendingUp, Calculator as CalcIcon, AlertTriangle, Info, CheckCircle2, ShieldAlert, Target, Lightbulb, Sparkles } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, Tooltip as ChartTooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { calculate } from './calculations/index.js';
 
-const CALCULATOR_TYPES = [
-    { id: 'sip', name: 'SIP', description: 'Systematic Investment Plan' },
-    { id: 'lumpsum', name: 'Lumpsum', description: 'One-time Investment' },
-    { id: 'stepup', name: 'Step-Up SIP', description: 'SIP with Annual Increase' },
-    { id: 'swp', name: 'SWP', description: 'Systematic Withdrawal' },
-    { id: 'goal', name: 'Goal Planner', description: 'Target-Based Investment' },
-    { id: 'cagr', name: 'CAGR', description: 'Annual Compound Returns' },
-    { id: 'xirr', name: 'XIRR / IRR', description: 'Internal Rate of Return' },
-    { id: 'inflation', name: 'Inflation', description: 'Purchasing Power Loss' },
-    { id: 'retirement', name: 'Retirement', description: 'Corpus & Savings Planner' },
-    { id: 'tax', name: 'Capital Gains Tax', description: 'STCG & LTCG Estimator' }
-];
+const CALCULATOR_METADATA = {
+    sip: {
+        id: 'sip',
+        name: 'SIP',
+        fullName: 'SIP (Systematic Investment Plan) Calculator',
+        badge: 'Monthly Wealth Building',
+        tagline: 'Invest a fixed amount every month and let compound interest grow your wealth steadily.',
+        description: 'A Systematic Investment Plan (SIP) allows you to deposit a fixed sum of money into mutual funds or stocks each month. Instead of stressing over market timing, you invest consistently over time. The power of compounding multiplies your regular monthly savings into a substantial corpus.',
+        bestFor: 'Salaried individuals, beginners, and anyone looking to build wealth over time through disciplined monthly savings.',
+        keyInsight: 'Compounding multiplies your returns exponentially the earlier you start and the longer you stay invested.'
+    },
+    lumpsum: {
+        id: 'lumpsum',
+        name: 'Lumpsum',
+        fullName: 'Lumpsum Investment Calculator',
+        badge: 'One-Time Deposit',
+        tagline: 'Discover how much a single, upfront investment multiplies over your chosen years.',
+        description: 'A Lumpsum investment means investing a bulk amount of money in one single deposit rather than monthly parts. Because your entire capital starts working and earning compound returns from day one, it offers maximum potential growth over long horizons.',
+        bestFor: 'Investing annual bonuses, inheritance, maturing fixed deposits, or accumulated surplus savings in one go.',
+        keyInsight: 'One-time deposits maximize market exposure time, giving your full capital the longest growth runway.'
+    },
+    stepup: {
+        id: 'stepup',
+        name: 'Step-Up SIP',
+        fullName: 'Step-Up (Top-Up) SIP Calculator',
+        badge: 'Income-Linked Growth',
+        tagline: 'Automatically increase your monthly investment each year as your salary rises.',
+        description: 'As your career progresses and your annual earnings increase, your savings should grow too. A Step-Up SIP automatically boosts your monthly contribution by a set percentage (e.g., 10%) every year, helping you achieve big goals much faster.',
+        bestFor: 'Working professionals with annual appraisals who want their investments to match their income growth.',
+        keyInsight: 'A small 10% yearly top-up can nearly double your final corpus compared to a flat, unchanging SIP.'
+    },
+    swp: {
+        id: 'swp',
+        name: 'SWP',
+        fullName: 'SWP (Systematic Withdrawal Plan) Calculator',
+        badge: 'Regular Monthly Income',
+        tagline: 'Withdraw a fixed monthly income while keeping the rest of your wealth invested and earning.',
+        description: 'A Systematic Withdrawal Plan (SWP) lets you withdraw a fixed monthly amount from an existing lump sum investment. It acts like a custom pension: you receive regular income for living expenses, while your remaining balance continues to earn market returns.',
+        bestFor: 'Retirees needing monthly cash flow, or anyone looking to generate steady passive income from accumulated savings.',
+        keyInsight: 'Provides reliable monthly cash flow while keeping your remaining balance invested in growth assets.'
+    },
+    goal: {
+        id: 'goal',
+        name: 'Goal Planner',
+        fullName: 'Target Goal & Milestone Planner',
+        badge: 'Target-Driven Savings',
+        tagline: 'Find the exact monthly savings needed to reach your dream financial milestone.',
+        description: 'Have a specific goal in mind—such as buying a home, paying for higher education, or buying a car? Instead of guessing, enter your target amount and target year, and this planner calculates the precise monthly investment required to get there.',
+        bestFor: 'Planning life milestones with a fixed target budget and specific deadline in mind.',
+        keyInsight: 'Turns intimidating financial goals into simple, achievable monthly savings steps.'
+    },
+    cagr: {
+        id: 'cagr',
+        name: 'CAGR',
+        fullName: 'Compound Annual Growth Rate (CAGR) Calculator',
+        badge: 'Annual Return Metric',
+        tagline: 'Measure the true annual rate of return on your past investments.',
+        description: 'CAGR (Compound Annual Growth Rate) calculates the constant annual percentage rate at which an investment grew from its start value to its end value. It smooths out annual market ups and downs to give you a single, accurate rate for comparison.',
+        bestFor: 'Comparing the true past performance of mutual funds, stocks, gold, or real estate against each other.',
+        keyInsight: 'The gold-standard financial metric to accurately evaluate and compare asset performance over time.'
+    },
+    xirr: {
+        id: 'xirr',
+        name: 'XIRR / IRR',
+        fullName: 'Internal Rate of Return (IRR / XIRR) Calculator',
+        badge: 'Multi-Cashflow Returns',
+        tagline: 'Accurately calculate returns when you deposit and withdraw money at different times.',
+        description: 'When investments involve multiple deposits, periodic top-ups, or irregular withdrawals, simple returns fail to give an accurate picture. IRR/XIRR accounts for the timing and size of every cash flow to calculate your true annualized return.',
+        bestFor: 'Evaluating real-life portfolios with ongoing SIPs, multiple cash infusions, and partial profit withdrawals.',
+        keyInsight: 'The precise formula used by mutual funds and private equity to compute actual multi-cashflow returns.'
+    },
+    inflation: {
+        id: 'inflation',
+        name: 'Inflation',
+        fullName: 'Inflation & Purchasing Power Calculator',
+        badge: 'Cost of Living Impact',
+        tagline: 'See how rising living costs reduce the real purchasing power of your money over time.',
+        description: 'Inflation is the rate at which the prices of everyday goods and services increase. Because of inflation, ₹1 Lakh today will buy far fewer goods in 10 or 20 years. This calculator shows the future cost of your lifestyle and the purchasing power lost.',
+        bestFor: 'Understanding why money kept idle in low-interest accounts loses real value, and how much future expenses will cost.',
+        keyInsight: 'Your investments must earn returns higher than the inflation rate to protect and grow your real wealth.'
+    },
+    retirement: {
+        id: 'retirement',
+        name: 'Retirement',
+        fullName: 'Comprehensive Retirement Corpus Planner',
+        badge: 'Lifelong Financial Freedom',
+        tagline: 'Calculate the total nest egg needed to retire comfortably and how much you must save monthly.',
+        description: 'Retirement planning ensures you maintain your lifestyle after you stop working. This calculator factors in your current age, retirement age, life expectancy, inflation, and post-retirement returns to compute the exact total corpus you need and your required monthly savings.',
+        bestFor: 'Anyone planning their retirement timeline, aiming for early financial freedom (FIRE), or building a pension.',
+        keyInsight: 'Factors in post-retirement inflation so your savings comfortably last your entire lifetime.'
+    },
+    tax: {
+        id: 'tax',
+        name: 'Capital Gains Tax',
+        fullName: 'Capital Gains Tax Calculator (STCG & LTCG)',
+        badge: 'Tax Estimation & Net Profit',
+        tagline: 'Estimate your capital gains tax liability and see your true take-home profit.',
+        description: 'When you sell equity shares or mutual funds at a profit, taxes apply based on holding time. If held for under 12 months, Short-Term Capital Gains (STCG, 20%) apply. If held for 12 months or more, Long-Term Capital Gains (LTCG, 12.5% on profits over ₹1.25 Lakh) apply.',
+        bestFor: 'Stock investors and mutual fund holders planning asset sales and wanting to know their net post-tax profit.',
+        keyInsight: 'Calculates your exact tax liability and take-home proceeds under the latest tax provisions.'
+    }
+};
+
+const CALCULATOR_TYPES = Object.values(CALCULATOR_METADATA).map(item => ({
+    id: item.id,
+    name: item.name,
+    description: item.tagline
+}));
 
 const formatRupees = (val) => {
     if (val === undefined || val === null || isNaN(val)) return '₹0';
@@ -128,6 +224,8 @@ const Calculator = () => {
     const [taxQty, setTaxQty] = useState(1000);
     const [taxMonths, setTaxMonths] = useState(18);
 
+    const currentMeta = CALCULATOR_METADATA[calcType] || CALCULATOR_METADATA.sip;
+
     // High-Precision Decoupled Financial Calculation Engine
     const result = useMemo(() => {
         let params = {};
@@ -186,36 +284,36 @@ const Calculator = () => {
     ]);
 
     return (
-        <div className="min-h-screen bg-ivory text-ink py-20 px-6 md:px-12 relative overflow-hidden dot-grid linen-noise">
+        <div className="min-h-screen bg-ivory text-ink py-10 sm:py-20 px-4 sm:px-6 md:px-12 relative overflow-hidden dot-grid linen-noise">
             {/* Background Blobs */}
             <div className="absolute top-0 left-0 w-[500px] h-[500px] rounded-full bg-burgundy/6 blur-[120px] pointer-events-none -translate-x-1/3 -translate-y-1/3" />
             <div className="absolute bottom-0 right-0 w-[500px] h-[500px] rounded-full bg-gold/4 blur-[120px] pointer-events-none translate-x-1/3 translate-y-1/3" />
 
             <div className="max-w-7xl mx-auto relative z-10">
                 {/* Header */}
-                <div className="mb-14">
+                <div className="mb-8 sm:mb-14 pr-12 sm:pr-0">
                     <button
                         onClick={() => navigate('/')}
-                        className="flex items-center gap-2 text-taupe hover:text-ink transition-colors text-sm font-semibold uppercase tracking-wider mb-8 cursor-pointer"
+                        className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cream/80 hover:bg-cream text-taupe hover:text-ink border border-beige/60 shadow-sm backdrop-blur-md transition-all hover:shadow hover:-translate-x-0.5 text-xs font-semibold uppercase tracking-wider mb-6 sm:mb-8 cursor-pointer group"
                     >
-                        <ArrowLeft size={16} /> Back to Home
+                        <ArrowLeft size={14} className="group-hover:-translate-x-0.5 transition-transform" /> Back to Home
                     </button>
 
-                    <h1 className="text-5xl md:text-7xl font-serif font-bold tracking-tight uppercase leading-[1.1]">
+                    <h1 className="text-3xl sm:text-5xl md:text-7xl font-serif font-bold tracking-tight uppercase leading-[1.1]">
                         Financial <span className="text-burgundy">Calculators</span>
                     </h1>
-                    <p className="mt-4 text-taupe text-lg max-w-2xl font-normal leading-relaxed">
-                        Accurately project your wealth trajectory. Powered by Finexa’s decoupled calculation engine.
+                    <p className="mt-3 sm:mt-4 text-taupe text-sm sm:text-lg max-w-2xl font-normal leading-relaxed">
+                        Accurately project your wealth trajectory with simple, powerful financial calculators.
                     </p>
                 </div>
 
                 {/* Tab Switcher - Responsive Grid */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mb-12 bg-cream/70 border border-beige/40 p-3 rounded-[24px] shadow-sm backdrop-blur-md">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 sm:gap-3 mb-6 sm:mb-8 bg-cream/70 border border-beige/40 p-2 sm:p-3 rounded-2xl sm:rounded-[24px] shadow-sm backdrop-blur-md">
                     {CALCULATOR_TYPES.map((type) => (
                         <button
                             key={type.id}
                             onClick={() => setCalcType(type.id)}
-                            className={`px-4 py-3 rounded-xl font-bold text-[10.5px] uppercase tracking-wider transition-all cursor-pointer select-none text-center truncate ${calcType === type.id
+                            className={`px-3 sm:px-4 py-2 sm:py-3 rounded-xl font-bold text-[9.5px] sm:text-[10.5px] uppercase tracking-wider transition-all cursor-pointer select-none text-center truncate ${calcType === type.id
                                 ? 'bg-ink text-ivory shadow-md scale-[1.02]'
                                 : 'text-taupe hover:text-ink hover:bg-beige/35'
                                 }`}
@@ -224,6 +322,59 @@ const Calculator = () => {
                             {type.name}
                         </button>
                     ))}
+                </div>
+
+                {/* Calculator Description Card */}
+                <div className="mb-8 sm:mb-10 bg-cream border border-beige/40 rounded-2xl sm:rounded-[28px] p-5 sm:p-8 shadow-[0_10px_30px_rgba(58,46,37,0.05)] text-left backdrop-blur-sm relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-80 h-80 bg-burgundy/5 rounded-full blur-[80px] pointer-events-none -mr-20 -mt-20" />
+                    
+                    <div className="relative z-10">
+                        <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
+                            <div className="flex items-center gap-2.5">
+                                <span className="px-3 py-1 bg-burgundy/10 text-burgundy font-bold text-[10px] uppercase tracking-wider rounded-full border border-burgundy/20 flex items-center gap-1.5">
+                                    <Sparkles size={12} className="text-burgundy" />
+                                    {currentMeta.badge}
+                                </span>
+                                <span className="text-[10px] font-mono text-taupe uppercase tracking-wider">
+                                    Module: {currentMeta.name}
+                                </span>
+                            </div>
+                        </div>
+
+                        <h2 className="text-2xl sm:text-3xl font-serif font-black text-ink mb-1.5 tracking-tight">
+                            {currentMeta.fullName}
+                        </h2>
+                        <p className="text-xs sm:text-sm font-semibold text-burgundy mb-4">
+                            {currentMeta.tagline}
+                        </p>
+
+                        <p className="text-xs sm:text-sm text-ink/80 leading-relaxed max-w-4xl mb-6">
+                            {currentMeta.description}
+                        </p>
+
+                        {/* User-Friendly Quick Guide Callouts */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-beige/35">
+                            <div className="flex items-start gap-3 bg-white/75 border border-beige/35 p-4 rounded-2xl shadow-xs">
+                                <div className="w-8 h-8 rounded-xl bg-teal/10 text-teal flex items-center justify-center shrink-0 mt-0.5">
+                                    <Target size={16} />
+                                </div>
+                                <div>
+                                    <h5 className="text-[10.5px] font-bold text-ink uppercase tracking-wider mb-1">When to Use</h5>
+                                    <p className="text-xs text-taupe font-medium leading-relaxed">{currentMeta.bestFor}</p>
+                                </div>
+                            </div>
+
+                            <div className="flex items-start gap-3 bg-white/75 border border-beige/35 p-4 rounded-2xl shadow-xs">
+                                <div className="w-8 h-8 rounded-xl bg-gold/15 text-gold flex items-center justify-center shrink-0 mt-0.5">
+                                    <Lightbulb size={16} />
+                                </div>
+                                <div>
+                                    <h5 className="text-[10.5px] font-bold text-ink uppercase tracking-wider mb-1">Key Takeaway</h5>
+                                    <p className="text-xs text-taupe font-medium leading-relaxed">{currentMeta.keyInsight}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Warnings / Notifications Banner */}
@@ -240,9 +391,9 @@ const Calculator = () => {
                 )}
 
                 {/* Calculator Panel */}
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-stretch">
                     {/* Left Column: Parameter controls (5 cols) */}
-                    <div className="lg:col-span-5 bg-cream border border-beige/40 rounded-[32px] p-8 flex flex-col justify-between shadow-[0_12px_40px_rgba(58,46,37,0.06)] text-left">
+                    <div className="lg:col-span-5 bg-cream border border-beige/40 rounded-2xl sm:rounded-[32px] p-5 sm:p-8 flex flex-col justify-between shadow-[0_12px_40px_rgba(58,46,37,0.06)] text-left">
                         <div>
                             <div className="flex items-center gap-3 mb-8 border-b border-beige/35 pb-4">
                                 <div className="w-10 h-10 rounded-xl bg-burgundy/10 flex items-center justify-center text-burgundy shadow-xs">
@@ -250,7 +401,7 @@ const Calculator = () => {
                                 </div>
                                 <div>
                                     <h3 className="font-serif font-extrabold text-base sm:text-lg text-ink uppercase tracking-tight">
-                                        {CALCULATOR_TYPES.find(t => t.id === calcType)?.name} Parameters
+                                        {currentMeta.name} Parameters
                                     </h3>
                                     <span className="text-[9px] font-mono text-taupe uppercase tracking-wider">Engine: v2.0 Modular Math</span>
                                 </div>
@@ -669,7 +820,7 @@ const Calculator = () => {
                     {/* Right Column: Visualization Card & Dynamic Stats Grid (7 cols) */}
                     <div className="lg:col-span-7 flex flex-col gap-6 justify-between items-stretch">
                         {/* Dynamic Summary Stats Grid */}
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
                             {calcType === 'inflation' ? (
                                 <>
                                     <div className="bg-cream border border-beige/40 p-6 rounded-3xl text-left shadow-sm">
@@ -794,7 +945,7 @@ const Calculator = () => {
                         </div>
 
                         {/* Recharts AreaChart Area */}
-                        <div className="bg-ink rounded-[32px] p-8 flex flex-col justify-between flex-grow h-[350px] lg:h-[450px] shadow-[0_20px_50px_rgba(58,46,37,0.2)] relative overflow-hidden border border-beige/10">
+                        <div className="bg-ink rounded-2xl sm:rounded-[32px] p-5 sm:p-8 flex flex-col justify-between flex-grow h-[300px] sm:h-[350px] lg:h-[450px] shadow-[0_20px_50px_rgba(58,46,37,0.2)] relative overflow-hidden border border-beige/10">
                             {/* Ambient glows */}
                             <div className="absolute top-0 right-0 w-64 h-64 bg-gold/5 rounded-full blur-[96px] pointer-events-none" />
                             <div className="absolute bottom-0 left-0 w-64 h-64 bg-burgundy/5 rounded-full blur-[96px] pointer-events-none" />

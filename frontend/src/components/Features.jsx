@@ -204,25 +204,68 @@ const Features = () => {
 
     useEffect(() => {
         const ctx = gsap.context(() => {
-            const scrollEnd = "+=2400";
+            const mm = gsap.matchMedia();
 
-            // Pin the section & update active card on scroll
-            ScrollTrigger.create({
-                trigger: sectionRef.current,
-                start: "top top",
-                end: scrollEnd,
-                pin: true,
-                scrub: 0.8,
-                onUpdate: (self) => {
-                    const index = Math.min(
-                        FEATURES_CONTENT.length - 1,
-                        Math.floor(self.progress * FEATURES_CONTENT.length)
-                    );
-                    setActiveCard(index);
-                }
+            // Desktop layout (1024px+): Sticky scroll with pin
+            mm.add("(min-width: 1024px)", () => {
+                const scrollEnd = "+=2400";
+
+                ScrollTrigger.create({
+                    trigger: sectionRef.current,
+                    start: "top top",
+                    end: scrollEnd,
+                    pin: true,
+                    scrub: 0.8,
+                    onUpdate: (self) => {
+                        const index = Math.min(
+                            FEATURES_CONTENT.length - 1,
+                            Math.floor(self.progress * FEATURES_CONTENT.length)
+                        );
+                        setActiveCard(index);
+                    }
+                });
+
+                // Dual Runner Text Parallax
+                gsap.to(runnerLeftRef.current, {
+                    xPercent: -35,
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: sectionRef.current,
+                        start: "top top",
+                        end: scrollEnd,
+                        scrub: 1
+                    }
+                });
+
+                gsap.to(runnerRightRef.current, {
+                    xPercent: 35,
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: sectionRef.current,
+                        start: "top top",
+                        end: scrollEnd,
+                        scrub: 1
+                    }
+                });
+
+                // Edge Progress Borders
+                const progressTl = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: sectionRef.current,
+                        start: "top top",
+                        end: scrollEnd,
+                        scrub: 0.2
+                    }
+                });
+
+                progressTl
+                    .fromTo(progressRef.current.top, { scaleX: 0 }, { scaleX: 1, ease: "none" })
+                    .fromTo(progressRef.current.right, { scaleY: 0 }, { scaleY: 1, ease: "none" })
+                    .fromTo(progressRef.current.bottom, { scaleX: 0 }, { scaleX: 1, ease: "none" })
+                    .fromTo(progressRef.current.left, { scaleY: 0 }, { scaleY: 1, ease: "none" });
             });
 
-            // 1. Elegant Title Reveal
+            // Title Reveal for all screens
             gsap.fromTo(titleRef.current,
                 { opacity: 0, y: 30, scale: 0.95 },
                 {
@@ -231,49 +274,10 @@ const Features = () => {
                     ease: "power3.out",
                     scrollTrigger: {
                         trigger: sectionRef.current,
-                        start: "top 40%"
+                        start: "top 60%"
                     }
                 }
             );
-
-            // 2. Dual Runner Text Parallax
-            gsap.to(runnerLeftRef.current, {
-                xPercent: -35,
-                ease: "none",
-                scrollTrigger: {
-                    trigger: sectionRef.current,
-                    start: "top top",
-                    end: scrollEnd,
-                    scrub: 1
-                }
-            });
-
-            gsap.to(runnerRightRef.current, {
-                xPercent: 35,
-                ease: "none",
-                scrollTrigger: {
-                    trigger: sectionRef.current,
-                    start: "top top",
-                    end: scrollEnd,
-                    scrub: 1
-                }
-            });
-
-            // 3. Edge Progress Borders
-            const progressTl = gsap.timeline({
-                scrollTrigger: {
-                    trigger: sectionRef.current,
-                    start: "top top",
-                    end: scrollEnd,
-                    scrub: 0.2
-                }
-            });
-
-            progressTl
-                .fromTo(progressRef.current.top, { scaleX: 0 }, { scaleX: 1, ease: "none" })
-                .fromTo(progressRef.current.right, { scaleY: 0 }, { scaleY: 1, ease: "none" })
-                .fromTo(progressRef.current.bottom, { scaleX: 0 }, { scaleX: 1, ease: "none" })
-                .fromTo(progressRef.current.left, { scaleY: 0 }, { scaleY: 1, ease: "none" });
 
         }, sectionRef);
 
@@ -284,13 +288,13 @@ const Features = () => {
         <section
             id="features"
             ref={sectionRef}
-            className="relative min-h-screen w-full bg-burgundy overflow-hidden flex flex-col items-center justify-start pt-14 pb-8 px-4 sm:px-8 md:px-12"
+            className="relative min-h-screen w-full bg-burgundy overflow-hidden flex flex-col items-center justify-start pt-16 sm:pt-20 pb-12 px-3 sm:px-8 md:px-12"
         >
             {/* Edge Progress Borders */}
-            <div ref={el => progressRef.current.top = el} className="absolute top-0 left-0 w-full h-[12px] bg-camel z-50 origin-left" />
-            <div ref={el => progressRef.current.right = el} className="absolute top-0 right-0 w-[12px] h-full bg-camel z-50 origin-top" />
-            <div ref={el => progressRef.current.bottom = el} className="absolute bottom-0 left-0 w-full h-[12px] bg-camel z-50 origin-right" />
-            <div ref={el => progressRef.current.left = el} className="absolute top-0 left-0 w-[12px] h-full bg-camel z-50 origin-bottom" />
+            <div ref={el => progressRef.current.top = el} className="absolute top-0 left-0 w-full h-[8px] sm:h-[12px] bg-camel z-50 origin-left" />
+            <div ref={el => progressRef.current.right = el} className="absolute top-0 right-0 w-[8px] sm:w-[12px] h-full bg-camel z-50 origin-top" />
+            <div ref={el => progressRef.current.bottom = el} className="absolute bottom-0 left-0 w-full h-[8px] sm:h-[12px] bg-camel z-50 origin-right" />
+            <div ref={el => progressRef.current.left = el} className="absolute top-0 left-0 w-[8px] sm:w-[12px] h-full bg-camel z-50 origin-bottom" />
 
             {/* Background Layers */}
             <div className="absolute inset-0 z-0">
@@ -304,13 +308,13 @@ const Features = () => {
                     </div>
                 </div>
 
-                <FloatingElements count={8} containerRef={sectionRef} />
+                <FloatingElements count={6} containerRef={sectionRef} />
             </div>
 
-            <div className="w-full max-w-7xl mx-auto px-2 sm:px-4 md:px-6 h-full flex flex-col items-center justify-start relative z-10">
+            <div className="w-full max-w-7xl mx-auto px-1 sm:px-4 md:px-6 h-full flex flex-col items-center justify-start relative z-10">
                 {/* Header Area */}
-                <div className="text-center mb-4 md:mb-5">
-                    <h2 ref={titleRef} className="text-ivory text-[clamp(2.2rem,4.5vw,5.2rem)] font-serif font-bold uppercase tracking-tight leading-[1] select-none">
+                <div className="text-center mb-6 md:mb-8">
+                    <h2 ref={titleRef} className="text-ivory text-[clamp(2rem,4.5vw,5.2rem)] font-serif font-bold uppercase tracking-tight leading-[1] select-none">
                         THE NEXT <br className="hidden sm:inline" />
                         <span className="sm:ml-3 inline-block">
                             <TextType
@@ -327,7 +331,7 @@ const Features = () => {
                 </div>
 
                 {/* STICKY SCROLL AREA */}
-                <div className="w-full h-[66vh] sm:h-[70vh] rounded-[32px] border border-beige/20 bg-ivory/95 shadow-[0_20px_50px_rgba(58,46,37,0.25)] overflow-hidden">
+                <div className="w-full min-h-[580px] lg:h-[70vh] rounded-[24px] sm:rounded-[32px] border border-beige/20 bg-ivory/95 shadow-[0_20px_50px_rgba(58,46,37,0.25)] overflow-hidden">
                     <StickyScrollReveal 
                         content={FEATURES_CONTENT} 
                         activeCard={activeCard}
@@ -336,8 +340,8 @@ const Features = () => {
                 </div>
 
                 {/* SCROLL HINT */}
-                <div className="mt-3 flex flex-col items-center opacity-60 animate-bounce">
-                    <span className="text-ivory font-semibold text-[9px] tracking-widest uppercase">Syncing Wealth Nodes</span>
+                <div className="mt-4 flex flex-col items-center opacity-60 animate-bounce">
+                    <span className="text-ivory font-semibold text-[8.5px] sm:text-[9px] tracking-widest uppercase">Syncing Wealth Nodes</span>
                     <span className="text-ivory text-xs mt-0.5">↓</span>
                 </div>
             </div>

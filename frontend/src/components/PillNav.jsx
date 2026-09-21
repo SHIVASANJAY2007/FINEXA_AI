@@ -51,14 +51,14 @@ const PillNav = ({
     const navItems = items || [];
 
     return (
-        <div className="fixed top-0 left-0 w-full z-[99999] pointer-events-none p-6 flex justify-center">
+        <div className="fixed top-0 left-0 w-full z-[99999] pointer-events-none p-3 sm:p-6 flex justify-center max-w-full">
             <motion.nav
                 layout
                 initial={false}
                 animate={{
-                    left: isScrolled ? '24px' : '50%',
+                    left: isScrolled ? '16px' : '50%',
                     x: isScrolled ? '0%' : '-50%',
-                    top: '24px',
+                    top: isScrolled ? '16px' : '16px',
                 }}
                 style={{
                     position: 'fixed'
@@ -67,21 +67,21 @@ const PillNav = ({
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
                 className={`
-                    pointer-events-auto relative flex items-center gap-2 p-1.5 
-                    bg-ivory/90 backdrop-blur-2xl border border-beige/40 
+                    pointer-events-auto relative flex items-center gap-1.5 p-1 sm:p-1.5 
+                    bg-ivory/95 backdrop-blur-2xl border border-beige/40 
                     rounded-full shadow-[0_8px_32px_rgba(58,46,37,0.12),inset_0_1px_1px_rgba(253,246,237,0.2)]
-                    overflow-hidden max-w-max
+                    overflow-hidden max-w-[calc(100vw-32px)] sm:max-w-max
                 `}
             >
                 {/* Logo / Dock Icon */}
-                <motion.div layout className="relative z-10 flex items-center">
+                <motion.div layout className="relative z-10 flex items-center shrink-0">
                     <Link
                         to="/"
-                        className="h-10 px-3.5 flex items-center justify-center bg-beige/25 rounded-full hover:bg-beige/45 transition-all active:scale-95"
+                        className="h-8 sm:h-10 px-2.5 sm:px-3.5 flex items-center justify-center bg-beige/25 rounded-full hover:bg-beige/45 transition-all active:scale-95"
                     >
-                        <span className="font-serif font-bold text-sm text-ink tracking-tight">
+                        <span className="font-serif font-bold text-xs sm:text-sm text-ink tracking-tight whitespace-nowrap">
                             FINEXA
-                            <sup className="text-gold font-sans font-extrabold text-[9px] ml-0.5">AI</sup>
+                            <sup className="text-gold font-sans font-extrabold text-[8px] sm:text-[9px] ml-0.5">AI</sup>
                         </span>
                     </Link>
                 </motion.div>
@@ -93,11 +93,11 @@ const PillNav = ({
                     animate={{
                         width: isDocked ? 0 : 'auto',
                         opacity: isDocked ? 0 : 1,
-                        marginLeft: isDocked ? 0 : 4,
-                        marginRight: isDocked ? 0 : 8,
+                        marginLeft: isDocked ? 0 : 2,
+                        marginRight: isDocked ? 0 : 4,
                     }}
                     transition={{ type: "spring", stiffness: 500, damping: 35 }}
-                    className="flex items-center gap-1 overflow-hidden whitespace-nowrap"
+                    className="flex items-center gap-0.5 sm:gap-1 overflow-x-auto no-scrollbar whitespace-nowrap scroll-smooth"
                 >
                     {navItems.map((item) => {
                         const currentHash = window.location.hash;
@@ -108,8 +108,8 @@ const PillNav = ({
                                 key={item.href}
                                 item={item}
                                 className={`
-                                    px-4 py-2 rounded-full text-[10.5px] font-semibold uppercase tracking-[1.5px]
-                                    transition-all duration-300 relative group
+                                    px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-[9px] sm:text-[10.5px] font-semibold uppercase tracking-[1px] sm:tracking-[1.5px]
+                                    transition-all duration-300 relative group shrink-0
                                     ${isCurrentActive
                                         ? 'text-ink z-10'
                                         : 'text-taupe hover:text-ink'}
@@ -122,7 +122,7 @@ const PillNav = ({
                                         transition={{ type: "spring", stiffness: 500, damping: 35 }}
                                     />
                                 )}
-                                <span className="relative py-1">
+                                <span className="relative py-0.5 sm:py-1">
                                     {item.label}
                                     {!isCurrentActive && (
                                         <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-terracotta transition-all duration-300 group-hover:w-full" />

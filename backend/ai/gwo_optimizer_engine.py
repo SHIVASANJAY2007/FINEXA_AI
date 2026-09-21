@@ -296,25 +296,25 @@ def run_gwo_optimizer(payload):
         },
         "packLeaders": {
             "alpha": {
-                "title": "Alpha Portfolio (👑 The Champion)",
-                "role": "Global Optimal Balance",
-                "tagline": "Highest risk-adjusted Sharpe ratio engineered for your exact goal.",
+                "title": "Optimal Sharpe Portfolio",
+                "role": "Maximum Risk-Adjusted Return",
+                "tagline": "Mathematically optimized asset allocation maximizing portfolio Sharpe ratio for steady compounding.",
                 "metrics": alpha_metrics,
                 "allocation": format_allocation(alpha_metrics["weights"]),
                 "projection": alpha_proj
             },
             "beta": {
-                "title": "Beta Portfolio (🛡️ The Shield)",
-                "role": "Defensive Advisor Alternative",
-                "tagline": "Lower volatility cushion with steady capital preservation.",
+                "title": "Defensive Capital Preservation",
+                "role": "Low-Volatility Buffer",
+                "tagline": "Prioritizes capital protection with higher debt and gold allocation to cushion downside market risk.",
                 "metrics": beta_metrics,
                 "allocation": format_allocation(beta_metrics["weights"]),
                 "projection": beta_proj
             },
             "delta": {
-                "title": "Delta Portfolio (🏹 The Hunter)",
-                "role": "Aggressive Alpha Alternative",
-                "tagline": "Maximum equity velocity designed to capture market upside.",
+                "title": "Aggressive Capital Appreciation",
+                "role": "High-Growth Equity Focus",
+                "tagline": "Weighted toward mid-cap equity and global tech indices designed to capture maximum long-term upside.",
                 "metrics": delta_metrics,
                 "allocation": format_allocation(delta_metrics["weights"]),
                 "projection": delta_proj

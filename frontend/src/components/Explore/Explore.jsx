@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, Info, AlertTriangle } from 'lucide-react';
+import { Search, Info, AlertTriangle, ArrowLeft } from 'lucide-react';
 import MarketPulse from './MarketPulse';
 import NewsFeed from './NewsFeed';
 import Movers from './Movers';
@@ -73,9 +73,9 @@ const Explore = () => {
                 <div className="max-w-7xl mx-auto mb-4 sm:mb-6 pr-12 sm:pr-0">
                     <button
                         onClick={() => navigate('/')}
-                        className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cream/80 hover:bg-cream text-taupe hover:text-ink border border-beige/60 shadow-sm backdrop-blur-md transition-all hover:shadow hover:-translate-x-0.5 text-xs font-semibold uppercase tracking-wider cursor-pointer group"
+                        className="flex items-center gap-2 text-taupe hover:text-ink transition-colors text-xs font-bold uppercase tracking-widest mb-6 cursor-pointer group"
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:-translate-x-0.5 transition-transform"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
+                        <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
                         Back to Home
                     </button>
                 </div>

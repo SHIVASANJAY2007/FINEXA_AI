@@ -129,6 +129,7 @@ const HowItWorks = () => {
                 scrollTrigger: {
                     trigger: sectionRef.current,
                     pin: true,
+                    anticipatePin: 1,
                     start: "top top",
                     end: () => `+=${Math.max(1200, totalWidth + 1800)}`,
                     scrub: 1,
@@ -168,7 +169,7 @@ const HowItWorks = () => {
         <section
             id="how-it-works"
             ref={sectionRef}
-            className="w-full bg-teal h-screen overflow-hidden relative flex flex-col justify-center py-12 sm:py-20"
+            className="w-full bg-teal h-screen overflow-hidden will-change-transform relative flex flex-col justify-center py-12 sm:py-20"
         >
             {/* Background Aesthetics */}
             <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">

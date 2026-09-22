@@ -85,10 +85,18 @@ const GlobalMenu = () => {
                                         },
                                         { 
                                             link: '/gwo', 
-                                            text: 'Portfolio Engine', 
+                                            text: 'Asset Allocation', 
                                             image: 'https://images.unsplash.com/photo-1579621970795-87facc2f976d?w=600&q=80',
                                             textColor: '#3A2E25',
                                             marqueeBgColor: '#0B4F4A',
+                                            marqueeTextColor: '#FDF6ED'
+                                        },
+                                        { 
+                                            link: '/ripper', 
+                                            text: 'RuleSense', 
+                                            image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&q=80',
+                                            textColor: '#3A2E25',
+                                            marqueeBgColor: '#6B1E2B',
                                             marqueeTextColor: '#FDF6ED'
                                         },
                                         { 

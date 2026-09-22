@@ -18,6 +18,8 @@ import biRoutes from './routes/biRoutes.js';
 import pexelsRoutes from './routes/pexelsRoutes.js';
 import exploreRoutes from './routes/exploreRoutes.js';
 import gwoRoutes from './routes/gwoRoutes.js';
+import hsaRoutes from './routes/hsaRoutes.js';
+import ripperRoutes from './routes/ripperRoutes.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -41,6 +43,8 @@ app.use('/api/travel', travelRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/bi', biRoutes);
 app.use('/api/gwo', gwoRoutes);
+app.use('/api/hsa', hsaRoutes);
+app.use('/api/ripper', ripperRoutes);
 app.use('/api/pexels', pexelsRoutes);
 app.use('/api/explore', exploreRoutes);
 

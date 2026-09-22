@@ -294,9 +294,10 @@ const Calculator = () => {
                 <div className="mb-8 sm:mb-14 pr-12 sm:pr-0">
                     <button
                         onClick={() => navigate('/')}
-                        className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cream/80 hover:bg-cream text-taupe hover:text-ink border border-beige/60 shadow-sm backdrop-blur-md transition-all hover:shadow hover:-translate-x-0.5 text-xs font-semibold uppercase tracking-wider mb-6 sm:mb-8 cursor-pointer group"
+                        className="flex items-center gap-2 text-taupe hover:text-ink transition-colors text-xs font-bold uppercase tracking-widest mb-6 cursor-pointer group"
                     >
-                        <ArrowLeft size={14} className="group-hover:-translate-x-0.5 transition-transform" /> Back to Home
+                        <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+                        Back to Home
                     </button>
 
                     <h1 className="text-3xl sm:text-5xl md:text-7xl font-serif font-bold tracking-tight uppercase leading-[1.1]">

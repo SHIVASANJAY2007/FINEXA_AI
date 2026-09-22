@@ -38,7 +38,24 @@ body,
   background: var(--color-ivory);
   color: var(--color-ink);
   font-family: var(--font-sans);
-  overflow-x: hidden;
+  /*
+    Use `clip` instead of `hidden` for horizontal overflow:
+    `overflow-x: hidden` turns the y-axis into a scroll container, which makes
+    GSAP ScrollTrigger pinned sections (position: fixed) flash a white gap on
+    fast scroll. `clip` clips without creating a scroll container, so the
+    pinned sections composite cleanly while vertical scrolling still works.
+  */
+  overflow-x: clip;
+  overflow-y: visible;
+}
+
+/* Fallback for browsers lacking `overflow: clip` support */
+@supports not (overflow-x: clip) {
+  html,
+  body,
+  #root {
+    overflow-x: hidden;
+  }
 }
 
 section {

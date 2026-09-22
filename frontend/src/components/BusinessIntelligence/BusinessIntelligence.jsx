@@ -858,7 +858,7 @@ export default function BusinessIntelligence() {
 
   return (
     <div className="flex flex-col min-h-screen bg-ivory text-ink font-sans dot-grid">
-      <header className="h-16 px-3 sm:px-6 bg-ivory/90 backdrop-blur-md border-b border-beige/40 flex items-center justify-between z-20 shrink-0 sticky top-0 pr-14 sm:pr-6">
+      <header className="h-16 pl-3 sm:pl-6 pr-24 bg-ivory/90 backdrop-blur-md border-b border-beige/40 flex items-center justify-between z-20 shrink-0 sticky top-0">
         <div className="flex items-center gap-2 sm:gap-3 min-w-0">
           <Link to="/" className="p-1.5 sm:p-2 rounded-full hover:bg-beige/30 transition-colors text-taupe hover:text-ink flex items-center gap-1.5 text-xs font-semibold shrink-0" title="Back to Home">
             <ArrowLeft size={16} /><span className="hidden sm:inline">Home</span>
@@ -893,9 +893,9 @@ export default function BusinessIntelligence() {
           <button
             onClick={handleReset}
             title={resetPhase === 1 ? 'Click again to clear all selections' : 'Return to form'}
-            className={`flex items-center gap-1.5 text-xs font-semibold px-2.5 sm:px-3 py-1.5 rounded-full transition-all cursor-pointer ${resetPhase === 1 ? 'bg-camel/10 text-camel border border-camel/30 hover:bg-camel/20 animate-pulse' : 'text-taupe hover:text-burgundy hover:bg-beige/30'}`}
+            className={`flex items-center gap-1.5 text-sm font-semibold px-3 sm:px-4 py-2 sm:py-2.5 rounded-full transition-all cursor-pointer ${resetPhase === 1 ? 'bg-camel/10 text-camel border border-camel/30 hover:bg-camel/20 animate-pulse' : 'text-taupe hover:text-burgundy hover:bg-beige/30'}`}
           >
-            <RotateCcw size={14} className={resetPhase === 1 ? 'animate-spin [animation-duration:3s]' : ''} />
+            <RotateCcw size={16} className={resetPhase === 1 ? 'animate-spin [animation-duration:3s]' : ''} />
             <span className="hidden sm:inline">{resetPhase === 1 ? 'Reset?' : 'Reset'}</span>
           </button>
         </div>

@@ -194,7 +194,7 @@ const WhyFINEXA = () => {
         <section
             id="why-FINEXA"
             ref={sectionRef}
-            className="w-full min-h-screen bg-teal relative overflow-hidden flex flex-col justify-center py-12 sm:py-16 px-4 sm:px-6 md:px-12 lg:px-20"
+            className="w-full min-h-screen bg-gold relative overflow-hidden flex flex-col justify-center py-12 sm:py-16 px-4 sm:px-6 md:px-12 lg:px-20"
         >
             {/* The Slowed & Smoothed Diagonal Ribbon Wipe Transition */}
             <SectionWipe containerRef={sectionRef} />

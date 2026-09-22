@@ -13,6 +13,7 @@ const FlowingMenuPage = lazy(() => import('./components/ui/FlowingMenuPage'))
 const Calculator = lazy(() => import('./components/Calculator/Calculator'))
 const BusinessIntelligence = lazy(() => import('./components/BusinessIntelligence/BusinessIntelligence'))
 const GreyWolfOptimizer = lazy(() => import('./components/GWO/GreyWolfOptimizer'))
+const RuleInductionClassifier = lazy(() => import('./components/RIPPER/RuleInductionClassifier'))
 
 const PageLoader = () => (
   <div className="min-h-screen w-full bg-ivory flex flex-col items-center justify-center gap-4 dot-grid">
@@ -43,6 +44,10 @@ function App() {
         <Route path="/business-intelligence" element={<BusinessIntelligence />} />
         <Route path="/gwo" element={<GreyWolfOptimizer />} />
         <Route path="/alpha-pack" element={<GreyWolfOptimizer />} />
+        <Route path="/harmony" element={<RuleInductionClassifier />} />
+        <Route path="/hsa" element={<RuleInductionClassifier />} />
+        <Route path="/ripper" element={<RuleInductionClassifier />} />
+        <Route path="/cba" element={<RuleInductionClassifier />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Suspense>

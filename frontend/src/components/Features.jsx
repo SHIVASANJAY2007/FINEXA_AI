@@ -215,6 +215,7 @@ const Features = () => {
                     start: "top top",
                     end: scrollEnd,
                     pin: true,
+                    anticipatePin: 1,
                     scrub: 0.8,
                     onUpdate: (self) => {
                         const index = Math.min(
@@ -288,7 +289,7 @@ const Features = () => {
         <section
             id="features"
             ref={sectionRef}
-            className="relative min-h-screen w-full bg-burgundy overflow-hidden flex flex-col items-center justify-start pt-16 sm:pt-20 pb-12 px-3 sm:px-8 md:px-12"
+            className="relative min-h-screen w-full bg-burgundy overflow-hidden will-change-transform flex flex-col items-center justify-start pt-8 sm:pt-10 pb-4 sm:pb-6 px-3 sm:px-8 md:px-12"
         >
             {/* Edge Progress Borders */}
             <div ref={el => progressRef.current.top = el} className="absolute top-0 left-0 w-full h-[8px] sm:h-[12px] bg-camel z-50 origin-left" />
@@ -313,9 +314,9 @@ const Features = () => {
 
             <div className="w-full max-w-7xl mx-auto px-1 sm:px-4 md:px-6 h-full flex flex-col items-center justify-start relative z-10">
                 {/* Header Area */}
-                <div className="text-center mb-6 md:mb-8">
+                <div className="text-center mb-3 sm:mb-4">
                     <h2 ref={titleRef} className="text-ivory text-[clamp(2rem,4.5vw,5.2rem)] font-serif font-bold uppercase tracking-tight leading-[1] select-none">
-                        THE NEXT <br className="hidden sm:inline" />
+                        THE NEXT
                         <span className="sm:ml-3 inline-block">
                             <TextType
                                 text={['ERA', 'STEP', 'MOVE']}
@@ -331,7 +332,7 @@ const Features = () => {
                 </div>
 
                 {/* STICKY SCROLL AREA */}
-                <div className="w-full min-h-[580px] lg:h-[70vh] rounded-[24px] sm:rounded-[32px] border border-beige/20 bg-ivory/95 shadow-[0_20px_50px_rgba(58,46,37,0.25)] overflow-hidden">
+                <div className="w-full min-h-[540px] lg:h-[60vh] rounded-[24px] sm:rounded-[32px] border border-beige/20 bg-ivory/95 shadow-[0_20px_50px_rgba(58,46,37,0.25)] overflow-hidden">
                     <StickyScrollReveal 
                         content={FEATURES_CONTENT} 
                         activeCard={activeCard}
@@ -340,7 +341,7 @@ const Features = () => {
                 </div>
 
                 {/* SCROLL HINT */}
-                <div className="mt-4 flex flex-col items-center opacity-60 animate-bounce">
+                <div className="mt-2 flex flex-col items-center opacity-60 animate-bounce">
                     <span className="text-ivory font-semibold text-[8.5px] sm:text-[9px] tracking-widest uppercase">Syncing Wealth Nodes</span>
                     <span className="text-ivory text-xs mt-0.5">↓</span>
                 </div>

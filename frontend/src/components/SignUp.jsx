@@ -21,10 +21,10 @@ const SignUp = () => {
             <div className="absolute top-4 left-4 sm:top-6 sm:left-6 z-20">
                 <button
                     onClick={() => navigate('/')}
-                    className="flex items-center gap-2 text-xs font-semibold text-taupe hover:text-ink transition-colors cursor-pointer bg-white/80 backdrop-blur-md px-3.5 sm:px-4 py-2 rounded-full border border-beige/40 shadow-sm"
+                    className="flex items-center gap-2 text-taupe hover:text-ink transition-colors text-xs font-bold uppercase tracking-widest cursor-pointer group"
                 >
-                    <ArrowLeft size={16} />
-                    <span>Back to Home</span>
+                    <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+                    Back to Home
                 </button>
             </div>
 

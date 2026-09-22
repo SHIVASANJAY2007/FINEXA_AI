@@ -93,10 +93,10 @@ export default function GreyWolfOptimizer() {
           <div className="flex items-center justify-between">
             <Link
               to="/"
-              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 hover:bg-white text-xs font-semibold text-[#6B1E2B] hover:text-[#521620] border border-[#3A2E25]/15 shadow-sm backdrop-blur-md transition-all hover:shadow hover:-translate-x-0.5 group cursor-pointer"
+              className="flex items-center gap-2 text-taupe hover:text-ink transition-colors text-xs font-bold uppercase tracking-widest cursor-pointer group"
             >
-              <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" />
-              <span>Back to Dashboard</span>
+              <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+              Back to Home
             </Link>
 
             <span className="hidden sm:inline-flex items-center gap-1 text-[10px] uppercase font-bold tracking-widest text-[#3A2E25]/60 bg-stone-100/90 px-3 py-1 rounded-full border border-stone-200">
@@ -108,10 +108,10 @@ export default function GreyWolfOptimizer() {
             <div>
               <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                 <h1 className="text-2xl sm:text-4xl font-serif font-bold text-[#1A1615]">
-                  FINEXA <span className="text-[#6B1E2B]">Portfolio Engine™</span>
+                  FINEXA <span className="text-[#6B1E2B]">Asset Allocation™</span>
                 </h1>
                 <span className="px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full text-[10px] sm:text-xs font-semibold bg-[#6B1E2B]/10 text-[#6B1E2B] border border-[#6B1E2B]/20">
-                  ⚡ Swarm Portfolio Optimizer
+                  ⚡ Swarm Asset Allocation
                 </span>
               </div>
               <p className="text-xs sm:text-sm text-[#3A2E25]/80 mt-1 max-w-2xl font-serif italic">

@@ -1,5 +1,6 @@
-import { lazy, Suspense } from 'react'
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { lazy, Suspense, useEffect } from 'react'
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import GlobalMenu from './components/ui/GlobalMenu'
 import './App.css'
 
@@ -28,10 +29,28 @@ const PageLoader = () => (
   </div>
 )
 
+function ScrollToTop() {
+    const { pathname } = useLocation();
+
+    useEffect(() => {
+        // Force-instant top on route change (bypasses the global
+        // `scroll-behavior: smooth` so we never scrub through pinned sections).
+        const html = document.documentElement;
+        const previous = html.style.scrollBehavior;
+        html.style.scrollBehavior = 'auto';
+        window.scrollTo(0, 0);
+        html.style.scrollBehavior = previous;
+        ScrollTrigger.refresh();
+    }, [pathname]);
+
+    return null;
+}
+
 function App() {
-  return (
-    <Suspense fallback={<PageLoader />}>
-      <GlobalMenu />
+    return (
+        <Suspense fallback={<PageLoader />}>
+            <ScrollToTop />
+            <GlobalMenu />
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/signup" element={<SignUp />} />

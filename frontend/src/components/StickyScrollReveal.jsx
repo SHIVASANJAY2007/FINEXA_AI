@@ -31,7 +31,7 @@ export const StickyScrollReveal = memo(({
     const activeItem = content[currentCard] || content[0];
 
     return (
-        <div className="h-full w-full flex flex-col lg:flex-row items-center justify-between p-4 sm:p-8 md:p-12 gap-6 lg:gap-12 relative overflow-y-auto lg:overflow-hidden bg-ivory">
+        <div className="h-full w-full flex flex-col lg:flex-row items-center justify-between p-5 sm:p-8 md:p-14 gap-8 lg:gap-14 relative overflow-y-auto lg:overflow-hidden bg-ivory">
             {/* Left Side: Rich, High-Contrast Content Showcase */}
             <div className="w-full lg:w-1/2 flex flex-col justify-between h-auto lg:h-full text-left z-10">
                 {/* Feature Navigation Tabs */}
@@ -40,7 +40,7 @@ export const StickyScrollReveal = memo(({
                         <button
                             key={index}
                             onClick={() => handleCardSelect(index)}
-                            className={`flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider transition-all cursor-pointer select-none shrink-0 ${currentCard === index
+                            className={`flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1.5 rounded-full text-[11px] sm:text-sm font-bold uppercase tracking-wider transition-all cursor-pointer select-none shrink-0 ${currentCard === index
                                 ? "bg-ink text-ivory shadow-md scale-102"
                                 : "bg-beige/30 text-taupe hover:bg-beige/60 hover:text-ink"
                                 }`}
@@ -62,25 +62,25 @@ export const StickyScrollReveal = memo(({
                             transition={{ duration: 0.35, ease: "easeOut" }}
                             className="space-y-3 sm:space-y-4"
                         >
-                            <div className="flex items-center gap-2 text-[10.5px] sm:text-xs font-extrabold uppercase tracking-widest text-burgundy">
+                            <div className="flex items-center gap-2 text-[11px] sm:text-sm font-extrabold uppercase tracking-widest text-burgundy">
                                 {FEATURE_ICONS[currentCard % FEATURE_ICONS.length]}
                                 <span>Domain 0{currentCard + 1} • Autonomous Workflow</span>
                             </div>
 
-                            <h3 className="text-xl sm:text-3xl md:text-4xl font-serif font-bold text-ink leading-tight">
+                            <h3 className="text-2xl sm:text-3xl md:text-5xl font-serif font-bold text-ink leading-tight">
                                 {activeItem.title}
                             </h3>
 
-                            <p className="text-xs sm:text-sm md:text-base text-ink/80 font-medium leading-relaxed max-w-lg">
+                            <p className="text-sm sm:text-base md:text-lg text-ink/80 font-medium leading-relaxed max-w-lg">
                                 {activeItem.description}
                             </p>
 
                             <div className="pt-1 sm:pt-2 flex items-center gap-2 sm:gap-3 flex-wrap">
-                                <div className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg bg-cream border border-beige/40 text-[10px] sm:text-[11px] font-bold text-ink shadow-xs">
+                                <div className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg bg-cream border border-beige/40 text-[11px] sm:text-xs font-bold text-ink shadow-xs">
                                     <Sparkles size={12} className="text-gold" />
                                     <span>AI Engine Active</span>
                                 </div>
-                                <div className="px-2.5 sm:px-3 py-1.5 rounded-lg bg-cream border border-beige/40 text-[10px] sm:text-[11px] font-bold text-taupe">
+                                <div className="px-2.5 sm:px-3 py-1.5 rounded-lg bg-cream border border-beige/40 text-[11px] sm:text-xs font-bold text-taupe">
                                     DPDP Encrypted
                                 </div>
                             </div>
@@ -107,7 +107,7 @@ export const StickyScrollReveal = memo(({
             </div>
 
             {/* Right Side: Desktop/Mobile Visual Card Engine */}
-            <div className="w-full lg:w-1/2 h-[260px] sm:h-[320px] md:h-[380px] lg:h-[400px] flex items-center justify-center relative shrink-0">
+            <div className="w-full lg:w-1/2 h-[300px] sm:h-[360px] md:h-[430px] lg:h-[480px] flex items-center justify-center relative shrink-0">
                 <div
                     className={`h-full w-full max-w-md rounded-2xl sm:rounded-3xl bg-ink overflow-hidden border border-beige/40 shadow-[0_20px_50px_rgba(58,46,37,0.2)] relative ${contentClassName}`}
                 >

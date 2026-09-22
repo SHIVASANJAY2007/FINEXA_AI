@@ -29,6 +29,16 @@ html {
   scroll-behavior: smooth;
 }
 
+/*
+  Stop scroll chaining: prevents an inner scroll container (chat log, modal
+  panel, tables) from scrolling the page behind it once its own scroll reaches
+  the top/bottom, and disables pull-to-refresh / overscroll bounce on body.
+*/
+html,
+body {
+  overscroll-behavior-y: none;
+}
+
 html,
 body,
 #root {

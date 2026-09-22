@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Download, Printer, X, Award, CheckCircle2, Sparkles, RefreshCw } from 'lucide-react';
+import { useScrollLock } from '../../hooks/useScrollLock';
 
 const generateRandomCertId = () => {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -14,6 +15,9 @@ const generateRandomCertId = () => {
 };
 
 const CertificateModal = ({ isOpen, onClose, userXP = 1350 }) => {
+  // Prevent background page scroll while the certificate modal is open
+  useScrollLock(isOpen);
+
   const [userName, setUserName] = useState(() => {
     return localStorage.getItem('finexa_user_name') || 'Alex Vance';
   });

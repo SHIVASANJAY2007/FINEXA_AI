@@ -54,12 +54,6 @@ const AGENTS = [
     }
 ];
 
-// Pre-seeded stable particle coordinates for consistent render performance
-const PARTICLES = Array.from({ length: 24 }, (_, i) => ({
-    top: `${((i * 37) % 94) + 3}%`,
-    left: `${((i * 59) % 94) + 3}%`
-}));
-
 const WorkflowCard = memo(({ title, subtext, color, shape, index, Icon, textColor, iconColor }) => {
     const cardRef = useRef(null);
 
@@ -131,7 +125,7 @@ const HowItWorks = () => {
                     pin: true,
                     anticipatePin: 1,
                     start: "top top",
-                    end: () => `+=${Math.max(1200, totalWidth + 1800)}`,
+                    end: () => `+=${Math.max(900, totalWidth + 1000)}`,
                     scrub: 1,
                     invalidateOnRefresh: true,
                 }
@@ -149,17 +143,6 @@ const HowItWorks = () => {
                 duration: 1.8,
             });
 
-            // Gentle float effect for particles
-            gsap.to(".bg-sparkle", {
-                y: "random(-80, 80)",
-                x: "random(-80, 80)",
-                duration: "random(6, 12)",
-                repeat: -1,
-                yoyo: true,
-                ease: "sine.inOut",
-                stagger: 0.15
-            });
-
         }, sectionRef);
 
         return () => ctx.revert();
@@ -171,19 +154,7 @@ const HowItWorks = () => {
             ref={sectionRef}
             className="w-full bg-teal h-screen overflow-hidden will-change-transform relative flex flex-col justify-center py-12 sm:py-20"
         >
-            {/* Background Aesthetics */}
-            <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-                {PARTICLES.map((pos, i) => (
-                    <div
-                        key={i}
-                        className="bg-sparkle absolute w-1.5 h-1.5 bg-ivory/15 rounded-full"
-                        style={{
-                            top: pos.top,
-                            left: pos.left
-                        }}
-                    />
-                ))}
-            </div>
+            {/* Background particle dots removed (previously rendered here) */}
 
             <div className="px-4 sm:px-8 md:px-16 mb-6 sm:mb-10 relative z-10 text-left">
                 <h2 className="text-ivory text-[clamp(2.2rem,5vw,7rem)] font-serif font-bold uppercase tracking-tight leading-[0.9] select-none">

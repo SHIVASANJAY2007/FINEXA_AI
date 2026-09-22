@@ -15,12 +15,12 @@ const FEATURES_CONTENT = [
             <div className="h-full w-full relative group overflow-hidden bg-ink">
                 <img src="/assets/features/ai_portfolio_1784285084959.png" alt="AI Portfolio" className="absolute inset-0 w-full h-full object-cover opacity-80 grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110" />
                 <div className="absolute inset-0 bg-gradient-to-t from-ivory/90 via-ivory/70 to-ivory/30" />
-                <div className="relative z-10 h-full p-8 flex flex-col justify-between text-left">
+                <div className="relative z-10 h-full p-8 sm:p-10 flex flex-col justify-between text-left">
                     <div>
                         <span className="px-3 py-1 bg-burgundy/10 text-burgundy text-[10px] font-bold rounded-full uppercase tracking-wider">
                             Smart Allocation
                         </span>
-                        <h4 className="text-xl font-serif font-bold text-ink mt-4">AI Rebalancing Engine</h4>
+                        <h4 className="text-2xl font-serif font-bold text-ink mt-4">AI Rebalancing Engine</h4>
                     </div>
 
                     <div className="space-y-3.5 my-auto">
@@ -71,12 +71,12 @@ const FEATURES_CONTENT = [
             <div className="h-full w-full relative group overflow-hidden bg-ink">
                 <img src="/assets/features/market_intel_1784285101555.png" alt="Market Intelligence" className="absolute inset-0 w-full h-full object-cover opacity-80 grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110" />
                 <div className="absolute inset-0 bg-gradient-to-t from-ivory/90 via-ivory/70 to-ivory/30" />
-                <div className="relative z-10 h-full p-8 flex flex-col justify-between text-left">
+                <div className="relative z-10 h-full p-8 sm:p-10 flex flex-col justify-between text-left">
                     <div>
                         <span className="px-3 py-1 bg-teal/10 text-teal text-[10px] font-bold rounded-full uppercase tracking-wider">
                             Real-Time Data
                         </span>
-                        <h4 className="text-xl font-serif font-bold text-ink mt-4">Market Monitor</h4>
+                        <h4 className="text-2xl font-serif font-bold text-ink mt-4">Market Monitor</h4>
                     </div>
 
                     <div className="space-y-2.5 my-auto">
@@ -111,12 +111,12 @@ const FEATURES_CONTENT = [
             <div className="h-full w-full relative group overflow-hidden bg-ink">
                 <img src="/assets/features/goal_planning_1784285113310.png" alt="Goal Planning" className="absolute inset-0 w-full h-full object-cover opacity-80 grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110" />
                 <div className="absolute inset-0 bg-gradient-to-t from-ivory/90 via-ivory/70 to-ivory/30" />
-                <div className="relative z-10 h-full p-8 flex flex-col justify-between text-left">
+                <div className="relative z-10 h-full p-8 sm:p-10 flex flex-col justify-between text-left">
                     <div>
                         <span className="px-3 py-1 bg-camel/15 text-camel text-[10px] font-bold rounded-full uppercase tracking-wider">
                             Goal Mapping
                         </span>
-                        <h4 className="text-xl font-serif font-bold text-ink mt-4">Future Roadmaps</h4>
+                        <h4 className="text-2xl font-serif font-bold text-ink mt-4">Future Roadmaps</h4>
                     </div>
 
                     <div className="space-y-3.5 my-auto">
@@ -159,12 +159,12 @@ const FEATURES_CONTENT = [
             <div className="h-full w-full relative group overflow-hidden bg-ink">
                 <img src="/assets/features/privacy_vault_1784285123899.png" alt="Privacy Vault" className="absolute inset-0 w-full h-full object-cover opacity-80 grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110" />
                 <div className="absolute inset-0 bg-gradient-to-t from-ivory/90 via-ivory/70 to-ivory/30" />
-                <div className="relative z-10 h-full p-8 flex flex-col justify-between text-left">
+                <div className="relative z-10 h-full p-8 sm:p-10 flex flex-col justify-between text-left">
                     <div>
                         <span className="px-3 py-1 bg-gold/15 text-gold text-[10px] font-bold rounded-full uppercase tracking-wider">
                             Zero Data Exposure
                         </span>
-                        <h4 className="text-xl font-serif font-bold text-ink mt-4">Consent Architecture</h4>
+                        <h4 className="text-2xl font-serif font-bold text-ink mt-4">Consent Architecture</h4>
                     </div>
 
                     <div className="space-y-3 my-auto">
@@ -208,7 +208,7 @@ const Features = () => {
 
             // Desktop layout (1024px+): Sticky scroll with pin
             mm.add("(min-width: 1024px)", () => {
-                const scrollEnd = "+=2400";
+                const scrollEnd = "+=1500";
 
                 ScrollTrigger.create({
                     trigger: sectionRef.current,
@@ -332,7 +332,7 @@ const Features = () => {
                 </div>
 
                 {/* STICKY SCROLL AREA */}
-                <div className="w-full min-h-[540px] lg:h-[60vh] rounded-[24px] sm:rounded-[32px] border border-beige/20 bg-ivory/95 shadow-[0_20px_50px_rgba(58,46,37,0.25)] overflow-hidden">
+                <div className="w-full min-h-[580px] lg:h-[66vh] rounded-[24px] sm:rounded-[32px] border border-beige/20 bg-ivory/95 shadow-[0_20px_50px_rgba(58,46,37,0.25)] overflow-hidden">
                     <StickyScrollReveal 
                         content={FEATURES_CONTENT} 
                         activeCard={activeCard}
@@ -341,7 +341,7 @@ const Features = () => {
                 </div>
 
                 {/* SCROLL HINT */}
-                <div className="mt-2 flex flex-col items-center opacity-60 animate-bounce">
+                <div className="mt-5 sm:mt-7 flex flex-col items-center opacity-60 animate-bounce">
                     <span className="text-ivory font-semibold text-[8.5px] sm:text-[9px] tracking-widest uppercase">Syncing Wealth Nodes</span>
                     <span className="text-ivory text-xs mt-0.5">↓</span>
                 </div>

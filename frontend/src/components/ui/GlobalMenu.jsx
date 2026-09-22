@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useScrollLock } from '../../hooks/useScrollLock';
 import FlowingMenu from './FlowingMenu';
 
 const GlobalMenu = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+    // Prevent background page scroll while the menu panel is open
+    useScrollLock(isMenuOpen);
 
     return (
         <>

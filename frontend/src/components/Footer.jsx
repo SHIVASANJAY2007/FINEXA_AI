@@ -47,7 +47,7 @@ const Footer = () => {
                 scrollTrigger: {
                     trigger: containerRef.current,
                     start: "top top",
-                    end: "+=4000",
+                    end: "+=3400",
                     scrub: 1,
                     pin: stickyRef.current,
                 }
@@ -235,11 +235,11 @@ const Footer = () => {
                 {/* ═══ PHASE 4: Final Content ═══ */}
                 <div
                     ref={finalContentRef}
-                    className="absolute inset-0 z-30 bg-ivory flex flex-col p-4 sm:p-6 md:p-12 text-ink justify-between will-change-transform overflow-y-auto"
+                    className="absolute inset-0 z-30 bg-ivory flex flex-col p-3 sm:p-4 md:p-6 text-ink justify-between will-change-transform overflow-y-auto no-scrollbar lg:overflow-hidden"
                 >
-                    <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 items-center max-w-7xl mx-auto w-full pt-12 sm:pt-16">
+                    <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-8 items-center max-w-7xl mx-auto w-full pt-4 sm:pt-6">
                         {/* Chart Card */}
-                        <div className="bg-ink rounded-3xl h-auto min-h-[440px] lg:h-[460px] p-5 sm:p-8 flex flex-col justify-between overflow-hidden border border-beige/40 shadow-[0_8px_32px_rgba(58,46,37,0.06)] relative group select-none">
+                        <div className="bg-ink rounded-3xl h-auto min-h-[340px] lg:h-[380px] p-5 sm:p-7 flex flex-col justify-between overflow-hidden border border-beige/40 shadow-[0_8px_32px_rgba(58,46,37,0.06)] relative group select-none">
                             {/* Video Background */}
                             <video
                                 src="/Compounded.mp4"
@@ -362,33 +362,41 @@ const Footer = () => {
                         </div>
 
                         {/* CTA Card */}
-                        <div className="bg-burgundy rounded-3xl p-6 sm:p-8 lg:p-12 text-ivory flex flex-col justify-between h-auto min-h-[340px] lg:h-[460px] shadow-2xl relative overflow-hidden group">
-                            <div className="absolute top-0 right-0 w-64 h-64 bg-gold/10 rounded-full blur-[64px] pointer-events-none" />
+                        <div className="bg-burgundy rounded-3xl p-6 sm:p-8 lg:p-10 text-ivory flex flex-col justify-center items-center text-center h-auto min-h-[340px] lg:h-[380px] shadow-2xl relative overflow-hidden group">
+                            {/* Background image (behind the content) */}
+                            <img
+                                src="/loan.png"
+                                alt=""
+                                className="absolute inset-0 w-full h-full object-cover object-center z-0 opacity-50 group-hover:scale-105 transition-transform duration-1000"
+                            />
+                            {/* Readability scrim behind the content */}
+                            <div className="absolute inset-0 z-[1] bg-gradient-to-t from-burgundy via-burgundy/60 to-burgundy/35 pointer-events-none" />
+                            <div className="absolute top-0 right-0 w-64 h-64 bg-gold/10 rounded-full blur-[64px] pointer-events-none z-[2]" />
 
-                            <div>
-                                <h2 className="font-serif text-3xl sm:text-4xl lg:text-6xl font-bold mb-3 sm:mb-4 tracking-tight leading-none">
+                            <div className="relative z-20 flex flex-col items-center justify-center w-full gap-4 sm:gap-5">
+                                <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight leading-[0.95] text-center">
                                     Ready to <br /> Begin?
                                 </h2>
-                                <p className="text-ivory/80 font-normal text-xs sm:text-sm md:text-base max-w-md leading-relaxed">
+                                <p className="text-ivory/85 font-normal text-xs sm:text-sm md:text-base max-w-md leading-relaxed text-center">
                                     Join the elite network of investors steering assets with autonomous intelligence.
                                 </p>
-                            </div>
 
-                            <Link
-                                to="/signup"
-                                className="mt-6 sm:mt-8 bg-ink text-ivory rounded-full py-3.5 sm:py-4 px-5 sm:px-6 flex items-center justify-between font-bold text-[11px] sm:text-xs uppercase tracking-widest hover:bg-teal transition-all duration-300 shadow-[0_4px_16px_rgba(0,0,0,0.15)] group/btn"
-                            >
-                                <span className="flex items-center gap-2.5 sm:gap-3">
-                                    <User className="bg-ivory/10 rounded-full p-1.5 sm:p-2" size={28} />
-                                    START NOW
-                                </span>
-                                <span className="group-hover/btn:translate-x-2 transition-transform text-base sm:text-lg">→</span>
-                            </Link>
+                                <Link
+                                    to="/signup"
+                                    className="mt-1 bg-ink text-ivory rounded-full py-3.5 sm:py-4 pl-5 sm:pl-6 pr-4 sm:pr-5 flex items-center justify-between font-bold text-[11px] sm:text-xs uppercase tracking-widest hover:bg-teal transition-all duration-300 shadow-[0_4px_16px_rgba(0,0,0,0.15)] group/btn w-full max-w-xs"
+                                >
+                                    <span className="flex items-center justify-center w-full select-none">
+                                        <User className="bg-ivory/10 rounded-full p-1.5 sm:p-2 shrink-0" size={26} />
+                                        <span className="ml-2.5 sm:ml-3">START NOW</span>
+                                    </span>
+                                    <span className="group-hover/btn:translate-x-2 transition-transform text-base sm:text-lg shrink-0">→</span>
+                                </Link>
+                            </div>
                         </div>
                     </div>
 
                     {/* Footer Links */}
-                    <footer className="mt-8 sm:mt-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 border-t border-beige/45 pt-6 sm:pt-8 text-ink w-full max-w-7xl mx-auto mb-4 sm:mb-6">
+                    <footer className="mt-3 sm:mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 border-t border-beige/45 pt-3 sm:pt-4 text-ink w-full max-w-7xl mx-auto mb-0 sm:mb-1">
                         <div className="text-left">
                             <h4 className="font-bold text-taupe uppercase text-[9.5px] tracking-widest mb-3 sm:mb-4">Platform</h4>
                             <ul className="space-y-2 font-bold text-xs uppercase tracking-wider text-ink/80">

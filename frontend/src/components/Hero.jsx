@@ -56,6 +56,7 @@ const Hero = () => {
     // 3D Phone interactive state
     const [phoneRotate, setPhoneRotate] = useState({ x: 0, y: 0 });
     const [phoneHovered, setPhoneHovered] = useState(false);
+    const [currentTime, setCurrentTime] = useState(() => new Date());
 
     const handlePhoneMouseMove = useCallback((e) => {
         const rect = e.currentTarget.getBoundingClientRect();
@@ -73,7 +74,15 @@ const Hero = () => {
     }, []);
 
     useEffect(() => {
-        // Typing timeline simulation
+        const updateClock = () => setCurrentTime(new Date());
+
+        updateClock();
+        const timer = window.setInterval(updateClock, 1000);
+
+        return () => window.clearInterval(timer);
+    }, []);
+
+    useEffect(() => {
         const timers = [
             setTimeout(() => setChatStep(1), 800),    // AI msg 1
             setTimeout(() => setChatStep(2), 1800),   // User msg
@@ -92,7 +101,7 @@ const Hero = () => {
                     scrollTrigger: {
                         trigger: containerRef.current,
                         start: "top top",
-                        end: "+=3200",
+                        end: "+=2200",
                         scrub: 1,
                         pin: true,
                         anticipatePin: 1
@@ -303,7 +312,7 @@ const Hero = () => {
                         <div className="w-full h-[540px] sm:h-[600px] lg:h-[650px] bg-ink rounded-[42px] sm:rounded-[46px] p-3 sm:p-3.5 shadow-[0_28px_72px_rgba(58,46,37,0.22)] border-4 border-beige/60 relative overflow-hidden flex flex-col">
                             {/* Status bar */}
                             <div className="flex justify-between items-center px-6 pt-2 pb-3.5 z-20 text-[10px] font-semibold text-cream/70 select-none">
-                                <span>9:41</span>
+                                <span>{currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                                 <div className="w-22 h-4 bg-black rounded-full absolute left-1/2 -translate-x-1/2 top-1.5" />
                                 <div className="flex items-center gap-1.5">
                                     <span>5G</span>

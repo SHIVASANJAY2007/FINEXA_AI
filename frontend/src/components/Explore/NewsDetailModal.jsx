@@ -1,17 +1,19 @@
 import React, { useEffect, memo } from 'react';
 import { motion } from 'framer-motion';
 import { X, ExternalLink, Sparkles, TrendingUp, TrendingDown, Minus } from 'lucide-react';
+import { useScrollLock } from '../../hooks/useScrollLock';
 
 const NewsDetailModal = ({ article, onClose }) => {
-    // Prevent body scroll when modal is open and handle Escape key
+    // Prevent background page scroll while modal is open (saves/restores prior value)
+    useScrollLock(Boolean(article));
+
+    // Handle Escape key
     useEffect(() => {
-        document.body.style.overflow = 'hidden';
         const handleKeyDown = (e) => {
             if (e.key === 'Escape') onClose();
         };
         window.addEventListener('keydown', handleKeyDown);
         return () => {
-            document.body.style.overflow = 'unset';
             window.removeEventListener('keydown', handleKeyDown);
         };
     }, [onClose]);

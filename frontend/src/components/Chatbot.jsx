@@ -191,6 +191,7 @@ const Chatbot = () => {
     const [chatStatus, setChatStatus] = useState('checking');
     const [isLoading, setIsLoading] = useState(false);
     const chatEndRef = useRef(null);
+    const messagesScrollRef = useRef(null);
     const inputRef = useRef(null);
 
     // Auto-focus input on mount and when loading finishes
@@ -284,7 +285,10 @@ const Chatbot = () => {
     };
 
     useEffect(() => {
-        chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+        const container = messagesScrollRef.current;
+        if (container) {
+            container.scrollTo({ top: container.scrollHeight, behavior: "smooth" });
+        }
     }, [messages, isLoading]);
 
     const handleSend = async (e) => {
@@ -382,7 +386,7 @@ const Chatbot = () => {
     };
 
     return (
-        <div className="flex flex-col h-screen w-full bg-ivory text-ink overflow-hidden font-sans dot-grid">
+        <div className="flex flex-col h-screen supports-[height:100dvh]:h-dvh w-full bg-ivory text-ink overflow-hidden font-sans dot-grid">
             {/* Top Header Navigation */}
             <header className="h-16 px-3 sm:px-6 bg-ivory/90 backdrop-blur-md border-b border-beige/40 flex items-center justify-between z-20 shrink-0">
                 <div className="flex items-center gap-2 sm:gap-3">
@@ -631,7 +635,7 @@ const Chatbot = () => {
                     <div className="flex-1 relative overflow-hidden bg-[#FDF8F3]">
                         <AnimatedIconBackground />
 
-                        <div className="absolute inset-0 overflow-y-auto p-4 sm:p-6 no-scrollbar z-10">
+                        <div ref={messagesScrollRef} className="absolute inset-0 overflow-y-auto p-4 sm:p-6 no-scrollbar z-10 overscroll-contain">
                             <AnimatePresence>
                                 {messages.map((msg) => (
                                     <ChatMessage key={msg.id} {...msg} />

@@ -72,7 +72,7 @@ const WhyFINEXA = () => {
                 ScrollTrigger.create({
                     trigger: sectionRef.current,
                     start: "top top",
-                    end: "+=1300",
+                    end: "+=900",
                     pin: true,
                     anticipatePin: 1,
                     scrub: 0.8
@@ -199,13 +199,6 @@ const WhyFINEXA = () => {
             {/* The Slowed & Smoothed Diagonal Ribbon Wipe Transition */}
             <SectionWipe containerRef={sectionRef} />
 
-            {/* Subtle background graphics */}
-            <div className="absolute inset-0 z-0 opacity-15 pointer-events-none">
-                <svg className="w-full h-full" viewBox="0 0 1440 800" fill="none" preserveAspectRatio="none">
-                    <path d="M1440 800V0C1300 120 1100 40 900 160C700 280 500 200 300 320C100 440 0 360 0 480V800H1440Z" fill="#135c56" />
-                </svg>
-            </div>
-
             <div ref={contentRef} className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center max-w-7xl mx-auto w-full">
                 {/* Left Column (Span 7) */}
                 <div className="lg:col-span-7 flex flex-col items-start text-left space-y-6 sm:space-y-8">
@@ -224,13 +217,13 @@ const WhyFINEXA = () => {
                     <div className="w-full max-w-md">
                         <div className="bg-camel border border-beige/30 p-5 sm:p-6 rounded-2xl shadow-[0_12px_40px_rgba(58,46,37,0.1)]">
                             <div className="flex justify-between items-end mb-3 sm:mb-4">
-                                <span ref={counterRef} className="text-ink font-sans font-extrabold text-4xl sm:text-5xl">0%</span>
+                                <span ref={counterRef} className="text-ink font-sans font-extrabold text-4xl sm:text-5xl">98%</span>
                                 <span className="status-text text-ink/75 font-semibold text-[9px] sm:text-[9.5px] uppercase tracking-wider text-right leading-relaxed select-none">
                                     Save <br />your goals...
                                 </span>
                             </div>
                             <div className="w-full h-2.5 sm:h-3 bg-ink/10 rounded-full overflow-hidden border border-ink/20">
-                                <div ref={progressRef} className="h-full bg-ink w-[0%]" />
+                                <div ref={progressRef} className="h-full bg-ink w-[98%]" />
                             </div>
                         </div>
                     </div>
@@ -240,9 +233,9 @@ const WhyFINEXA = () => {
                 <div className="lg:col-span-5 relative flex items-center justify-center pointer-events-auto w-full">
                     <div className="stats-cards-container flex flex-col gap-4 py-2 w-full max-w-sm">
                         {/* Stat Card 1: Assets Advised */}
-                        <div className="bg-ivory/8 border border-ivory/15 p-5 sm:p-6 rounded-2xl shadow-[0_8px_32px_rgba(11,79,74,0.25)] hover:border-gold/45 transition-colors group">
+                        <div className="bg-teal border border-ivory/20 p-5 sm:p-6 rounded-2xl shadow-[0_8px_32px_rgba(11,79,74,0.25)] hover:border-gold/45 transition-colors group">
                             <span ref={stat1Ref} className="block font-sans font-extrabold text-3xl sm:text-4xl text-gold group-hover:scale-102 transition-transform duration-300">
-                                ₹0.0Cr+
+                                ₹2.4Cr+
                             </span>
                             <span className="block text-[11.5px] sm:text-[12.5px] font-medium text-cream/80 uppercase tracking-widest mt-1.5">
                                 Assets Advised
@@ -250,9 +243,9 @@ const WhyFINEXA = () => {
                         </div>
 
                         {/* Stat Card 2: Goal Completion Rate */}
-                        <div className="bg-ivory/8 border border-ivory/15 p-5 sm:p-6 rounded-2xl shadow-[0_8px_32px_rgba(11,79,74,0.25)] hover:border-gold/45 transition-colors group">
+                        <div className="bg-teal border border-ivory/20 p-5 sm:p-6 rounded-2xl shadow-[0_8px_32px_rgba(11,79,74,0.25)] hover:border-gold/45 transition-colors group">
                             <span ref={stat2Ref} className="block font-sans font-extrabold text-3xl sm:text-4xl text-gold group-hover:scale-102 transition-transform duration-300">
-                                0%
+                                94%
                             </span>
                             <span className="block text-[11.5px] sm:text-[12.5px] font-medium text-cream/80 uppercase tracking-widest mt-1.5">
                                 Goal Completion Rate
@@ -260,9 +253,9 @@ const WhyFINEXA = () => {
                         </div>
 
                         {/* Stat Card 3: Average Query Speed */}
-                        <div className="bg-ivory/8 border border-ivory/15 p-5 sm:p-6 rounded-2xl shadow-[0_8px_32px_rgba(11,79,74,0.25)] hover:border-gold/45 transition-colors group">
+                        <div className="bg-teal border border-ivory/20 p-5 sm:p-6 rounded-2xl shadow-[0_8px_32px_rgba(11,79,74,0.25)] hover:border-gold/45 transition-colors group">
                             <span ref={stat3Ref} className="block font-sans font-extrabold text-3xl sm:text-4xl text-gold group-hover:scale-102 transition-transform duration-300">
-                                0 sec
+                                11 sec
                             </span>
                             <span className="block text-[11.5px] sm:text-[12.5px] font-medium text-cream/80 uppercase tracking-widest mt-1.5">
                                 Average Query Speed

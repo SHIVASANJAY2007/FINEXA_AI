@@ -111,7 +111,7 @@ const PricingSection = () => {
                 ScrollTrigger.create({
                     trigger: sectionRef.current,
                     start: "top top",
-                    end: "+=1200",
+                    end: "+=800",
                     pin: true,
                     anticipatePin: 1,
                     scrub: 0.8

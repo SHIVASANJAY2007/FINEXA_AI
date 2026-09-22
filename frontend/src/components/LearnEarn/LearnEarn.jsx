@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { COURSES } from './learnData';
 import CertificateModal from './CertificateModal';
+import { useScrollLock } from '../../hooks/useScrollLock';
 import './LearnEarn.css';
 
 const LOCAL_STORAGE_XP_KEY = 'finexa_learn_xp';
@@ -54,6 +55,9 @@ const LearnEarn = () => {
   const [quizSubmitted, setQuizSubmitted] = useState(false);
   const [quizPassed, setQuizPassed] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
+
+  // Prevent background page scroll while the module/quiz modal is open
+  useScrollLock(Boolean(activeCourse));
 
   // Sync to local storage
   useEffect(() => {

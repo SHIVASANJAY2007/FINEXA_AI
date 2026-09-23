@@ -107,9 +107,9 @@ export const StickyScrollReveal = memo(({
             </div>
 
             {/* Right Side: Desktop/Mobile Visual Card Engine */}
-            <div className="w-full lg:w-1/2 h-[300px] sm:h-[360px] md:h-[430px] lg:h-[480px] flex items-center justify-center relative shrink-0">
+            <div className="w-full lg:w-1/2 h-[330px] sm:h-[400px] md:h-[470px] lg:h-[520px] flex items-center justify-center relative shrink-0">
                 <div
-                    className={`h-full w-full max-w-md rounded-2xl sm:rounded-3xl bg-ink overflow-hidden border border-beige/40 shadow-[0_20px_50px_rgba(58,46,37,0.2)] relative ${contentClassName}`}
+                    className={`h-full w-full max-w-lg rounded-2xl sm:rounded-3xl bg-ink overflow-hidden border border-beige/40 shadow-[0_20px_50px_rgba(58,46,37,0.2)] relative ${contentClassName}`}
                 >
                     <AnimatePresence mode="wait">
                         <motion.div

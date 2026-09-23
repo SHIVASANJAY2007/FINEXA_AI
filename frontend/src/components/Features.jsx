@@ -71,32 +71,32 @@ const FEATURES_CONTENT = [
             <div className="h-full w-full relative group overflow-hidden bg-ink">
                 <img src="/assets/features/market_intel_1784285101555.png" alt="Market Intelligence" className="absolute inset-0 w-full h-full object-cover opacity-80 grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110" />
                 <div className="absolute inset-0 bg-gradient-to-t from-ivory/90 via-ivory/70 to-ivory/30" />
-                <div className="relative z-10 h-full p-8 sm:p-10 flex flex-col justify-between text-left">
+                <div className="relative z-10 h-full p-8 sm:p-11 flex flex-col justify-between text-left">
                     <div>
-                        <span className="px-3 py-1 bg-teal/10 text-teal text-[10px] font-bold rounded-full uppercase tracking-wider">
+                        <span className="px-3.5 py-1.5 bg-teal/10 text-teal text-[11px] font-bold rounded-full uppercase tracking-wider">
                             Real-Time Data
                         </span>
-                        <h4 className="text-2xl font-serif font-bold text-ink mt-4">Market Monitor</h4>
+                        <h4 className="text-[1.65rem] sm:text-3xl font-serif font-bold text-ink mt-4">Market Monitor</h4>
                     </div>
 
-                    <div className="space-y-2.5 my-auto">
-                        <div className="p-2.5 bg-cream border border-beige/30 rounded-xl flex items-center justify-between transition-all group-hover:translate-x-1 duration-300">
-                            <span className="text-[11px] font-bold text-ink">SBI Max FD Rate</span>
-                            <span className="text-[12px] font-extrabold text-teal">7.25% p.a.</span>
+                    <div className="space-y-3 my-auto">
+                        <div className="p-3 bg-cream border border-beige/30 rounded-xl flex items-center justify-between transition-all group-hover:translate-x-1 duration-300">
+                            <span className="text-sm font-bold text-ink">SBI Max FD Rate</span>
+                            <span className="text-sm sm:text-base font-extrabold text-teal">7.25% p.a.</span>
                         </div>
-                        <div className="p-2.5 bg-cream border border-beige/30 rounded-xl flex items-center justify-between transition-all group-hover:translate-x-1 duration-500">
-                            <span className="text-[11px] font-bold text-ink">Nifty 50 Index</span>
-                            <span className="text-[12px] font-extrabold text-teal">24,450.80 (+1.45%)</span>
+                        <div className="p-3 bg-cream border border-beige/30 rounded-xl flex items-center justify-between transition-all group-hover:translate-x-1 duration-500">
+                            <span className="text-sm font-bold text-ink">Nifty 50 Index</span>
+                            <span className="text-sm sm:text-base font-extrabold text-teal">24,450.80 (+1.45%)</span>
                         </div>
-                        <div className="p-2.5 bg-cream border border-beige/30 rounded-xl flex items-center justify-between transition-all group-hover:translate-x-1 duration-700">
-                            <span className="text-[11px] font-bold text-ink">PPF Interest rate</span>
-                            <span className="text-[12px] font-extrabold text-ink">7.10% (Fixed)</span>
+                        <div className="p-3 bg-cream border border-beige/30 rounded-xl flex items-center justify-between transition-all group-hover:translate-x-1 duration-700">
+                            <span className="text-sm font-bold text-ink">PPF Interest rate</span>
+                            <span className="text-sm sm:text-base font-extrabold text-ink">7.10% (Fixed)</span>
                         </div>
                     </div>
 
                     <div className="border-t border-beige/40 pt-4 flex items-center justify-between">
-                        <span className="text-[10px] font-mono text-taupe uppercase">Tickers</span>
-                        <span className="text-[9.5px] font-bold text-gold tracking-widest uppercase">
+                        <span className="text-[11px] font-mono text-taupe uppercase">Tickers</span>
+                        <span className="text-[10.5px] font-bold text-gold tracking-widest uppercase">
                             LIVE MF NAVs ACTIVE
                         </span>
                     </div>
@@ -332,7 +332,7 @@ const Features = () => {
                 </div>
 
                 {/* STICKY SCROLL AREA */}
-                <div className="w-full min-h-[580px] lg:h-[66vh] rounded-[24px] sm:rounded-[32px] border border-beige/20 bg-ivory/95 shadow-[0_20px_50px_rgba(58,46,37,0.25)] overflow-hidden">
+                <div className="w-full min-h-[620px] lg:h-[70vh] rounded-[24px] sm:rounded-[32px] border border-beige/20 bg-ivory/95 shadow-[0_20px_50px_rgba(58,46,37,0.25)] overflow-hidden">
                     <StickyScrollReveal 
                         content={FEATURES_CONTENT} 
                         activeCard={activeCard}
@@ -341,9 +341,9 @@ const Features = () => {
                 </div>
 
                 {/* SCROLL HINT */}
-                <div className="mt-5 sm:mt-7 flex flex-col items-center opacity-60 animate-bounce">
-                    <span className="text-ivory font-semibold text-[8.5px] sm:text-[9px] tracking-widest uppercase">Syncing Wealth Nodes</span>
-                    <span className="text-ivory text-xs mt-0.5">↓</span>
+                <div className="mt-5 sm:mt-7 flex items-center justify-center gap-2 opacity-60 animate-bounce">
+                    <span className="text-ivory font-semibold text-[9px] sm:text-[10px] tracking-widest uppercase">Syncing Wealth Nodes</span>
+                    <span className="text-ivory text-xs leading-none">↓</span>
                 </div>
             </div>
         </section>

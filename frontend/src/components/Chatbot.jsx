@@ -156,11 +156,11 @@ const ChatMessage = memo(({ text, isBot, time, isError }) => {
                     </div>
                 )}
 
-                <div className="text-xs sm:text-sm leading-relaxed font-medium text-left w-full">
+                <div dir="auto" className="text-xs sm:text-sm leading-relaxed font-medium text-left w-full break-words">
                     {isBot && !isError ? (
                         <ResponseRenderer text={text} />
                     ) : (
-                        <div className="whitespace-pre-wrap">{text}</div>
+                        <div className="whitespace-pre-wrap break-words">{text}</div>
                     )}
                 </div>
 
@@ -326,7 +326,8 @@ const Chatbot = () => {
             });
 
             if (!response.ok) {
-                throw new Error(`Proxy responded with status ${response.status}`);
+                const errData = await response.json().catch(() => ({}));
+                throw new Error(errData.error || `Proxy responded with status ${response.status}`);
             }
 
             const messageEndTime = performance.now();
@@ -365,7 +366,7 @@ const Chatbot = () => {
             setMessages(prev => [...prev, {
                 id: `err-${Date.now()}`,
                 isBot: true,
-                text: "I encountered a problem connecting to the AI agent. Please check your network and try again.",
+                text: `⚠️ n8n AI Agent Error: ${err.message || "Unable to reach n8n workflow."}`,
                 isError: true,
                 time: nowTime()
             }]);

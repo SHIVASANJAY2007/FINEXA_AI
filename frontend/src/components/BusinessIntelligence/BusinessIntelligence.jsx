@@ -373,12 +373,15 @@ Format all tables using clean Markdown tables with proper header rows, separator
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify({ sessionId, message: prompt, personId: '' }),
       });
-      if (!res.ok) throw new Error(`Backend responded with HTTP ${res.status}`);
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.error || `n8n BI backend responded with HTTP ${res.status}`);
+      }
       const data = await res.json();
       setReportText(data.output || data.response || data.text || data.message || JSON.stringify(data) || 'Report generation complete.');
       setReportState('success');
     } catch (err) {
-      setReportError(err.message || 'Failed to generate report. Please check your connection and try again.');
+      setReportError(err.message || 'Failed to generate report via n8n. Please check your n8n workflow and try again.');
       setReportState('error');
     }
   };

@@ -55,7 +55,7 @@ export const generateReport = async (req, res, next) => {
     let reportReplyText;
 
     if (!N8N_BI_WEBHOOK_URL) {
-      return res.status(500).json({ error: "N8N_BI_WEBHOOK_URL is not configured." });
+      return res.status(503).json({ error: "N8N_BI_WEBHOOK_URL is not configured. Business Intelligence strictly requires an active n8n Webhook URL and does not serve static responses." });
     }
 
     // 2. Forward payload to n8n Business Intelligence webhook with 120s timeout
@@ -82,15 +82,17 @@ export const generateReport = async (req, res, next) => {
       });
     } catch (fetchError) {
       if (fetchError.name === 'AbortError') {
-        return res.status(504).json({ error: "n8n BI Agent took too long to respond (120s timeout exceeded)." });
+        return res.status(544).json({ error: "n8n BI Agent took too long to respond (120s timeout exceeded)." });
       }
-      throw fetchError;
+      return res.status(502).json({ error: `Failed to connect to n8n Business Intelligence webhook: ${fetchError.message || fetchError}` });
     } finally {
       clearTimeout(timeoutId);
     }
 
     if (!response.ok) {
-      throw new Error(`n8n BI webhook responded with HTTP status ${response.status}`);
+      return res.status(response.status >= 500 ? response.status : 502).json({
+        error: `n8n BI webhook responded with HTTP status ${response.status}`
+      });
     }
 
     // 3. Parse n8n response layout defensively

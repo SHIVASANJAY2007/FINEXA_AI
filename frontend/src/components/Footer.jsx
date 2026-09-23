@@ -237,9 +237,9 @@ const Footer = () => {
                     ref={finalContentRef}
                     className="absolute inset-0 z-30 bg-ivory flex flex-col p-3 sm:p-4 md:p-6 text-ink justify-between will-change-transform overflow-y-auto no-scrollbar lg:overflow-hidden"
                 >
-                    <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-8 items-center max-w-7xl mx-auto w-full pt-4 sm:pt-6">
+                    <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-10 items-center max-w-[90rem] mx-auto w-full pt-5 sm:pt-8">
                         {/* Chart Card */}
-                        <div className="bg-ink rounded-3xl h-auto min-h-[340px] lg:h-[380px] p-5 sm:p-7 flex flex-col justify-between overflow-hidden border border-beige/40 shadow-[0_8px_32px_rgba(58,46,37,0.06)] relative group select-none">
+                        <div className="bg-ink rounded-3xl h-auto min-h-[420px] lg:h-[460px] p-6 sm:p-9 flex flex-col justify-between overflow-hidden border border-beige/40 shadow-[0_8px_32px_rgba(58,46,37,0.06)] relative group select-none">
                             {/* Video Background */}
                             <video
                                 src="/Compounded.mp4"
@@ -253,50 +253,50 @@ const Footer = () => {
                             {/* Top header */}
                             <div className="relative z-10 flex justify-between items-start">
                                 <div>
-                                    <span className="px-2.5 py-0.5 bg-gold/20 text-gold text-[8.5px] sm:text-[9px] font-bold rounded uppercase tracking-wider">
+                                    <span className="px-3 py-1 bg-gold/20 text-gold text-[9.5px] sm:text-[10px] font-bold rounded uppercase tracking-wider">
                                         Growth Matrix
                                     </span>
-                                    <h3 className="font-serif text-xl sm:text-2xl font-bold text-ivory mt-2">Compounded Trajectory</h3>
+                                    <h3 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-ivory mt-2.5">Compounded Trajectory</h3>
                                 </div>
                                 <div className="text-right">
-                                    <span className="text-[8.5px] sm:text-[9.5px] uppercase font-bold text-ivory/50 block">Future Value</span>
-                                    <span className="font-serif text-lg sm:text-2xl font-black text-gold select-all">{formatRupees(fv)}</span>
+                                    <span className="text-[9.5px] sm:text-[10px] uppercase font-bold text-ivory/50 block">Future Value</span>
+                                    <span className="font-serif text-2xl sm:text-3xl font-black text-gold select-all">{formatRupees(fv)}</span>
                                 </div>
                             </div>
 
                             {/* Dynamic stats values */}
-                            <div className="relative z-10 grid grid-cols-3 gap-2 bg-black/40 backdrop-blur-xs p-2.5 sm:p-3 rounded-2xl border border-ivory/5 text-left my-auto mt-3 sm:mt-4">
+                            <div className="relative z-10 grid grid-cols-3 gap-2 bg-black/40 backdrop-blur-xs p-3 sm:p-4 rounded-2xl border border-ivory/5 text-left my-auto mt-4 sm:mt-5">
                                 <div>
-                                    <span className="text-[7.5px] sm:text-[9px] uppercase font-bold text-ivory/50 block">Investment</span>
-                                    <span className="text-[11px] sm:text-sm font-extrabold text-ivory">
+                                    <span className="text-[9px] sm:text-[10px] uppercase font-bold text-ivory/50 block">Investment</span>
+                                    <span className="text-sm sm:text-base font-extrabold text-ivory">
                                         ₹{Math.round(investment).toLocaleString('en-IN')}/mo
                                     </span>
                                 </div>
                                 <div>
-                                    <span className="text-[7.5px] sm:text-[9px] uppercase font-bold text-ivory/50 block">Total Invested</span>
-                                    <span className="text-[11px] sm:text-sm font-extrabold text-ivory/90">{formatRupees(totalInvested)}</span>
+                                    <span className="text-[9px] sm:text-[10px] uppercase font-bold text-ivory/50 block">Total Invested</span>
+                                    <span className="text-sm sm:text-base font-extrabold text-ivory/90">{formatRupees(totalInvested)}</span>
                                 </div>
                                 <div>
-                                    <span className="text-[7.5px] sm:text-[9px] uppercase font-bold text-ivory/50 block">Duration</span>
-                                    <span className="text-[11px] sm:text-sm font-extrabold text-gold">{years} Years</span>
+                                    <span className="text-[9px] sm:text-[10px] uppercase font-bold text-ivory/50 block">Duration</span>
+                                    <span className="text-sm sm:text-base font-extrabold text-gold">{years} Years</span>
                                 </div>
                             </div>
 
                             {/* Interactive Sliders */}
-                            <div className="relative z-10 mt-3 sm:mt-4 flex flex-col gap-2.5 sm:gap-3 text-left">
+                            <div className="relative z-10 mt-4 sm:mt-5 flex flex-col gap-3 sm:gap-4 text-left">
                                 {/* Monthly Investment Control */}
-                                <div className="flex flex-col gap-1">
-                                    <div className="flex justify-between items-center text-[8px] sm:text-[9px] font-bold text-ivory/50 uppercase tracking-widest">
+                                <div className="flex flex-col gap-1.5">
+                                    <div className="flex justify-between items-center text-[9px] sm:text-[10px] font-bold text-ivory/50 uppercase tracking-widest">
                                         <span>Monthly Investment</span>
-                                        <div className="flex items-center gap-1 bg-black/30 border border-ivory/10 px-2 py-0.5 rounded">
-                                            <span className="text-gold font-extrabold text-[10px]">₹</span>
+                                        <div className="flex items-center gap-1 bg-black/30 border border-ivory/10 px-2.5 py-1 rounded">
+                                            <span className="text-gold font-extrabold text-xs">₹</span>
                                             <input
                                                 type="number"
                                                 min="500"
                                                 max="1000000"
                                                 value={investment}
                                                 onChange={(e) => setInvestment(Math.max(0, Number(e.target.value)))}
-                                                className="bg-transparent text-gold font-extrabold text-[10px] w-14 outline-none border-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                                className="bg-transparent text-gold font-extrabold text-xs w-16 outline-none border-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                             />
                                         </div>
                                     </div>
@@ -307,13 +307,13 @@ const Footer = () => {
                                         step="1000"
                                         value={investment}
                                         onChange={(e) => setInvestment(Number(e.target.value))}
-                                        className="w-full accent-gold bg-ivory/10 h-1 rounded-lg appearance-none cursor-pointer relative z-10 transition-all hover:bg-ivory/20"
+                                        className="w-full accent-gold bg-ivory/10 h-1.5 rounded-lg appearance-none cursor-pointer relative z-10 transition-all hover:bg-ivory/20"
                                     />
                                 </div>
 
                                 {/* Years Control */}
-                                <div className="flex flex-col gap-1">
-                                    <label className="text-[8px] sm:text-[9px] font-bold text-ivory/50 uppercase tracking-widest flex justify-between">
+                                <div className="flex flex-col gap-1.5">
+                                    <label className="text-[9px] sm:text-[10px] font-bold text-ivory/50 uppercase tracking-widest flex justify-between">
                                         <span>Adjust Horizon</span>
                                         <span className="text-gold font-extrabold">{years} Years</span>
                                     </label>
@@ -324,13 +324,13 @@ const Footer = () => {
                                         step="1"
                                         value={years}
                                         onChange={(e) => setYears(Number(e.target.value))}
-                                        className="w-full accent-gold bg-ivory/10 h-1 rounded-lg appearance-none cursor-pointer relative z-10 transition-all hover:bg-ivory/20"
+                                        className="w-full accent-gold bg-ivory/10 h-1.5 rounded-lg appearance-none cursor-pointer relative z-10 transition-all hover:bg-ivory/20"
                                     />
                                 </div>
                             </div>
 
                             {/* Dynamic Recharts AreaChart */}
-                            <div className="w-full h-20 sm:h-28 relative z-10 overflow-visible mt-3 mb-1">
+                            <div className="w-full h-24 sm:h-36 relative z-10 overflow-visible mt-4 mb-2">
                                 <ResponsiveContainer width="100%" height="100%">
                                     <AreaChart data={chartData} margin={{ top: 5, right: 5, left: 5, bottom: 5 }}>
                                         <defs>
@@ -362,32 +362,32 @@ const Footer = () => {
                         </div>
 
                         {/* CTA Card */}
-                        <div className="bg-burgundy rounded-3xl p-6 sm:p-8 lg:p-10 text-ivory flex flex-col justify-center items-center text-center h-auto min-h-[340px] lg:h-[380px] shadow-2xl relative overflow-hidden group">
+                        <div className="bg-burgundy rounded-3xl p-8 sm:p-10 lg:p-14 text-ivory flex flex-col justify-center items-center text-center h-auto min-h-[420px] lg:h-[460px] shadow-2xl relative overflow-hidden group">
                             {/* Background image (behind the content) */}
                             <img
                                 src="/loan.png"
                                 alt=""
-                                className="absolute inset-0 w-full h-full object-cover object-center z-0 opacity-50 group-hover:scale-105 transition-transform duration-1000"
+                                className="absolute inset-0 m-auto max-h-[58%] max-w-[58%] object-contain object-center z-0 opacity-40 select-none"
                             />
                             {/* Readability scrim behind the content */}
                             <div className="absolute inset-0 z-[1] bg-gradient-to-t from-burgundy via-burgundy/60 to-burgundy/35 pointer-events-none" />
                             <div className="absolute top-0 right-0 w-64 h-64 bg-gold/10 rounded-full blur-[64px] pointer-events-none z-[2]" />
 
-                            <div className="relative z-20 flex flex-col items-center justify-center w-full gap-4 sm:gap-5">
-                                <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight leading-[0.95] text-center">
+                            <div className="relative z-20 flex flex-col items-center justify-center w-full gap-5 sm:gap-6">
+                                <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[0.95] text-center">
                                     Ready to <br /> Begin?
                                 </h2>
-                                <p className="text-ivory/85 font-normal text-xs sm:text-sm md:text-base max-w-md leading-relaxed text-center">
+                                <p className="text-ivory/85 font-normal text-sm sm:text-base md:text-lg max-w-lg leading-relaxed text-center">
                                     Join the elite network of investors steering assets with autonomous intelligence.
                                 </p>
 
                                 <Link
                                     to="/signup"
-                                    className="mt-1 bg-ink text-ivory rounded-full py-3.5 sm:py-4 pl-5 sm:pl-6 pr-4 sm:pr-5 flex items-center justify-between font-bold text-[11px] sm:text-xs uppercase tracking-widest hover:bg-teal transition-all duration-300 shadow-[0_4px_16px_rgba(0,0,0,0.15)] group/btn w-full max-w-xs"
+                                    className="mt-1 bg-ink text-ivory rounded-full py-4 sm:py-5 pl-6 sm:pl-7 pr-5 sm:pr-6 flex items-center justify-between font-bold text-xs sm:text-sm uppercase tracking-widest hover:bg-teal transition-all duration-300 shadow-[0_4px_16px_rgba(0,0,0,0.15)] group/btn w-full max-w-sm"
                                 >
                                     <span className="flex items-center justify-center w-full select-none">
-                                        <User className="bg-ivory/10 rounded-full p-1.5 sm:p-2 shrink-0" size={26} />
-                                        <span className="ml-2.5 sm:ml-3">START NOW</span>
+                                        <User className="bg-ivory/10 rounded-full p-2 sm:p-2.5 shrink-0" size={30} />
+                                        <span className="ml-3">START NOW</span>
                                     </span>
                                     <span className="group-hover/btn:translate-x-2 transition-transform text-base sm:text-lg shrink-0">→</span>
                                 </Link>

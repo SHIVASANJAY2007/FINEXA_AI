@@ -30,13 +30,13 @@ const isVideoUrl = (url) => {
            url.includes('vimeo.com');
 };
 
-// Regex constants for the parsing engine
-const dayHeaderRegex = /^(?:#+\s+|\*\*|)\b(Day\s+\d+|DAY\s+\d+)\b(?:\s*[:-]\s*|\s+)(.*?)(?:\*\*|)$/i;
-const timeSegmentRegex = /^\s*[-*\d.+\s]*\*\*?(Morning|Afternoon|Evening|Night)(?:\s*\([^)]+\))?\*\*?:?\s*(.*?)\s*$/i;
-const calloutRegex = /^(?:💡|⚠️|🚨|ℹ️|🛑|📌|👉)?\s*\*\*?(Tip|Warning|Important|Note|Remember|Caution|Alert|Success|Info)\*\*?\s*:\s*(.*?)$/i;
-const planHeaderRegex = /^(?:#+\s+|\*\*|)\b(Plan\s+\d+|Option\s+[A-Z])\b(?:\s*[:-]\s*|\s+)(.*?)(?:\*\*|)$/i;
-const sourcesHeaderRegex = /^(?:#+\s+|\*\*|)(Sources|References|Citations)(?:\s*[:-]\s*|\s*)(?:\*\*|)$/i;
-const sourceLinkRegex = /^\s*[-*\d.+\s]*(?:\[(.*?)\]\((.*?)\)|(https?:\/\/[^\s]+))\s*$/i;
+// Regex constants for the parsing engine (with Unicode support across scripts)
+const dayHeaderRegex = /^(?:#+\s+|\*\*|)\b(Day\s+\d+|DAY\s+\d+)\b(?:\s*[:-]\s*|\s+)(.*?)(?:\*\*|)$/iu;
+const timeSegmentRegex = /^\s*[-*\d.+\s]*\*\*?(Morning|Afternoon|Evening|Night)(?:\s*\([^)]+\))?\*\*?:?\s*(.*?)\s*$/iu;
+const calloutRegex = /^(?:💡|⚠️|🚨|ℹ️|🛑|📌|👉)?\s*\*\*?(Tip|Warning|Important|Note|Remember|Caution|Alert|Success|Info)\*\*?\s*:\s*(.*?)$/iu;
+const planHeaderRegex = /^(?:#+\s+|\*\*|)\b(Plan\s+\d+|Option\s+[A-Z])\b(?:\s*[:-]\s*|\s+)(.*?)(?:\*\*|)$/iu;
+const sourcesHeaderRegex = /^(?:#+\s+|\*\*|)(Sources|References|Citations)(?:\s*[:-]\s*|\s*)(?:\*\*|)$/iu;
+const sourceLinkRegex = /^\s*[-*\d.+\s]*(?:\[(.*?)\]\((.*?)\)|(https?:\/\/[^\s]+))\s*$/iu;
 
 // Preprocessing text (separates lists that are squeezed together with emojis)
 const preprocessBotReplyText = (text) => {
@@ -47,11 +47,11 @@ const preprocessBotReplyText = (text) => {
         let currentLine = line;
         
         // 1. Split on keycaps 1️⃣ to 10️⃣ and list bullets (✨, 💡, ⭐️) preceded by non-whitespace
-        const generalListRegex = /([^\s])\s*((?:[1-9]|10)️⃣|✨|💡|⭐️)\s+/g;
+        const generalListRegex = /([^\s])\s*((?:[1-9]|10)️⃣|✨|💡|⭐️)\s+/gu;
         currentLine = currentLine.replace(generalListRegex, '$1\n- $2 ');
         
-        // 2. Split on activity emojis followed by titles and colons/dashes
-        const titleListRegex = /([^\s])\s*(🏄|🌿|🏛️|🛍️|🍴|👤|🏨|🎟️|🎡|🚕|🚗|🚌|💰|💵|🗺️|🏔️|🏝️|⛺|🚂|✈️|⏱️|🎒)\s+([A-Za-z0-9\s&]+?)(:|–|-)\s+/g;
+        // 2. Split on activity emojis followed by titles and colons/dashes (supports Unicode letters in all languages)
+        const titleListRegex = /([^\s])\s*([\u{1F300}-\u{1F9FF}🚀🏄🌿🏛️🛍️🍴👤🏨🎟️🎡🚕🚗🚌💰💵🗺️🏔️🏝️⛺🚂✈️⏱️🎒])\s+([^\n:-–—]+?)(:|–|-|—)\s+/gu;
         currentLine = currentLine.replace(titleListRegex, '$1\n- $2 $3$4 ');
         
         return currentLine;

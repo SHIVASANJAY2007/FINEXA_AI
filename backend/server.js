@@ -10,6 +10,9 @@ const __dirname = dirname(__filename);
 
 dotenv.config({ path: join(__dirname, '.env') });
 
+// Allow Node.js to bypass self-signed SSL certificate chain rejection for n8n / external API webhooks
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
 // Import routes
 import authRoutes from './routes/authRoutes.js';
 import travelRoutes from './routes/travelRoutes.js';

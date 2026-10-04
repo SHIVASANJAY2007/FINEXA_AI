@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { AlertCircle, ExternalLink, ShieldAlert, X, Info, CheckCircle2 } from 'lucide-react';
+import { AlertCircle, AlertTriangle, ExternalLink, ShieldAlert, X, Info, CheckCircle2 } from 'lucide-react';
 import { useScrollLock } from '../../hooks/useScrollLock';
 
 const DISCLAIMER_LINK = "https://finexa-privacy-policy.vercel.app/";

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { AlertTriangle, ExternalLink, ShieldAlert, X, Info, CheckCircle2 } from 'lucide-react';
+import { AlertCircle, ExternalLink, ShieldAlert, X, Info, CheckCircle2 } from 'lucide-react';
 import { useScrollLock } from '../../hooks/useScrollLock';
 
 const DISCLAIMER_LINK = "https://finexa-privacy-policy.vercel.app/";
@@ -36,7 +36,7 @@ const AssistiveWarningButton = () => {
 
     return (
         <>
-            {/* AssistiveTouch Floating Warning Button */}
+            {/* AssistiveTouch Floating Warning Button - Pure Red with Exclamatory Icon */}
             <motion.div
                 className="fixed bottom-6 left-6 z-[9990] touch-none select-none"
                 initial={{ scale: 0, opacity: 0 }}
@@ -50,25 +50,27 @@ const AssistiveWarningButton = () => {
                 onHoverEnd={() => setIsHovered(false)}
             >
                 <div className="relative group">
-                    {/* Pulsing glow effect around AssistiveTouch orb */}
-                    <div className="absolute -inset-1.5 rounded-full bg-gradient-to-r from-amber-500/40 via-burgundy/30 to-amber-600/40 blur-sm animate-pulse opacity-75 group-hover:opacity-100 transition-opacity" />
+                    {/* Pulsing red glow effect around AssistiveTouch orb */}
+                    <div className="absolute -inset-1.5 rounded-full bg-gradient-to-r from-red-600/70 via-red-500/50 to-red-700/70 blur-md animate-pulse opacity-85 group-hover:opacity-100 transition-opacity" />
 
-                    {/* Main AssistiveTouch button */}
+                    {/* Main AssistiveTouch pure red button */}
                     <button
                         onClick={() => setIsOpen(true)}
-                        className="relative w-14 h-14 rounded-full bg-ink/90 text-ivory hover:bg-ink backdrop-blur-xl border-2 border-amber-500/60 shadow-2xl flex items-center justify-center cursor-pointer transition-all duration-300 active:scale-90 group"
+                        className="relative w-14 h-14 rounded-full bg-red-600 text-white hover:bg-red-700 backdrop-blur-xl border-2 border-white/90 shadow-2xl flex items-center justify-center cursor-pointer transition-all duration-300 active:scale-90 group"
                         aria-label="Important Legal Warning & Risk Notice"
                         title="FINEXA AI Risk Disclaimer & Legal Warning"
                     >
                         {/* Outer ring styling like iOS AssistiveTouch */}
-                        <span className="absolute inset-1 rounded-full border border-ivory/20 pointer-events-none" />
+                        <span className="absolute inset-1 rounded-full border border-white/30 pointer-events-none" />
 
-                        {/* Animated Warning Icon */}
+                        {/* Animated Pure Red Exclamatory Icon */}
                         <div className="relative flex items-center justify-center">
-                            <AlertTriangle className="w-6 h-6 text-amber-400 group-hover:scale-110 transition-transform duration-200" />
+                            <span className="font-sans font-black text-2xl leading-none text-white group-hover:scale-110 transition-transform duration-200">
+                                !
+                            </span>
                             <span className="absolute -top-1 -right-1 flex h-3 w-3">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                                <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-500 border border-ink"></span>
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-3 w-3 bg-white border border-red-600"></span>
                             </span>
                         </div>
                     </button>
@@ -80,9 +82,9 @@ const AssistiveWarningButton = () => {
                                 initial={{ opacity: 0, y: 5, x: 0 }}
                                 animate={{ opacity: 1, y: 0, x: 0 }}
                                 exit={{ opacity: 0, y: 5 }}
-                                className="absolute left-16 top-2 whitespace-nowrap bg-ink/95 text-ivory text-xs px-3 py-1.5 rounded-lg shadow-xl border border-amber-500/30 backdrop-blur-md font-medium pointer-events-none flex items-center gap-1.5"
+                                className="absolute left-16 top-2 whitespace-nowrap bg-red-950/95 text-white text-xs px-3 py-1.5 rounded-lg shadow-xl border border-red-500/40 backdrop-blur-md font-semibold pointer-events-none flex items-center gap-1.5"
                             >
-                                <ShieldAlert className="w-3.5 h-3.5 text-amber-400" />
+                                <AlertCircle className="w-3.5 h-3.5 text-red-400" />
                                 <span>FINEXA Risk Disclaimer</span>
                             </motion.div>
                         )}
@@ -112,16 +114,16 @@ const AssistiveWarningButton = () => {
                             className="relative w-full max-w-2xl max-h-[85vh] bg-ivory border border-beige/60 rounded-3xl shadow-2xl overflow-hidden flex flex-col z-10 linen-noise"
                         >
                             {/* Modal Header */}
-                            <div className="relative px-6 py-5 bg-gradient-to-r from-burgundy/90 via-ink to-burgundy/95 text-ivory flex items-center justify-between border-b border-amber-500/20">
+                            <div className="relative px-6 py-5 bg-gradient-to-r from-red-900 via-ink to-red-950 text-ivory flex items-center justify-between border-b border-red-500/30">
                                 <div className="flex items-center gap-3.5">
-                                    <div className="w-10 h-10 rounded-2xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center flex-shrink-0">
-                                        <AlertTriangle className="w-6 h-6 text-amber-300 animate-pulse" />
+                                    <div className="w-10 h-10 rounded-2xl bg-red-600/30 border border-red-400/50 flex items-center justify-center flex-shrink-0">
+                                        <span className="font-sans font-black text-xl text-red-400 animate-pulse">!</span>
                                     </div>
                                     <div>
                                         <h2 className="font-serif font-bold text-lg sm:text-xl tracking-wide text-ivory">
                                             FINEXA AI — Disclaimer & Risk Notice
                                         </h2>
-                                        <p className="text-xs text-amber-200/80 font-sans">
+                                        <p className="text-xs text-red-200/80 font-sans">
                                             Important Legal Information & Platform Guidance
                                         </p>
                                     </div>

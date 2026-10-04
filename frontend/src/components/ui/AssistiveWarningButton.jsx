@@ -51,7 +51,7 @@ const AssistiveWarningButton = () => {
             >
                 <div className="relative group">
                     {/* Pulsing red glow effect around AssistiveTouch orb */}
-                    <div className="absolute -inset-1.5 rounded-full bg-gradient-to-r from-red-600/70 via-red-500/50 to-red-700/70 blur-md animate-pulse opacity-85 group-hover:opacity-100 transition-opacity" />
+                    <div className="absolute -inset-1.5 bg-gradient-to-r from-red-600/70 via-red-500/50 to-red-700/70 blur-md animate-pulse opacity-85 group-hover:opacity-100 transition-opacity" />
 
                     {/* Main AssistiveTouch pure red button */}
                     <button

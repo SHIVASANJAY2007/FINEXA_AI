@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { AlertCircle, AlertTriangle, ExternalLink, ShieldAlert, X, Info, CheckCircle2 } from 'lucide-react';
+import { AlertCircle, ExternalLink, ShieldAlert, X, Info, CheckCircle2 } from 'lucide-react';
 import { useScrollLock } from '../../hooks/useScrollLock';
 
 const DISCLAIMER_LINK = "https://finexa-privacy-policy.vercel.app/";
@@ -9,6 +9,7 @@ const AssistiveWarningButton = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
     const [hasAcknowledged, setHasAcknowledged] = useState(false);
+    const hasDraggedRef = useRef(false);
 
     // Prevent scrolling when popup modal is open
     useScrollLock(isOpen);
@@ -38,14 +39,26 @@ const AssistiveWarningButton = () => {
         <>
             {/* AssistiveTouch Floating Warning Button - Pure Red with Exclamatory Icon */}
             <motion.div
-                className="fixed bottom-6 left-6 z-[9990] touch-none select-none"
-                initial={{ scale: 0, opacity: 0 }}
+                className="fixed top-0 left-0 z-[9990] touch-none select-none"
+                initial={{
+                    scale: 0,
+                    opacity: 0,
+                    x: 24,
+                    y: typeof window !== 'undefined' ? window.innerHeight - 80 : 0,
+                }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ type: 'spring', stiffness: 260, damping: 20, delay: 0.5 }}
                 drag
-                dragConstraints={{ left: 10, right: window.innerWidth - 80, top: 10, bottom: window.innerHeight - 80 }}
+                dragConstraints={{
+                    left: 10,
+                    top: 10,
+                    right: typeof window !== 'undefined' ? window.innerWidth - 80 : 0,
+                    bottom: typeof window !== 'undefined' ? window.innerHeight - 80 : 0,
+                }}
                 dragElastic={0.1}
                 dragMomentum={false}
+                onPointerDown={() => { hasDraggedRef.current = false; }}
+                onDrag={() => { hasDraggedRef.current = true; }}
                 onHoverStart={() => setIsHovered(true)}
                 onHoverEnd={() => setIsHovered(false)}
             >
@@ -55,7 +68,10 @@ const AssistiveWarningButton = () => {
 
                     {/* Main AssistiveTouch pure red button */}
                     <button
-                        onClick={() => setIsOpen(true)}
+                        onClick={() => {
+                            if (hasDraggedRef.current) return;
+                            setIsOpen(true);
+                        }}
                         className="relative w-14 h-14 rounded-full bg-red-600 text-white hover:bg-red-700 backdrop-blur-xl border-2 border-white/90 shadow-2xl flex items-center justify-center cursor-pointer transition-all duration-300 active:scale-90 group"
                         aria-label="Important Legal Warning & Risk Notice"
                         title="FINEXA AI Risk Disclaimer & Legal Warning"
@@ -113,7 +129,7 @@ const AssistiveWarningButton = () => {
                             <div className="relative px-6 py-5 bg-gradient-to-r from-red-900 via-ink to-red-950 text-ivory flex items-center justify-between border-b border-red-500/30">
                                 <div className="flex items-center gap-3.5">
                                     <div className="w-10 h-10 rounded-2xl bg-red-600/30 border border-red-400/50 flex items-center justify-center flex-shrink-0">
-                                        <span className="font-sans font-black text-xl text-red-400 animate-pulse">!</span>
+                                        <span className="font-sans font-black text-xl text-red-400">!</span>
                                     </div>
                                     <div>
                                         <h2 className="font-serif font-bold text-lg sm:text-xl tracking-wide text-ivory">

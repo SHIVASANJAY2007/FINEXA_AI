@@ -1,17 +1,24 @@
 import React, { useEffect, useState, memo } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const NavButton = memo(({ item, onClick, className, children }) => {
     const isHash = item.href.startsWith('#');
 
     const handleClick = (e) => {
         if (isHash) {
+            e.preventDefault();
             const id = item.href.substring(1);
             const el = document.getElementById(id);
             if (el) {
-                e.preventDefault();
-                el.scrollIntoView({ behavior: 'smooth' });
+                // Check if GSAP ScrollTrigger has a trigger for this element
+                const st = ScrollTrigger.getAll().find(s => s.trigger === el || s.vars?.trigger === `#${id}`);
+                const targetY = st ? st.start : (el.getBoundingClientRect().top + window.pageYOffset - 80);
+                window.scrollTo({ top: targetY, behavior: 'smooth' });
                 window.history.pushState(null, null, item.href);
             }
         }
@@ -34,7 +41,8 @@ const NavButton = memo(({ item, onClick, className, children }) => {
 });
 
 const PillNav = ({
-    items = []
+    items = [],
+    activeHref = ''
 }) => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
@@ -100,8 +108,7 @@ const PillNav = ({
                     className="flex items-center gap-0.5 sm:gap-1 overflow-x-auto no-scrollbar whitespace-nowrap scroll-smooth"
                 >
                     {navItems.map((item) => {
-                        const currentHash = window.location.hash;
-                        const isCurrentActive = currentHash === item.href || (item.href === '/signup' && window.location.pathname === '/signup') || (item.href === '/dashboard' && window.location.pathname === '/dashboard');
+                        const isCurrentActive = activeHref === item.href || (item.href === '/signup' && window.location.pathname === '/signup') || (item.href === '/dashboard' && window.location.pathname === '/dashboard');
 
                         return (
                             <NavButton
@@ -138,3 +145,4 @@ const PillNav = ({
 };
 
 export default memo(PillNav);
+

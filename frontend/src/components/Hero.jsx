@@ -95,14 +95,14 @@ const Hero = () => {
         const ctx = gsap.context(() => {
             const mm = gsap.matchMedia();
 
-            // Desktop layout (1024px+): Pinning timeline with extended hold
+            // Desktop layout (1024px+): Pinning timeline with natural scroll feel
             mm.add("(min-width: 1024px)", () => {
                 const tl = gsap.timeline({
                     scrollTrigger: {
                         trigger: containerRef.current,
                         start: "top top",
-                        end: "+=2200",
-                        scrub: 1,
+                        end: "+=1200",
+                        scrub: 0.6,
                         pin: true,
                         anticipatePin: 1
                     }
@@ -128,7 +128,7 @@ const Hero = () => {
                     opacity: 1,
                     y: 0,
                     pointerEvents: "auto",
-                    duration: 0.8,
+                    duration: 0.6,
                     ease: "power2.out"
                 });
 
@@ -141,13 +141,13 @@ const Hero = () => {
                         scale: 1,
                         rotate: 0,
                         filter: "blur(0px)",
-                        duration: 1.2,
+                        duration: 0.8,
                         ease: "power2.out"
-                    }, `-=${index === 0 ? 0.2 : 0.6}`);
+                    }, `-=${index === 0 ? 0.1 : 0.4}`);
                 });
 
-                // 3. Extended hold
-                tl.to({}, { duration: 2.5 });
+                // 3. Natural hold
+                tl.to({}, { duration: 1 });
             });
 
             // Mobile / Tablet layout (< 1024px): Scroll-triggered reveal without lock pinning
@@ -203,9 +203,9 @@ const Hero = () => {
             <div className="absolute bottom-0 right-0 w-[500px] h-[500px] rounded-full bg-gold/4 blur-[120px] pointer-events-none translate-x-1/3 translate-y-1/3" />
 
             <div ref={contentRef} className="max-w-7xl mx-auto px-4 sm:px-8 md:px-12 w-full z-10 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center mt-2 sm:mt-4">
-                {/* Left Column: Unified Max-W-XL Centered Container */}
-                <div className="lg:col-span-7 flex flex-col justify-center items-center text-center space-y-6 max-w-xl mx-auto w-full">
-                    <h1 className="hero-title text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif font-bold tracking-tight text-ink leading-[1.1] uppercase text-center w-full">
+                {/* Left Column: Unified Centered Container */}
+                <div className="lg:col-span-7 flex flex-col justify-center items-center text-center space-y-6 max-w-2xl mx-auto w-full">
+                    <h1 className="hero-title text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-serif font-bold tracking-tight text-ink leading-[1.1] uppercase text-center w-full">
                         <span className="block">
                             <EncryptedText
                                 text="YOUR WEALTH"
@@ -226,21 +226,21 @@ const Hero = () => {
                         </span>
                     </h1>
 
-                    <p className="text-taupe text-sm sm:text-base font-normal leading-relaxed text-center w-full px-2">
+                    <p className="text-taupe text-base sm:text-lg font-normal leading-relaxed text-center w-full px-2">
                         Your intelligent financial companion on WhatsApp. Powered by Agentic AI that reasons, plans, and remembers — delivering personalized wealth decisions without the cost of a financial advisor.
                     </p>
 
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 sm:gap-4 w-full">
                         <button
                             onClick={scrollToFeatures}
-                            className="w-full sm:w-auto bg-burgundy text-ivory px-8 py-3.5 rounded-full font-semibold text-xs sm:text-sm uppercase tracking-wider hover:bg-burgundy/90 transition-all active:scale-95 shadow-[0_4px_16px_rgba(107,30,43,0.25)] flex items-center justify-center gap-2 group pointer-events-auto cursor-pointer"
+                            className="w-full sm:w-auto bg-burgundy text-ivory px-8 py-4 rounded-full font-semibold text-sm sm:text-base uppercase tracking-wider hover:bg-burgundy/90 transition-all active:scale-95 shadow-[0_4px_16px_rgba(107,30,43,0.25)] flex items-center justify-center gap-2 group pointer-events-auto cursor-pointer"
                         >
                             <span>Explore Features</span>
-                            <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                            <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                         </button>
                         <a
                             href="/signup"
-                            className="w-full sm:w-auto bg-transparent border border-beige hover:border-ink text-ink px-8 py-3.5 rounded-full font-semibold text-xs sm:text-sm uppercase tracking-wider transition-all text-center flex items-center justify-center pointer-events-auto"
+                            className="w-full sm:w-auto bg-transparent border border-beige hover:border-ink text-ink px-8 py-4 rounded-full font-semibold text-sm sm:text-base uppercase tracking-wider transition-all text-center flex items-center justify-center pointer-events-auto"
                         >
                             Start Free
                         </a>
@@ -248,11 +248,11 @@ const Hero = () => {
 
                     {/* Trust Line */}
                     <div className="flex flex-wrap items-center justify-center gap-2 pt-2 border-t border-beige/40 w-full text-center">
-                        <span className="text-[10px] sm:text-[11px] font-medium text-taupe uppercase tracking-wider">WhatsApp-Native</span>
+                        <span className="text-[11px] sm:text-xs font-medium text-taupe uppercase tracking-wider">WhatsApp-Native</span>
                         <span className="w-1.5 h-1.5 rounded-full bg-beige" />
-                        <span className="text-[10px] sm:text-[11px] font-medium text-taupe uppercase tracking-wider">DPDP Compliant</span>
+                        <span className="text-[11px] sm:text-xs font-medium text-taupe uppercase tracking-wider">DPDP Compliant</span>
                         <span className="w-1.5 h-1.5 rounded-full bg-beige" />
-                        <span className="text-[10px] sm:text-[11px] font-medium text-taupe uppercase tracking-wider">Agentic AI Powered</span>
+                        <span className="text-[11px] sm:text-xs font-medium text-taupe uppercase tracking-wider">Agentic AI Powered</span>
                     </div>
 
                     {/* Pinned Scroll-Revealed Cards Container (Responsive Grid) */}

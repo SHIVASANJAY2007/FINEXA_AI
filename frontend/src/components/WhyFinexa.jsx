@@ -67,12 +67,12 @@ const WhyFINEXA = () => {
         const ctx = gsap.context(() => {
             const mm = gsap.matchMedia();
 
-            // Desktop layout (1024px+): Pinning with scrub
+            // Desktop layout (1024px+): Scroll lock pin system
             mm.add("(min-width: 1024px)", () => {
                 ScrollTrigger.create({
                     trigger: sectionRef.current,
                     start: "top top",
-                    end: "+=900",
+                    end: "+=800",
                     pin: true,
                     anticipatePin: 1,
                     scrub: 0.8
@@ -190,12 +190,12 @@ const WhyFINEXA = () => {
         return () => ctx.revert();
     }, []);
 
-    return (
-        <section
-            id="why-FINEXA"
-            ref={sectionRef}
-            className="w-full min-h-screen bg-gold relative overflow-hidden flex flex-col justify-center py-12 sm:py-16 px-4 sm:px-6 md:px-12 lg:px-20"
-        >
+return (
+    <section
+        id="why-finexa"
+        ref={sectionRef}
+        className="w-full min-h-screen bg-gold relative overflow-hidden flex flex-col justify-center py-12 sm:py-16 px-4 sm:px-6 md:px-12 lg:px-20"
+    >
             {/* The Slowed & Smoothed Diagonal Ribbon Wipe Transition */}
             <SectionWipe containerRef={sectionRef} />
 

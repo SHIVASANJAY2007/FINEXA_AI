@@ -208,7 +208,7 @@ const Features = () => {
 
             // Desktop layout (1024px+): Sticky scroll with pin
             mm.add("(min-width: 1024px)", () => {
-                const scrollEnd = "+=1500";
+                const scrollEnd = "+=1000";
 
                 ScrollTrigger.create({
                     trigger: sectionRef.current,
@@ -216,7 +216,7 @@ const Features = () => {
                     end: scrollEnd,
                     pin: true,
                     anticipatePin: 1,
-                    scrub: 0.8,
+                    scrub: 0.5,
                     onUpdate: (self) => {
                         const index = Math.min(
                             FEATURES_CONTENT.length - 1,

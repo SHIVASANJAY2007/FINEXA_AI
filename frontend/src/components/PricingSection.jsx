@@ -106,12 +106,12 @@ const PricingSection = () => {
         const ctx = gsap.context(() => {
             const mm = gsap.matchMedia();
 
-            // Desktop layout (1024px+): Pinning with release
+            // Desktop layout (1024px+): Scroll lock pin system
             mm.add("(min-width: 1024px)", () => {
                 ScrollTrigger.create({
                     trigger: sectionRef.current,
                     start: "top top",
-                    end: "+=800",
+                    end: "+=700",
                     pin: true,
                     anticipatePin: 1,
                     scrub: 0.8

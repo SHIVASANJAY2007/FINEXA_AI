@@ -118,15 +118,15 @@ const HowItWorks = () => {
             if (!container) return;
             const totalWidth = container.scrollWidth - window.innerWidth;
 
-            // Pinned timeline with extended hold
+            // Pinned timeline with natural horizontal scroll
             const tl = gsap.timeline({
                 scrollTrigger: {
                     trigger: sectionRef.current,
                     pin: true,
                     anticipatePin: 1,
                     start: "top top",
-                    end: () => `+=${Math.max(900, totalWidth + 1000)}`,
-                    scrub: 1,
+                    end: () => `+=${Math.max(600, totalWidth + 400)}`,
+                    scrub: 0.6,
                     invalidateOnRefresh: true,
                 }
             });
@@ -135,12 +135,12 @@ const HowItWorks = () => {
             tl.to(container, {
                 x: -Math.max(0, totalWidth),
                 ease: "none",
-                duration: 3,
+                duration: 2,
             });
 
-            // 2. Extended Lock/Hold
+            // 2. Short Lock/Hold
             tl.to({}, {
-                duration: 1.8,
+                duration: 0.5,
             });
 
         }, sectionRef);

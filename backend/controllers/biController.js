@@ -127,7 +127,8 @@ export const generateReport = async (req, res, next) => {
       console.warn("WARNING: Failed to log BI assistant reply to database. Proceeding in degraded mode:", dbErr.message || dbErr);
     }
 
-    // 5. Return structured response to client
+    // 5. Return structured response to client with explicit UTF-8 charset header
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
     res.status(200).json({
       output: reportReplyText
     });

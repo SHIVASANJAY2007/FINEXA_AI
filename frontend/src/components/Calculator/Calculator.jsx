@@ -303,7 +303,7 @@ const Calculator = () => {
                     <h1 className="text-3xl sm:text-5xl md:text-7xl font-serif font-bold tracking-tight uppercase leading-[1.1]">
                         Financial <span className="text-burgundy">Calculators</span>
                     </h1>
-                    <p className="mt-3 sm:mt-4 text-taupe text-sm sm:text-lg max-w-2xl font-normal leading-relaxed">
+                    <p className="mt-3 sm:mt-4 text-taupe text-sm sm:text-lg max-w-2xl mx-auto font-normal leading-relaxed text-center">
                         Accurately project your wealth trajectory with simple, powerful financial calculators.
                     </p>
                 </div>

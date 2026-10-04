@@ -31,9 +31,9 @@ $$A = P \\left(1 + \\frac{r}{n}\\right)^{nt}$$
 - **t** = Time in years
 
 ### Real-World Example:
-If you invest **$100 per month** at an average annual return of **8%**:
-- After 10 years: ~$18,294 (You invested $12,000; earned $6,294 in growth)
-- After 30 years: ~$149,035 (You invested $36,000; earned $113,035 in growth!)
+If you invest **\\$100 per month** at an average annual return of **8%**:
+- After 10 years: ~\\$18,294 (You invested \\$12,000; earned \\$6,294 in growth)
+- After 30 years: ~\\$149,035 (You invested \\$36,000; earned \\$113,035 in growth!)
 
 Notice how over 75% of your total wealth at Year 30 comes purely from compounding gains.`,
         keyTakeaway: 'Start early. Even small monthly contributions compound into significant wealth over multi-year time horizons.'
@@ -350,13 +350,13 @@ By limiting risk to 1-2% per trade, even a sequence of 5 consecutive losses resu
 $$\\text{Shares} = \\frac{\\text{Account Capital} \\times \\text{Risk \\%}}{\\text{Entry Price} - \\text{Stop Loss Price}}$$
 
 ### Scenario Example:
-- **Account Capital**: $10,000
-- **Risk Target (2%)**: $200
-- **Stock Entry**: $50
-- **Stop Loss**: $46 (Risk per share = $4)
-- **Position Size**: $200 / $4 = **50 Shares** ($2,500 total position value)
+- **Account Capital**: \\$10,000
+- **Risk Target (2%)**: \\$200
+- **Stock Entry**: \\$50
+- **Stop Loss**: \\$46 (Risk per share = \\$4)
+- **Position Size**: \\$200 / \\$4 = **50 Shares** (\\$2,500 total position value)
 
-If the trade hits your stop loss at $46, your exact total loss is capped at $200 (2%).`,
+If the trade hits your stop loss at \\$46, your exact total loss is capped at \\$200 (2%).`,
         keyTakeaway: 'Always place your stop-loss order immediately upon entry. Remove emotion from trade exits.'
       },
       {
@@ -365,14 +365,14 @@ If the trade hits your stop loss at $46, your exact total loss is capped at $200
         subtitle: 'Winning with a 40% win rate',
         content: `You do not need a 90% win rate to be extremely profitable. Profitability depends on your **Risk-to-Reward Ratio (R:R)**:
 
-- **1:2 Risk-Reward Ratio**: Risking $100 to make $200.
-- **1:3 Risk-Reward Ratio**: Risking $100 to make $300.
+- **1:2 Risk-Reward Ratio**: Risking \\$100 to make \\$200.
+- **1:3 Risk-Reward Ratio**: Risking \\$100 to make \\$300.
 
 ### The Math of Expectancy:
 With a **1:3 R:R**, if you execute 10 trades and lose 6 of them (40% win rate):
-- 6 Losses $\\times$ -$100 = -$600
-- 4 Wins $\\times$ +$300 = +$1,200
-- **Net Profit**: **+$600**
+- 6 Losses $\\times$ -\\$100 = -\\$600
+- 4 Wins $\\times$ +\\$300 = +\\$1,200
+- **Net Profit**: **+\\$600**
 
 Focus on taking trades where potential upside substantially outweighs downside risk.`,
         keyTakeaway: 'High risk-to-reward ratios allow you to be wrong more often than right and still build compounding wealth.'

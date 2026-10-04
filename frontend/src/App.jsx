@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect } from 'react'
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import GlobalMenu from './components/ui/GlobalMenu'
+import AssistiveWarningButton from './components/ui/AssistiveWarningButton'
 import './App.css'
 
 const LandingPage = lazy(() => import('./components/LandingPage'))
@@ -51,6 +52,7 @@ function App() {
         <Suspense fallback={<PageLoader />}>
             <ScrollToTop />
             <GlobalMenu />
+            <AssistiveWarningButton />
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/signup" element={<SignUp />} />

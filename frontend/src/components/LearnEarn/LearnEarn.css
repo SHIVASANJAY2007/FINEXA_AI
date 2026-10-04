@@ -1,1 +1,13 @@
 /* Emptying this file since all styling has been migrated to Tailwind classes directly inside the component to match the global theme perfectly */
+
+/* KaTeX math rendering inside lesson markdown content */
+.learn-lesson-content .katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.35rem 0;
+  margin: 0.9rem auto;
+  max-width: 100%;
+}
+.learn-lesson-content .katex {
+  font-size: 1em;
+}

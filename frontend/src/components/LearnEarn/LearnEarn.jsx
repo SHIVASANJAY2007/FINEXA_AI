@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
+import 'katex/dist/katex.min.css';
 import { 
   PlayCircle, 
   ArrowLeft, 
@@ -536,8 +539,8 @@ const LearnEarn = () => {
                         </div>
 
                         {/* Markdown Lesson Content */}
-                        <div className="prose prose-stone max-w-none text-ink text-sm sm:text-base leading-relaxed bg-cream/60 p-6 rounded-2xl border border-beige/50 space-y-4">
-                          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        <div className="learn-lesson-content prose prose-stone max-w-none text-ink text-sm sm:text-base leading-relaxed bg-cream/60 p-6 rounded-2xl border border-beige/50 space-y-4">
+                          <ReactMarkdown remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeKatex]}>
                             {activeCourse.lessons[currentLessonIdx].content}
                           </ReactMarkdown>
                         </div>

@@ -24,6 +24,7 @@ import {
   AlertCircle, Copy, ExternalLink, Minus,
 } from 'lucide-react';
 import { getApiBaseUrl } from '../../utils/api';
+import { t, getLangCode } from './biTranslations';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // SECTION 1 — Markdown Renderer
@@ -187,14 +188,14 @@ function ReportRenderer({ text }) {
 // SECTION 2 — Static Data
 // ─────────────────────────────────────────────────────────────────────────────
 
-const STEPS = [
-  { id: 1, label: 'Language',   icon: Globe },
-  { id: 2, label: 'Location',   icon: MapPin },
-  { id: 3, label: 'Scale',      icon: Layers },
-  { id: 4, label: 'Business',   icon: Building2 },
-  { id: 5, label: 'Investment', icon: Coins },
-  { id: 6, label: 'Experience', icon: Briefcase },
-  { id: 7, label: 'Analysis',   icon: Sparkles },
+const getSteps = (lang) => [
+  { id: 1, label: t(lang, 'step1Label'), icon: Globe },
+  { id: 2, label: t(lang, 'step2Label'), icon: MapPin },
+  { id: 3, label: t(lang, 'step3Label'), icon: Layers },
+  { id: 4, label: t(lang, 'step4Label'), icon: Building2 },
+  { id: 5, label: t(lang, 'step5Label'), icon: Coins },
+  { id: 6, label: t(lang, 'step6Label'), icon: Briefcase },
+  { id: 7, label: t(lang, 'step7Label'), icon: Sparkles },
 ];
 
 const LANGUAGES = [
@@ -204,61 +205,61 @@ const LANGUAGES = [
   'ਪੰਜਾਬੀ (Punjabi)', 'অসমীয়া (Assamese)', 'Other Language',
 ];
 
-const SCALES = [
-  { id: 'nano',   label: 'Nano / Self-Employed',       desc: 'Single-person artisan, mobile vendor, or home enterprise (< ₹50k)' },
-  { id: 'micro',  label: 'Micro Enterprise',            desc: 'Home-based unit, village shop, or single counter setup (₹50k–₹1L)' },
-  { id: 'small',  label: 'Small Scale Industry',        desc: 'Block-level processing unit, small workshop, or assembly line' },
-  { id: 'medium', label: 'Medium Enterprise',           desc: 'District-level hub, producer organization (FPO), or cooperative' },
-  { id: 'large',  label: 'Scale-up / Regional Network', desc: 'Multi-district distribution network or retail franchise chain' },
-  { id: 'export', label: 'Export-Oriented Unit',        desc: 'Specialized production unit targeting national & international buyers' },
-  { id: 'other',  label: 'Other Custom Scale',          desc: 'Specify your own custom business operational scale' },
+const getScales = (lang) => [
+  { id: 'nano',   label: t(lang, 'scale_nano_label'),   desc: t(lang, 'scale_nano_desc') },
+  { id: 'micro',  label: t(lang, 'scale_micro_label'),  desc: t(lang, 'scale_micro_desc') },
+  { id: 'small',  label: t(lang, 'scale_small_label'),  desc: t(lang, 'scale_small_desc') },
+  { id: 'medium', label: t(lang, 'scale_medium_label'), desc: t(lang, 'scale_medium_desc') },
+  { id: 'large',  label: t(lang, 'scale_large_label'),  desc: t(lang, 'scale_large_desc') },
+  { id: 'export', label: t(lang, 'scale_export_label'), desc: t(lang, 'scale_export_desc') },
+  { id: 'other',  label: t(lang, 'scale_other_label'),  desc: t(lang, 'scale_other_desc') },
 ];
 
-const BUSINESSES = [
-  { id: 'dairy',      label: 'Dairy Processing & Livestock',        desc: 'Milk collection, chilling, ghee, curd, cheese, animal husbandry' },
-  { id: 'agri',       label: 'Agri-Processing & Grain Milling',     desc: 'Flour milling, oil extraction, pulse processing, cold storage' },
-  { id: 'solar',      label: 'Solar & Renewable Energy',            desc: 'Rooftop solar, solar pump sets, green micro-grid technology' },
-  { id: 'organic',    label: 'Organic Farming & Bio-Inputs',        desc: 'Vermi-compost, bio-fertilizers, neem oil, organic packaging' },
-  { id: 'poultry',    label: 'Poultry, Sericulture & Fisheries',    desc: 'Poultry farming, fish pond hatcheries, silk weaving' },
-  { id: 'food',       label: 'Food Processing & Bakery Hub',        desc: 'Bakery items, packaged snacks, pickles, juices, spices' },
-  { id: 'logistics',  label: 'Logistics, Transport & Cold Chain',   desc: 'Mini-truck freight, cold chain reefer van, rural logistics hub' },
-  { id: 'retail',     label: 'Retail, Apparel & Kirana Superstore', desc: 'General merchant, readymade garments, FMCG consumer goods' },
-  { id: 'tech',       label: 'Digital Services, CSC & FinTech',     desc: 'Common Service Centre, micro-ATM kiosk, digital IT hub' },
-  { id: 'handicraft', label: 'Handicrafts, Pottery & Handloom',     desc: 'Artisan clusters, traditional weaving, terracotta, woodcraft' },
-  { id: 'herbal',     label: 'Ayurveda, Herbal & Wellness',         desc: 'Medicinal plant farming, essential oil, ayurvedic products' },
-  { id: 'tourism',    label: 'Eco-Tourism & Rural Homestays',       desc: 'Agri-tourism hubs, heritage stays, local guide services' },
-  { id: 'other',      label: 'Other Business Idea',                 desc: 'Specify your custom business concept, sector, or innovative idea' },
+const getBusinesses = (lang) => [
+  { id: 'dairy',      label: t(lang, 'biz_dairy_label'),      desc: t(lang, 'biz_dairy_desc') },
+  { id: 'agri',       label: t(lang, 'biz_agri_label'),       desc: t(lang, 'biz_agri_desc') },
+  { id: 'solar',      label: t(lang, 'biz_solar_label'),      desc: t(lang, 'biz_solar_desc') },
+  { id: 'organic',    label: t(lang, 'biz_organic_label'),    desc: t(lang, 'biz_organic_desc') },
+  { id: 'poultry',    label: t(lang, 'biz_poultry_label'),    desc: t(lang, 'biz_poultry_desc') },
+  { id: 'food',       label: t(lang, 'biz_food_label'),       desc: t(lang, 'biz_food_desc') },
+  { id: 'logistics',  label: t(lang, 'biz_logistics_label'),  desc: t(lang, 'biz_logistics_desc') },
+  { id: 'retail',     label: t(lang, 'biz_retail_label'),     desc: t(lang, 'biz_retail_desc') },
+  { id: 'tech',       label: t(lang, 'biz_tech_label'),       desc: t(lang, 'biz_tech_desc') },
+  { id: 'handicraft', label: t(lang, 'biz_handicraft_label'), desc: t(lang, 'biz_handicraft_desc') },
+  { id: 'herbal',     label: t(lang, 'biz_herbal_label'),     desc: t(lang, 'biz_herbal_desc') },
+  { id: 'tourism',    label: t(lang, 'biz_tourism_label'),    desc: t(lang, 'biz_tourism_desc') },
+  { id: 'other',      label: t(lang, 'biz_other_label'),      desc: t(lang, 'biz_other_desc') },
 ];
 
-const INVESTMENTS = [
-  { id: 'seed',       label: 'Under ₹50,000',           note: 'Self-funded / Micro-grant & PM-SVANidhi' },
-  { id: 'low',        label: '₹50,000 – ₹1 Lakh',       note: 'Eligible for Mudra Shishu Scheme' },
-  { id: 'mid1',       label: '₹1 – ₹3 Lakhs',           note: 'Eligible for Mudra Kishor & PMEGP Micro' },
-  { id: 'mid2',       label: '₹3 – ₹5 Lakhs',           note: 'Eligible for Stand-Up India & PMEGP 35% Subsidy' },
-  { id: 'high',       label: '₹5 – ₹10 Lakhs',          note: 'Eligible for Mudra Tarun Scheme' },
-  { id: 'growth',     label: '₹10 – ₹25 Lakhs',         note: 'Eligible for CGTMSE Collateral-Free Loan' },
-  { id: 'enterprise', label: 'Above ₹25 Lakhs',          note: 'Eligible for State MSME Capital Investment Grants' },
-  { id: 'other',      label: 'Custom Investment Budget',  note: 'Specify your target capital investment budget' },
+const getInvestments = (lang) => [
+  { id: 'seed',       label: t(lang, 'inv_seed_label'),       note: t(lang, 'inv_seed_note') },
+  { id: 'low',        label: t(lang, 'inv_low_label'),        note: t(lang, 'inv_low_note') },
+  { id: 'mid1',       label: t(lang, 'inv_mid1_label'),       note: t(lang, 'inv_mid1_note') },
+  { id: 'mid2',       label: t(lang, 'inv_mid2_label'),       note: t(lang, 'inv_mid2_note') },
+  { id: 'high',       label: t(lang, 'inv_high_label'),       note: t(lang, 'inv_high_note') },
+  { id: 'growth',     label: t(lang, 'inv_growth_label'),     note: t(lang, 'inv_growth_note') },
+  { id: 'enterprise', label: t(lang, 'inv_enterprise_label'), note: t(lang, 'inv_enterprise_note') },
+  { id: 'other',      label: t(lang, 'inv_other_label'),      note: t(lang, 'inv_other_note') },
 ];
 
-const EXPERIENCES = [
-  { id: 'first',       label: 'First-Time Entrepreneur',            desc: 'Starting fresh with zero prior venture management experience' },
-  { id: 'family',      label: 'Family Business Lineage',            desc: 'Familiar with traditional family trade or ancestral operations' },
-  { id: 'skilled',     label: 'Skilled Artisan / Vocational Grad',  desc: 'Formally trained (ITI/PMKVY) or practicing skilled technician' },
-  { id: 'exservice',   label: 'Ex-Serviceman / Defense / Retired',  desc: 'Leveraging disciplined service experience and pension funds' },
-  { id: 'farmer',      label: 'Progressive Farmer / Agriculturist', desc: 'Deep practical background in agricultural land & farming' },
-  { id: 'experienced', label: 'Experienced Enterprise Owner',       desc: 'Currently operating or scaling an active business unit' },
-  { id: 'other',       label: 'Other Professional Background',      desc: 'Specify your unique career background or work experience' },
+const getExperiences = (lang) => [
+  { id: 'first',       label: t(lang, 'exp_first_label'),       desc: t(lang, 'exp_first_desc') },
+  { id: 'family',      label: t(lang, 'exp_family_label'),      desc: t(lang, 'exp_family_desc') },
+  { id: 'skilled',     label: t(lang, 'exp_skilled_label'),     desc: t(lang, 'exp_skilled_desc') },
+  { id: 'exservice',   label: t(lang, 'exp_exservice_label'),   desc: t(lang, 'exp_exservice_desc') },
+  { id: 'farmer',      label: t(lang, 'exp_farmer_label'),      desc: t(lang, 'exp_farmer_desc') },
+  { id: 'experienced', label: t(lang, 'exp_experienced_label'), desc: t(lang, 'exp_experienced_desc') },
+  { id: 'other',       label: t(lang, 'exp_other_label'),       desc: t(lang, 'exp_other_desc') },
 ];
 
-const LOADING_PHRASES = [
-  'Synthesizing feasibility blueprint...',
-  'Analyzing regional OGD market datasets...',
-  'Evaluating local competitor density & demand...',
-  'Cross-referencing government loan & subsidy schemes...',
-  'Calculating estimated payback period & profit margin...',
-  'Formulating regulatory compliance & license checklist...',
-  'Finalizing executive summary & recommendations...',
+const getLoadingPhrases = (lang) => [
+  t(lang, 'phrase1'),
+  t(lang, 'phrase2'),
+  t(lang, 'phrase3'),
+  t(lang, 'phrase4'),
+  t(lang, 'phrase5'),
+  t(lang, 'phrase6'),
+  t(lang, 'phrase7'),
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -278,7 +279,7 @@ const srem = (k)    => { try { sessionStorage.removeItem(k);        } catch { /*
 // SECTION 4 — Wizard (inner component, not exported)
 // ─────────────────────────────────────────────────────────────────────────────
 
-function Wizard({ goIdleTick = 0, hardResetTick = 0 }) {
+function Wizard({ goIdleTick = 0, hardResetTick = 0, onLangSelect }) {
   const scrollRef = useRef(null);
 
   const [currentStep,   setCurrentStep]   = useState(() => { const s = ss(SK.STEP); return s ? parseInt(s, 10) : 1; });
@@ -292,6 +293,18 @@ function Wizard({ goIdleTick = 0, hardResetTick = 0 }) {
   const [reportError,   setReportError]   = useState('');
   const [phraseIdx,     setPhraseIdx]     = useState(0);
   const [sessionId]                       = useState(() => 'BI-' + Math.random().toString(36).substring(2, 9) + '-' + Date.now());
+
+  const lang = selections.language || 'English';
+  const STEPS = getSteps(lang);
+  const SCALES = getScales(lang);
+  const BUSINESSES = getBusinesses(lang);
+  const INVESTMENTS = getInvestments(lang);
+  const EXPERIENCES = getExperiences(lang);
+  const LOADING_PHRASES = getLoadingPhrases(lang);
+
+  useEffect(() => {
+    if (onLangSelect) onLangSelect(lang);
+  }, [lang, onLangSelect]);
 
   // Scroll to top on step change
   useEffect(() => { scrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' }); }, [currentStep]);
@@ -349,15 +362,19 @@ function Wizard({ goIdleTick = 0, hardResetTick = 0 }) {
   const handleGenerateReport = async () => {
     setReportState('loading'); setReportError(''); setPhraseIdx(0);
     const loc = selections.location || 'India';
-    const prompt = `Generate a comprehensive MSME Business Feasibility Report and Market Analysis for the following setup:
-- Preferred Language: ${selections.language || 'English'}
+    const targetLanguage = selections.language || 'English';
+    const prompt = `CRITICAL LANGUAGE REQUIREMENT: You MUST generate the ENTIRE MSME Business Feasibility Report and Market Analysis STRICTLY in the following language: ${targetLanguage}.
+Do NOT write in English unless ${targetLanguage} is English. All headings, subheadings, explanations, metrics, bullet points, recommendations, checklists, and tables MUST be translated into and written in ${targetLanguage}.
+
+Venture Profile & Setup:
+- Target Language: ${targetLanguage}
 - Target Location: ${loc}
 - Scale of Business: ${selections.scale || 'Micro Enterprise'}
 - Proposed Business Sector / Idea: ${selections.business || 'Dairy Processing & Livestock'}
 - Estimated Investment Budget: ${selections.investment || '₹1 – ₹3 Lakhs'}
 - Prior Entrepreneurial Experience: ${selections.experience || 'First-Time Entrepreneur'}
 
-Please structure the response with clear headings, bullet points, and key metrics covering:
+Please structure the feasibility report with clear headings, bullet points, and key metrics covering:
 1. Executive Summary & Market Opportunity in ${loc}
 2. Required Setup, Machinery & Daily Operations
 3. Financial Projections, Unit Economics & Payback Period
@@ -366,7 +383,8 @@ Please structure the response with clear headings, bullet points, and key metric
 6. Key Risk Factors & Actionable 90-Day Execution Roadmap
 7. Local Competitor Landscape in ${loc}
 
-Format all tables using clean Markdown tables with proper header rows, separator rows, and aligned data columns.`;
+Format all tables using clean Markdown tables with proper header rows, separator rows, and aligned data columns.
+REMEMBER: The entire report MUST be written 100% in ${targetLanguage}.`;
     try {
       const res = await fetch(`${getApiBaseUrl()}/bi/report`, {
         method: 'POST',
@@ -446,12 +464,12 @@ Format all tables using clean Markdown tables with proper header rows, separator
   };
 
   const selectionItems = [
-    { icon: Globe,     label: 'Language',   val: selections.language   },
-    { icon: MapPin,    label: 'Location',   val: selections.location   },
-    { icon: Layers,    label: 'Scale',      val: selections.scale      },
-    { icon: Building2, label: 'Business',   val: selections.business   },
-    { icon: Coins,     label: 'Investment', val: selections.investment  },
-    { icon: Briefcase, label: 'Experience', val: selections.experience  },
+    { icon: Globe,     label: t(lang, 'step1Label'), val: selections.language   },
+    { icon: MapPin,    label: t(lang, 'step2Label'), val: selections.location   },
+    { icon: Layers,    label: t(lang, 'step3Label'), val: selections.scale      },
+    { icon: Building2, label: t(lang, 'step4Label'), val: selections.business   },
+    { icon: Coins,     label: t(lang, 'step5Label'), val: selections.investment  },
+    { icon: Briefcase, label: t(lang, 'step6Label'), val: selections.experience  },
   ];
 
   // ── Render ──────────────────────────────────────────────────────────────────
@@ -469,24 +487,24 @@ Format all tables using clean Markdown tables with proper header rows, separator
           </div>
           <div className="space-y-2">
             <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-teal px-3 py-1 rounded-full bg-teal/10 border border-teal/20">
-              FINEXA AI — Business Intelligence Engine
+              {t(lang, 'loadingTitle')}
             </span>
             <h2 className="text-xl sm:text-2xl font-serif font-extrabold text-ink tracking-tight min-h-[3rem] flex items-center justify-center">
               {LOADING_PHRASES[phraseIdx]}
             </h2>
             <p className="text-sm text-taupe font-medium max-w-md mx-auto">
-              Preparing analysis for <span className="text-burgundy font-bold">{selections.business || 'your venture'}</span>
-              {selections.location && <> in <span className="text-teal font-bold">{selections.location}</span></>}
+              {t(lang, 'prepAnalysis')} <span className="text-burgundy font-bold">{selections.business || 'your venture'}</span>
+              {selections.location && <> {t(lang, 'inLocation')} <span className="text-teal font-bold">{selections.location}</span></>}
             </p>
           </div>
           <div className="w-full bg-beige/40 h-1.5 rounded-full overflow-hidden">
             <div className="bg-gradient-to-r from-burgundy via-teal to-gold h-full w-2/3 animate-pulse rounded-full" />
           </div>
           <div className="grid grid-cols-2 gap-3 w-full text-left pt-4 border-t border-beige/60">
-            {['Aggregating OGD market metrics', 'Cross-referencing Mudra & PMEGP', 'Synthesizing feasibility blueprint', 'Generating PDF export schema'].map((t, i) => (
-              <div key={t} className="flex items-center gap-2 text-sm text-taupe">
+            {[t(lang, 'loadingTask1'), t(lang, 'loadingTask2'), t(lang, 'loadingTask3'), t(lang, 'loadingTask4')].map((taskText, i) => (
+              <div key={taskText} className="flex items-center gap-2 text-sm text-taupe">
                 {i < 2 ? <CheckCircle2 size={15} className="text-teal shrink-0" /> : i === 2 ? <Loader2 size={15} className="text-burgundy animate-spin shrink-0" /> : <div className="w-3.5 h-3.5 rounded-full border border-beige shrink-0" />}
-                <span>{t}</span>
+                <span>{taskText}</span>
               </div>
             ))}
           </div>
@@ -499,19 +517,19 @@ Format all tables using clean Markdown tables with proper header rows, separator
           <div className="p-5 rounded-2xl bg-white border border-beige/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-md">
             <div className="space-y-1">
               <div className="flex items-center gap-2">
-                <span className="px-2.5 py-0.5 rounded-full bg-teal/10 border border-teal/20 text-teal text-[10px] font-mono font-bold uppercase">Official Blueprint</span>
+                <span className="px-2.5 py-0.5 rounded-full bg-teal/10 border border-teal/20 text-teal text-[10px] font-mono font-bold uppercase">{t(lang, 'officialBlueprint')}</span>
                 {selections.location && <span className="text-xs text-taupe font-mono">{selections.location}</span>}
               </div>
               <h2 className="text-xl sm:text-2xl font-serif font-extrabold text-ink tracking-tight">
-                Feasibility Analysis: {selections.business || 'Custom Business Venture'}
+                {t(lang, 'feasibilityAnalysis')} {selections.business || 'Custom Business Venture'}
               </h2>
             </div>
             <div className="flex items-center gap-2 w-full sm:w-auto">
               <button onClick={handleDownloadPDF} className="flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-teal text-ivory font-black text-xs uppercase tracking-wider hover:bg-teal/90 shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer">
-                <Download size={14} /><span>Download PDF</span>
+                <Download size={14} /><span>{t(lang, 'downloadPdf')}</span>
               </button>
               <button onClick={() => setReportState('idle')} className="px-3 py-2.5 rounded-xl bg-ivory border border-beige text-taupe hover:text-ink hover:bg-beige/30 text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer">
-                <RefreshCw size={14} /><span className="hidden sm:inline">Modify</span>
+                <RefreshCw size={14} /><span className="hidden sm:inline">{t(lang, 'modify')}</span>
               </button>
             </div>
           </div>
@@ -529,14 +547,14 @@ Format all tables using clean Markdown tables with proper header rows, separator
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-beige/60">
             <div className="flex items-center gap-2 text-sm text-taupe">
               <CheckCircle2 size={16} className="text-teal" />
-              <span>Verified by FINEXA AI Business Intelligence Engine</span>
+              <span>{t(lang, 'verifiedBy')}</span>
             </div>
             <div className="flex items-center gap-2 w-full sm:w-auto">
               <button onClick={handleDownloadPDF} className="flex-1 sm:flex-none px-4 py-2 rounded-xl bg-teal/10 border border-teal/20 text-teal hover:bg-teal/20 font-extrabold text-xs transition-all flex items-center justify-center gap-2 cursor-pointer">
-                <Printer size={14} /><span>Print / Export PDF</span>
+                <Printer size={14} /><span>{t(lang, 'printPdf')}</span>
               </button>
               <Link to="/chatbot" className="flex-1 sm:flex-none px-4 py-2 rounded-xl bg-ivory border border-beige text-taupe hover:text-ink font-bold text-xs transition-all flex items-center justify-center gap-2">
-                <MessageSquare size={14} /><span>Ask in Chatbot</span>
+                <MessageSquare size={14} /><span>{t(lang, 'askChatbot')}</span>
               </Link>
             </div>
           </div>
@@ -548,12 +566,12 @@ Format all tables using clean Markdown tables with proper header rows, separator
         <div className="max-w-md mx-auto px-6 py-16 text-center space-y-4">
           <AlertCircle size={40} className="text-burgundy/60 mx-auto" />
           <div>
-            <h3 className="font-serif font-extrabold text-lg text-ink">Report Generation Failed</h3>
+            <h3 className="font-serif font-extrabold text-lg text-ink">{t(lang, 'reportFailed')}</h3>
             <p className="text-sm text-taupe mt-1">{reportError}</p>
           </div>
           <div className="flex gap-2 pt-2">
-            <button onClick={handleGenerateReport} className="flex-1 py-2.5 rounded-xl bg-burgundy text-ivory font-bold text-xs uppercase tracking-wider hover:bg-burgundy/90 transition-all cursor-pointer">Retry</button>
-            <Link to="/chatbot" className="flex-1 py-2.5 rounded-xl bg-ivory border border-beige text-taupe hover:text-ink font-bold text-xs text-center transition-all">Open Chatbot</Link>
+            <button onClick={handleGenerateReport} className="flex-1 py-2.5 rounded-xl bg-burgundy text-ivory font-bold text-xs uppercase tracking-wider hover:bg-burgundy/90 transition-all cursor-pointer">{t(lang, 'retry')}</button>
+            <Link to="/chatbot" className="flex-1 py-2.5 rounded-xl bg-ivory border border-beige text-taupe hover:text-ink font-bold text-xs text-center transition-all">{t(lang, 'openChatbot')}</Link>
           </div>
         </div>
       )}
@@ -585,40 +603,46 @@ Format all tables using clean Markdown tables with proper header rows, separator
 
           {/* Step title */}
           <div className="mb-7">
-            <span className="text-xs font-mono font-bold uppercase tracking-widest text-teal">Step {currentStep} of {STEPS.length}</span>
+            <span className="text-xs font-mono font-bold uppercase tracking-widest text-teal">{t(lang, 'step')} {currentStep} {t(lang, 'of')} {STEPS.length}</span>
             <h1 className="mt-1 text-2xl sm:text-3xl font-serif font-extrabold text-ink tracking-tight">
-              {currentStep === 1 && 'Select Your Preferred Language'}
-              {currentStep === 2 && 'Where do you plan to start your business?'}
-              {currentStep === 3 && 'What is the scale of your business?'}
-              {currentStep === 4 && 'Which business sector are you considering?'}
-              {currentStep === 5 && 'What is your estimated investment capacity?'}
-              {currentStep === 6 && 'What is your prior experience level?'}
-              {currentStep === 7 && 'Review & Generate Feasibility Report'}
+              {currentStep === 1 && t(lang, 'step1Title')}
+              {currentStep === 2 && t(lang, 'step2Title')}
+              {currentStep === 3 && t(lang, 'step3Title')}
+              {currentStep === 4 && t(lang, 'step4Title')}
+              {currentStep === 5 && t(lang, 'step5Title')}
+              {currentStep === 6 && t(lang, 'step6Title')}
+              {currentStep === 7 && t(lang, 'step7Title')}
             </h1>
             <p className="mt-1.5 text-sm text-taupe">
-              {currentStep === 2 ? 'This helps us analyse the local market and opportunities for you.' : 'Provide details to tailor your MSME feasibility analysis.'}
+              {currentStep === 1 && t(lang, 'step1Sub')}
+              {currentStep === 2 && t(lang, 'step2Sub')}
+              {currentStep === 3 && t(lang, 'step3Sub')}
+              {currentStep === 4 && t(lang, 'step4Sub')}
+              {currentStep === 5 && t(lang, 'step5Sub')}
+              {currentStep === 6 && t(lang, 'step6Sub')}
+              {currentStep === 7 && t(lang, 'step7Sub')}
             </p>
           </div>
 
           {/* Step 1 — Language */}
           {currentStep === 1 && (
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-              {LANGUAGES.map(lang => {
-                const isOther = lang === 'Other Language';
-                const sel = selections.language === lang || (isOther && (selections.language === 'Other Language' || selections.language.startsWith('Custom:')));
+              {LANGUAGES.map(langName => {
+                const isOther = langName === 'Other Language';
+                const sel = selections.language === langName || (isOther && (selections.language === 'Other Language' || selections.language.startsWith('Custom:')));
                 if (isOther && sel) return (
-                  <div key={lang} className="col-span-2 sm:col-span-3 p-4 rounded-2xl border border-teal bg-teal/8 ring-2 ring-teal/15 flex flex-col sm:flex-row items-start sm:items-center gap-3">
-                    <span className="text-sm font-bold text-ink shrink-0">Custom Language:</span>
+                  <div key={langName} className="col-span-2 sm:col-span-3 p-4 rounded-2xl border border-teal bg-teal/8 ring-2 ring-teal/15 flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                    <span className="text-sm font-bold text-ink shrink-0">{t(lang, 'customLangTitle')}</span>
                     <input autoFocus type="text" placeholder="e.g. Konkani, Mizo, Tulu..." value={customInputs.language}
                       onChange={e => handleCustomChange('language', e.target.value)}
                       className="w-full px-3.5 py-2 rounded-xl bg-ivory border border-beige text-sm text-ink focus:outline-none focus:border-teal" />
                   </div>
                 );
                 return (
-                  <button key={lang}
-                    onClick={() => isOther ? updateSel('language', customInputs.language ? `Custom: ${customInputs.language}` : 'Other Language') : updateSel('language', lang)}
+                  <button key={langName}
+                    onClick={() => isOther ? updateSel('language', customInputs.language ? `Custom: ${customInputs.language}` : 'Other Language') : updateSel('language', langName)}
                     className={`p-4 rounded-2xl border text-center font-semibold text-sm transition-all cursor-pointer ${sel ? 'border-teal bg-teal/8 text-ink ring-2 ring-teal/15 shadow-md' : 'border-beige bg-white text-taupe hover:text-ink hover:border-camel/60 hover:bg-cream/60'}`}
-                  >{lang}</button>
+                  >{langName}</button>
                 );
               })}
             </div>
@@ -629,8 +653,8 @@ Format all tables using clean Markdown tables with proper header rows, separator
             <div className="space-y-5">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {[
-                  { mode: 'auto',   title: '1. Use My Current Location', sub: 'Detect my current location automatically', badge: 'Recommended', onSelect: () => { setLocationMode('auto'); updateSel('location', 'Coimbatore, Tamil Nadu'); } },
-                  { mode: 'map',    title: '2. Select on Map',            sub: 'Pick your business location on interactive map', onSelect: () => { setLocationMode('map'); updateSel('location', 'Selected on Interactive Map'); } },
+                  { mode: 'auto',   title: t(lang, 'locAutoTitle'), sub: t(lang, 'locAutoSub'), badge: t(lang, 'recommended'), onSelect: () => { setLocationMode('auto'); updateSel('location', 'Coimbatore, Tamil Nadu'); } },
+                  { mode: 'map',    title: t(lang, 'locMapTitle'),  sub: t(lang, 'locMapSub'), onSelect: () => { setLocationMode('map'); updateSel('location', 'Selected on Interactive Map'); } },
                 ].map(({ mode, title, sub, badge, onSelect }) => (
                   <div key={mode} onClick={onSelect} className={`p-5 rounded-2xl border cursor-pointer transition-all flex flex-col gap-4 ${locationMode === mode ? 'border-teal bg-teal/8 ring-2 ring-teal/15 shadow-md' : 'border-beige bg-white hover:border-camel/60'}`}>
                     <div className="flex items-start gap-3">
@@ -646,8 +670,8 @@ Format all tables using clean Markdown tables with proper header rows, separator
                   <div className="flex items-start gap-3">
                     <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 mt-0.5 ${locationMode === 'pin' ? 'border-teal bg-teal' : 'border-beige'}`}>{locationMode === 'pin' && <span className="w-2 h-2 rounded-full bg-ivory" />}</div>
                     <div className="w-full">
-                      <h3 className="font-bold text-base text-ink">3. Enter PIN Code</h3>
-                      <p className="text-sm text-taupe mt-0.5">Enter 6-digit PIN code to find your area</p>
+                      <h3 className="font-bold text-base text-ink">{t(lang, 'locPinTitle')}</h3>
+                      <p className="text-sm text-taupe mt-0.5">{t(lang, 'locPinSub')}</p>
                       {locationMode === 'pin' && <input autoFocus type="text" maxLength={6} placeholder="e.g. 641001" value={pinCodeInput} onChange={e => { setPinCodeInput(e.target.value); if (e.target.value.length === 6) updateSel('location', `PIN: ${e.target.value}`); }} className="mt-3 w-full px-3 py-2 rounded-xl bg-ivory border border-beige text-sm text-ink focus:outline-none focus:border-teal" />}
                     </div>
                   </div>
@@ -656,8 +680,8 @@ Format all tables using clean Markdown tables with proper header rows, separator
                   <div className="flex items-start gap-3">
                     <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 mt-0.5 ${locationMode === 'manual' ? 'border-teal bg-teal' : 'border-beige'}`}>{locationMode === 'manual' && <span className="w-2 h-2 rounded-full bg-ivory" />}</div>
                     <div className="w-full">
-                      <h3 className="font-bold text-base text-ink">4. Enter Village / Block / District</h3>
-                      <p className="text-sm text-taupe mt-0.5">Type your area details manually</p>
+                      <h3 className="font-bold text-base text-ink">{t(lang, 'locManualTitle')}</h3>
+                      <p className="text-sm text-taupe mt-0.5">{t(lang, 'locManualSub')}</p>
                       {locationMode === 'manual' && <input autoFocus type="text" placeholder="e.g. Pollachi, Coimbatore" value={manualInput} onChange={e => { setManualInput(e.target.value); updateSel('location', e.target.value); }} className="mt-3 w-full px-3 py-2 rounded-xl bg-ivory border border-beige text-sm text-ink focus:outline-none focus:border-teal" />}
                     </div>
                   </div>
@@ -665,7 +689,7 @@ Format all tables using clean Markdown tables with proper header rows, separator
               </div>
               <div className="p-4 rounded-xl border border-teal/20 bg-teal/6 flex items-center gap-3 text-sm text-taupe">
                 <Shield size={18} className="text-teal shrink-0" />
-                <div><strong className="text-ink block font-semibold">We respect your privacy.</strong><span>Location data is only used for market analysis and never shared.</span></div>
+                <div><strong className="text-ink block font-semibold">{t(lang, 'privacyTitle')}</strong><span>{t(lang, 'privacySub')}</span></div>
               </div>
             </div>
           )}
@@ -678,7 +702,7 @@ Format all tables using clean Markdown tables with proper header rows, separator
                 const sel = selections.scale === opt.label || (isOther && (selections.scale === opt.label || selections.scale.startsWith('Custom:')));
                 if (isOther && sel) return (
                   <div key={opt.id} className="col-span-1 sm:col-span-2 p-5 rounded-2xl border border-teal bg-teal/8 ring-2 ring-teal/15 space-y-3">
-                    <h3 className="font-bold text-base text-ink">Type Custom Business Scale</h3>
+                    <h3 className="font-bold text-base text-ink">{t(lang, 'customScaleTitle')}</h3>
                     <p className="text-sm text-taupe">{opt.desc}</p>
                     <input autoFocus type="text" placeholder="e.g. Village Cooperative with 50 local farmers..." value={customInputs.scale} onChange={e => handleCustomChange('scale', e.target.value)} className="w-full px-3.5 py-2.5 rounded-xl bg-ivory border border-beige text-sm text-ink focus:outline-none focus:border-teal" />
                   </div>
@@ -702,7 +726,7 @@ Format all tables using clean Markdown tables with proper header rows, separator
                 const sel = selections.business === opt.label || (isOther && (selections.business === opt.label || selections.business.startsWith('Custom:')));
                 if (isOther && sel) return (
                   <div key={opt.id} className="col-span-1 sm:col-span-2 p-4 rounded-2xl border border-teal bg-teal/8 ring-2 ring-teal/15 space-y-3">
-                    <h3 className="font-bold text-base text-ink">Type Custom Business Idea</h3>
+                    <h3 className="font-bold text-base text-ink">{t(lang, 'customBizTitle')}</h3>
                     <p className="text-sm text-taupe">{opt.desc}</p>
                     <input autoFocus type="text" placeholder="e.g. Drone spray service for precision agriculture..." value={customInputs.business} onChange={e => handleCustomChange('business', e.target.value)} className="w-full px-3.5 py-2.5 rounded-xl bg-ivory border border-beige text-sm text-ink focus:outline-none focus:border-teal" />
                   </div>
@@ -726,7 +750,7 @@ Format all tables using clean Markdown tables with proper header rows, separator
                 const sel = selections.investment === opt.label || (isOther && (selections.investment === opt.label || selections.investment.startsWith('Custom:')));
                 if (isOther && sel) return (
                   <div key={opt.id} className="col-span-1 sm:col-span-2 md:col-span-4 p-4 rounded-2xl border border-teal bg-teal/8 ring-2 ring-teal/15 space-y-3">
-                    <h3 className="font-bold text-base text-ink">Type Custom Investment Amount</h3>
+                    <h3 className="font-bold text-base text-ink">{t(lang, 'customInvTitle')}</h3>
                     <p className="text-sm text-taupe">{opt.note}</p>
                     <input autoFocus type="text" placeholder="e.g. ₹15 Lakhs bank loan + ₹5 Lakhs personal savings..." value={customInputs.investment} onChange={e => handleCustomChange('investment', e.target.value)} className="w-full px-3.5 py-2.5 rounded-xl bg-ivory border border-beige text-sm text-ink focus:outline-none focus:border-teal" />
                   </div>
@@ -750,7 +774,7 @@ Format all tables using clean Markdown tables with proper header rows, separator
                 const sel = selections.experience === opt.label || (isOther && (selections.experience === opt.label || selections.experience.startsWith('Custom:')));
                 if (isOther && sel) return (
                   <div key={opt.id} className="col-span-1 sm:col-span-2 p-5 rounded-2xl border border-teal bg-teal/8 ring-2 ring-teal/15 space-y-3">
-                    <h3 className="font-bold text-base text-ink">Describe Custom Professional Experience</h3>
+                    <h3 className="font-bold text-base text-ink">{t(lang, 'customExpTitle')}</h3>
                     <p className="text-sm text-taupe">{opt.desc}</p>
                     <input autoFocus type="text" placeholder="e.g. 10 years in logistics & cold chain supply management..." value={customInputs.experience} onChange={e => handleCustomChange('experience', e.target.value)} className="w-full px-3.5 py-2.5 rounded-xl bg-ivory border border-beige text-sm text-ink focus:outline-none focus:border-teal" />
                   </div>
@@ -772,8 +796,8 @@ Format all tables using clean Markdown tables with proper header rows, separator
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-teal/10 border border-teal/20 flex items-center justify-center text-teal"><Sparkles size={20} /></div>
                 <div>
-                  <h3 className="font-serif font-extrabold text-lg text-ink">Blueprint Ready to Generate</h3>
-                  <p className="text-sm text-taupe">Review your configuration before running the AI analysis</p>
+                  <h3 className="font-serif font-extrabold text-lg text-ink">{t(lang, 'blueprintReady')}</h3>
+                  <p className="text-sm text-taupe">{t(lang, 'reviewConfig')}</p>
                 </div>
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -782,13 +806,13 @@ Format all tables using clean Markdown tables with proper header rows, separator
                     <Icon size={16} className="text-teal shrink-0 mt-0.5" />
                     <div>
                       <span className="text-[10px] uppercase font-mono text-taupe/70 block">{label}</span>
-                      <strong className="text-sm text-ink block mt-0.5">{val || <span className="text-taupe/50 font-normal">Not selected</span>}</strong>
+                      <strong className="text-sm text-ink block mt-0.5">{val || <span className="text-taupe/50 font-normal">{t(lang, 'notSelected')}</span>}</strong>
                     </div>
                   </div>
                 ))}
               </div>
               <button onClick={handleGenerateReport} className="w-full py-4 rounded-xl bg-burgundy text-ivory font-black text-sm uppercase tracking-wider shadow-lg hover:bg-burgundy/90 transition-all flex items-center justify-center gap-2 cursor-pointer">
-                <Sparkles size={16} /><span>Generate AI Feasibility Report</span>
+                <Sparkles size={16} /><span>{t(lang, 'generateBtn')}</span>
               </button>
             </div>
           )}
@@ -797,17 +821,17 @@ Format all tables using clean Markdown tables with proper header rows, separator
           <div className="flex items-center justify-between pt-8 border-t border-beige/60 mt-8">
             <button onClick={() => setCurrentStep(p => Math.max(1, p - 1))} disabled={currentStep === 1}
               className={`px-6 py-2.5 rounded-xl border text-sm font-bold transition-all flex items-center gap-2 ${currentStep === 1 ? 'border-beige/30 text-taupe/30 cursor-not-allowed' : 'border-beige bg-white text-taupe hover:text-ink hover:bg-beige/20 cursor-pointer'}`}>
-              <ArrowLeft size={15} /><span>Back</span>
+              <ArrowLeft size={15} /><span>{t(lang, 'back')}</span>
             </button>
             <button onClick={() => setCurrentStep(p => Math.min(7, p + 1))} disabled={currentStep === 7}
               className={`px-8 py-2.5 rounded-xl font-extrabold text-sm tracking-wide transition-all flex items-center gap-2 ${currentStep === 7 ? 'bg-beige/40 text-taupe/40 cursor-not-allowed' : 'bg-teal text-ivory hover:bg-teal/90 shadow-md cursor-pointer'}`}>
-              <span>Continue</span><ChevronRight size={15} />
+              <span>{t(lang, 'continue')}</span><ChevronRight size={15} />
             </button>
           </div>
 
           {/* Current Selection */}
           <div className="mt-10 pt-6 border-t border-beige/60">
-            <p className="text-xs font-mono font-bold uppercase tracking-widest text-taupe/60 mb-4">Your Current Selection</p>
+            <p className="text-xs font-mono font-bold uppercase tracking-widest text-taupe/60 mb-4">{t(lang, 'currentSelection')}</p>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {selectionItems.map(({ icon: Icon, label, val }) => (
                 <div key={label} className="p-4 rounded-2xl bg-white border border-beige/80 flex items-center gap-3 shadow-sm">
@@ -817,7 +841,7 @@ Format all tables using clean Markdown tables with proper header rows, separator
                   <div className="min-w-0">
                     <span className="text-[10px] text-taupe/60 block leading-none font-mono uppercase tracking-wide">{label}</span>
                     <span className="text-sm font-bold text-ink block mt-0.5 truncate">
-                      {val || <span className="text-taupe/40 font-normal text-xs">Not selected</span>}
+                      {val || <span className="text-taupe/40 font-normal text-xs">{t(lang, 'notSelected')}</span>}
                     </span>
                   </div>
                 </div>
@@ -839,6 +863,12 @@ export default function BusinessIntelligence() {
   const [resetPhase,    setResetPhase]    = useState(0); // 0=normal, 1=warning
   const [goIdleTick,    setGoIdleTick]    = useState(0);
   const [hardResetTick, setHardResetTick] = useState(0);
+  const [headerLang,    setHeaderLang]    = useState(() => {
+    try {
+      const s = sessionStorage.getItem(SK.SEL);
+      return s ? JSON.parse(s).language || 'English' : 'English';
+    } catch { return 'English'; }
+  });
   const warnTimerRef = useRef(null);
 
   useEffect(() => {
@@ -864,7 +894,7 @@ export default function BusinessIntelligence() {
       <header className="h-16 pl-3 sm:pl-6 pr-24 bg-ivory/90 backdrop-blur-md border-b border-beige/40 flex items-center justify-between z-20 shrink-0 sticky top-0">
         <div className="flex items-center gap-2 sm:gap-3 min-w-0">
           <Link to="/" className="p-1.5 sm:p-2 rounded-full hover:bg-beige/30 transition-colors text-taupe hover:text-ink flex items-center gap-1.5 text-xs font-semibold shrink-0" title="Back to Home">
-            <ArrowLeft size={16} /><span className="hidden sm:inline">Home</span>
+            <ArrowLeft size={16} /><span className="hidden sm:inline">{t(headerLang, 'home')}</span>
           </Link>
           <div className="h-4 w-[1px] bg-beige/60 hidden sm:block" />
           <div className="flex items-center gap-1.5 sm:gap-2 truncate">
@@ -872,7 +902,7 @@ export default function BusinessIntelligence() {
               FINEXA<sup className="text-gold font-sans font-extrabold text-[10px] ml-0.5">AI</sup>
             </span>
             <span className="text-[8px] sm:text-[9px] uppercase tracking-widest font-extrabold bg-teal/10 text-teal px-1.5 sm:px-2 py-0.5 rounded-full truncate">
-              BI Engine
+              {t(headerLang, 'biEngine')}
             </span>
           </div>
         </div>
@@ -889,7 +919,7 @@ export default function BusinessIntelligence() {
                 className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-camel/15 border border-camel/40 text-camel text-[10px] sm:text-[11px] font-semibold whitespace-nowrap shadow-sm"
               >
                 <AlertTriangle size={12} className="shrink-0" />
-                <span className="hidden xs:inline">Click again to clear</span>
+                <span className="hidden xs:inline">{t(headerLang, 'clickToClear')}</span>
               </motion.div>
             )}
           </AnimatePresence>
@@ -899,13 +929,13 @@ export default function BusinessIntelligence() {
             className={`flex items-center gap-1.5 text-sm font-semibold px-3 sm:px-4 py-2 sm:py-2.5 rounded-full transition-all cursor-pointer ${resetPhase === 1 ? 'bg-camel/10 text-camel border border-camel/30 hover:bg-camel/20 animate-pulse' : 'text-taupe hover:text-burgundy hover:bg-beige/30'}`}
           >
             <RotateCcw size={16} className={resetPhase === 1 ? 'animate-spin [animation-duration:3s]' : ''} />
-            <span className="hidden sm:inline">{resetPhase === 1 ? 'Reset?' : 'Reset'}</span>
+            <span className="hidden sm:inline">{resetPhase === 1 ? t(headerLang, 'resetQ') : t(headerLang, 'reset')}</span>
           </button>
         </div>
       </header>
 
       <main className="flex-1 overflow-auto">
-        <Wizard goIdleTick={goIdleTick} hardResetTick={hardResetTick} />
+        <Wizard goIdleTick={goIdleTick} hardResetTick={hardResetTick} onLangSelect={setHeaderLang} />
       </main>
     </div>
   );

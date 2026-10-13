@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useScrollLock } from '../../hooks/useScrollLock';
+import { X } from 'lucide-react';
 import FlowingMenu from './FlowingMenu';
 
 const GlobalMenu = () => {
@@ -48,7 +49,7 @@ const GlobalMenu = () => {
                                 onClick={() => setIsMenuOpen(false)}
                                 className="absolute top-6 right-6 z-[100000] w-12 h-12 rounded-full bg-[#3A2E25]/10 text-[#3A2E25] hover:bg-[#3A2E25]/20 flex items-center justify-center font-bold uppercase tracking-widest text-xs cursor-pointer shadow-md active:scale-95 border border-[#3A2E25]/10 transition-colors"
                             >
-                                ✕
+                                <X className="w-5 h-5" strokeWidth={2.5} aria-hidden="true" />
                             </button>
 
                             {/* Render Flowing Menu inside panel with transparent bg */}
@@ -56,12 +57,12 @@ const GlobalMenu = () => {
                                 <FlowingMenu
                                     items={[
                                         { 
-                                            link: '/chatbot', 
-                                            text: 'Chatbot', 
-                                            image: 'https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?w=600&q=80',
+                                            link: '/gwo', 
+                                            text: 'Asset Allocation', 
+                                            image: 'https://images.unsplash.com/photo-1579621970795-87facc2f976d?w=600&q=80',
                                             textColor: '#3A2E25',
-                                            marqueeBgColor: '#C9A227',
-                                            marqueeTextColor: '#3A2E25'
+                                            marqueeBgColor: '#0B4F4A',
+                                            marqueeTextColor: '#FDF6ED'
                                         },
                                         { 
                                             link: '/business-intelligence', 
@@ -70,6 +71,22 @@ const GlobalMenu = () => {
                                             textColor: '#3A2E25',
                                             marqueeBgColor: '#3A2E25',
                                             marqueeTextColor: '#C9A227'
+                                        },
+                                        { 
+                                            link: '/calculator', 
+                                            text: 'Calculator', 
+                                            image: 'https://images.unsplash.com/photo-1586486855514-8c633cc6fd38?w=600&q=80',
+                                            textColor: '#3A2E25',
+                                            marqueeBgColor: '#0B4F4A',
+                                            marqueeTextColor: '#FDF6ED'
+                                        },
+                                        { 
+                                            link: '/chatbot', 
+                                            text: 'Chatbot', 
+                                            image: 'https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?w=600&q=80',
+                                            textColor: '#3A2E25',
+                                            marqueeBgColor: '#C9A227',
+                                            marqueeTextColor: '#3A2E25'
                                         },
                                         { 
                                             link: '/explore', 
@@ -88,27 +105,11 @@ const GlobalMenu = () => {
                                             marqueeTextColor: '#FDF6ED'
                                         },
                                         { 
-                                            link: '/gwo', 
-                                            text: 'Asset Allocation', 
-                                            image: 'https://images.unsplash.com/photo-1579621970795-87facc2f976d?w=600&q=80',
-                                            textColor: '#3A2E25',
-                                            marqueeBgColor: '#0B4F4A',
-                                            marqueeTextColor: '#FDF6ED'
-                                        },
-                                        { 
                                             link: '/ripper', 
                                             text: 'RuleSense', 
                                             image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&q=80',
                                             textColor: '#3A2E25',
                                             marqueeBgColor: '#6B1E2B',
-                                            marqueeTextColor: '#FDF6ED'
-                                        },
-                                        { 
-                                            link: '/calculator', 
-                                            text: 'Calculator', 
-                                            image: 'https://images.unsplash.com/photo-1586486855514-8c633cc6fd38?w=600&q=80',
-                                            textColor: '#3A2E25',
-                                            marqueeBgColor: '#0B4F4A',
                                             marqueeTextColor: '#FDF6ED'
                                         }
                                     ]}

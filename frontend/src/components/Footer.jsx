@@ -1,12 +1,30 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Link } from 'react-router-dom';
-import { User, Activity, ShieldCheck, Cpu, Bell, Check } from 'lucide-react';
+import MarqueeButton from './ui/MarqueeButton';
+import { User, Activity, ShieldCheck, Cpu, Check, ExternalLink, MessageCircle, Send, Code, Terminal, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AreaChart, Area, Tooltip as ChartTooltip, ResponsiveContainer } from 'recharts';
 
 gsap.registerPlugin(ScrollTrigger);
+
+const InstagramIcon = ({ size = 20, className = "" }) => (
+    <svg
+        width={size}
+        height={size}
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className={className}
+    >
+        <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+        <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+    </svg>
+);
 
 const Footer = () => {
     const containerRef = useRef(null);
@@ -194,7 +212,7 @@ const Footer = () => {
                     ref={transitionRef}
                     className="absolute inset-0 z-[12] flex flex-col items-center justify-center text-center px-6 pointer-events-none will-change-transform"
                 >
-                    <span className="px-3 sm:px-4 py-1 sm:py-1.5 bg-teal/15 text-teal text-[9px] sm:text-[10px] font-bold rounded-full uppercase tracking-widest mb-6 sm:mb-8 border border-teal/20">
+                    <span class="px-3 sm:px-4 py-1 sm:py-1.5 bg-teal-500/20 text-teal-300 sm:text-[10px] text-[9px] font-extrabold rounded-full uppercase tracking-widest mb-6 sm:mb-8 border border-teal-400/40 shadow-[0_0_12px_rgba(20,184,166,0.15)]">
                         Protocol Initialized
                     </span>
                     <h2 className="text-ivory text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-serif font-bold uppercase tracking-tight leading-[0.95]">
@@ -207,7 +225,7 @@ const Footer = () => {
                     </p>
                     <div className="mt-8 sm:mt-10 flex items-center gap-3">
                         <div className="w-2 h-2 rounded-full bg-teal animate-pulse" />
-                        <span className="text-[10px] font-mono text-teal/70 uppercase tracking-widest">
+                        <span className="text-[10px] font-mono text-teal-300 font-semibold uppercase tracking-widest">
                             Initializing Wealth Nodes...
                         </span>
                     </div>
@@ -362,78 +380,181 @@ const Footer = () => {
                         </div>
 
                         {/* CTA Card */}
-                        <div className="bg-burgundy rounded-3xl p-8 sm:p-10 lg:p-14 text-ivory flex flex-col justify-center items-center text-center h-auto min-h-[420px] lg:h-[460px] shadow-2xl relative overflow-hidden group">
-                            {/* Background image (behind the content) */}
-                            <img
-                                src="/loan.png"
-                                alt=""
-                                className="absolute inset-0 m-auto max-h-[58%] max-w-[58%] object-contain object-center z-0 opacity-40 select-none"
-                            />
-                            {/* Readability scrim behind the content */}
-                            <div className="absolute inset-0 z-[1] bg-gradient-to-t from-burgundy via-burgundy/60 to-burgundy/35 pointer-events-none" />
-                            <div className="absolute top-0 right-0 w-64 h-64 bg-gold/10 rounded-full blur-[64px] pointer-events-none z-[2]" />
+                        <div className="bg-burgundy rounded-3xl p-6 sm:p-8 lg:p-6 text-ivory flex flex-col sm:flex-row items-center justify-between gap-6 sm:gap-10 h-auto min-h-[420px] lg:h-[460px] shadow-2xl relative overflow-visible group">
+                            {/* Background glow */}
+                            <div className="absolute top-0 right-0 w-64 h-64 bg-gold/10 rounded-full blur-[64px] pointer-events-none z-0" />
 
-                            <div className="relative z-20 flex flex-col items-center justify-center w-full gap-5 sm:gap-6">
-                                <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[0.95] text-center">
+                            {/* Human image (left) */}
+                            <div className="relative z-10 flex items-center justify-center w-full sm:w-[50%] lg:w-[52%] order-1 h-[320px] sm:h-[404px] lg:h-[540px] lg:my-[-40px]">
+                                <img
+                                    src="/Human.png"
+                                    alt=""
+                                    className="h-full w-auto max-w-full object-contain select-none drop-shadow-2xl brightness-0 invert animate-human-shake"
+                                />
+                            </div>
+
+                            {/* Content (right) */}
+                            <div className="relative z-20 flex flex-col items-center sm:items-start justify-center gap-4 sm:gap-5 w-full sm:w-[58%] order-2 text-center sm:text-left">
+                                <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight leading-[0.95]">
                                     Ready to <br /> Begin?
                                 </h2>
-                                <p className="text-ivory/85 font-normal text-sm sm:text-base md:text-lg max-w-lg leading-relaxed text-center">
+                                <p className="text-ivory/85 font-normal text-sm sm:text-base max-w-lg leading-relaxed">
                                     Join the elite network of investors steering assets with autonomous intelligence.
                                 </p>
 
-                                <Link
+                                <MarqueeButton
+                                    text="START NOW"
                                     to="/signup"
-                                    className="mt-1 bg-ink text-ivory rounded-full py-4 sm:py-5 pl-6 sm:pl-7 pr-5 sm:pr-6 flex items-center justify-between font-bold text-xs sm:text-sm uppercase tracking-widest hover:bg-teal transition-all duration-300 shadow-[0_4px_16px_rgba(0,0,0,0.15)] group/btn w-full max-w-sm"
-                                >
-                                    <span className="flex items-center justify-center w-full select-none">
-                                        <User className="bg-ivory/10 rounded-full p-2 sm:p-2.5 shrink-0" size={30} />
-                                        <span className="ml-3">START NOW</span>
-                                    </span>
-                                    <span className="group-hover/btn:translate-x-2 transition-transform text-base sm:text-lg shrink-0">→</span>
-                                </Link>
+                                    className="btn-23--borderless mt-1 sm:mt-2"
+                                />
                             </div>
                         </div>
                     </div>
 
-                    {/* Footer Links */}
-                    <footer className="mt-3 sm:mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 border-t border-beige/45 pt-3 sm:pt-4 text-ink w-full max-w-7xl mx-auto mb-0 sm:mb-1">
-                        <div className="text-left">
-                            <h4 className="font-bold text-taupe uppercase text-[9.5px] tracking-widest mb-3 sm:mb-4">Platform</h4>
-                            <ul className="space-y-2 font-bold text-xs uppercase tracking-wider text-ink/80">
-                                <li><a href="#features" className="hover:text-burgundy">Features</a></li>
-                                <li><a href="#pricing" className="hover:text-burgundy">Pricing</a></li>
-                            </ul>
-                        </div>
+                    {/* Footer Links & Comprehensive Navigation */}
+                    <footer className="mt-6 sm:mt-8 border-t border-beige/60 pt-6 sm:pt-8 text-ink w-full max-w-7xl mx-auto space-y-6 sm:space-y-8">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 text-left">
+                            
+                            {/* Column 1: Modules & Navigation (Landing Page Sections) */}
+                            <div className="space-y-3">
+                                <h4 className="font-serif font-bold text-burgundy text-sm sm:text-base uppercase tracking-wider flex items-center gap-2">
+                                    <Sparkles size={14} className="text-gold" />
+                                    <span>Modules & Navigation</span>
+                                </h4>
+                                <div className="grid grid-cols-2 gap-x-3 gap-y-2 text-xs font-semibold text-ink/80">
+                                    <a href="#features" className="hover:text-burgundy transition-colors">Features</a>
+                                    <a href="#how-it-works" className="hover:text-burgundy transition-colors">How It Works</a>
+                                    <a href="#why-finexa" className="hover:text-burgundy transition-colors">Why FINEXA</a>
+                                    <a href="#pricing" className="hover:text-burgundy transition-colors">Pricing</a>
+                                </div>
+                            </div>
 
-                        <div className="text-left">
-                            <h4 className="font-bold text-taupe uppercase text-[9.5px] tracking-widest mb-3 sm:mb-4">Connect with us</h4>
-                            <div className="flex flex-col gap-2.5 sm:gap-3">
-                                <button
-                                    onClick={handleSubscribe}
-                                    className="bg-ink text-ivory px-4 sm:px-5 py-2 sm:py-2.5 rounded-full font-bold text-[9.5px] sm:text-[10px] uppercase tracking-wider hover:bg-teal transition-colors flex items-center gap-2 w-fit group cursor-pointer"
+                            {/* Column 2: Developers & Team (Circular Profile Icons with Hover Details) */}
+                            <div className="space-y-3">
+                                <h4 className="font-serif font-bold text-burgundy text-sm sm:text-base uppercase tracking-wider flex items-center gap-2">
+                                    <Code size={14} className="text-gold" />
+                                    <span>Developers</span>
+                                </h4>
+                                <p className="text-[11px] text-taupe font-medium">Hover profile logo to view developer details</p>
+                                
+                                <div className="flex items-center gap-3 pt-1">
+                                    {/* Dev Profile 1 */}
+                                    <div className="relative group cursor-pointer">
+                                        <div className="w-11 h-11 rounded-full bg-burgundy text-ivory border-2 border-ivory shadow-md flex items-center justify-center font-bold text-sm group-hover:scale-110 group-hover:border-gold transition-all">
+                                            <User size={20} />
+                                        </div>
+                                        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-3 bg-ink text-ivory rounded-xl shadow-xl border border-gold/30 opacity-0 group-hover:opacity-100 pointer-events-none transition-all duration-200 z-50 text-left">
+                                            <p className="text-xs font-bold text-gold">Lead AI Architect</p>
+                                            <p className="text-[10px] text-ivory/80 mt-0.5">Autonomous Reasoning & Multi-Agent Engine</p>
+                                        </div>
+                                    </div>
+
+                                    {/* Dev Profile 2 */}
+                                    <div className="relative group cursor-pointer">
+                                        <div className="w-11 h-11 rounded-full bg-teal text-ivory border-2 border-ivory shadow-md flex items-center justify-center font-bold text-sm group-hover:scale-110 group-hover:border-gold transition-all">
+                                            <Terminal size={20} />
+                                        </div>
+                                        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-3 bg-ink text-ivory rounded-xl shadow-xl border border-teal-400/30 opacity-0 group-hover:opacity-100 pointer-events-none transition-all duration-200 z-50 text-left">
+                                            <p className="text-xs font-bold text-teal-300">Quant Lead</p>
+                                            <p className="text-[10px] text-ivory/80 mt-0.5">GWO & Algorithmic Optimization Models</p>
+                                        </div>
+                                    </div>
+
+                                    {/* Dev Profile 3 */}
+                                    <div className="relative group cursor-pointer">
+                                        <div className="w-11 h-11 rounded-full bg-camel text-ink border-2 border-ivory shadow-md flex items-center justify-center font-bold text-sm group-hover:scale-110 group-hover:border-gold transition-all">
+                                            <Code size={20} />
+                                        </div>
+                                        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-3 bg-ink text-ivory rounded-xl shadow-xl border border-amber-400/30 opacity-0 group-hover:opacity-100 pointer-events-none transition-all duration-200 z-50 text-left">
+                                            <p className="text-xs font-bold text-gold">Full-Stack Core</p>
+                                            <p className="text-[10px] text-ivory/80 mt-0.5">WhatsApp API & Real-time Web Bridge</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Column 3: Legal & Governance (Single Button) */}
+                            <div className="space-y-3">
+                                <h4 className="font-serif font-bold text-burgundy text-sm sm:text-base uppercase tracking-wider flex items-center gap-2">
+                                    <ShieldCheck size={14} className="text-gold" />
+                                    <span>Terms & Legal</span>
+                                </h4>
+                                <p className="text-[11px] text-taupe font-medium">Compliance, DPDP Act & Privacy Frameworks</p>
+                                <a
+                                    href="https://finexa-privacy-policy.vercel.app/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="w-full py-3 px-4 rounded-xl bg-burgundy hover:bg-burgundy/90 text-ivory font-bold text-xs flex items-center justify-between shadow-sm transition-all active:scale-98 group"
                                 >
-                                    <Bell size={12} className="group-hover:rotate-12 transition-transform" />
-                                    Subscribe
-                                </button>
-                                <p className="text-[9px] sm:text-[9.5px] uppercase font-bold text-taupe max-w-[170px] leading-relaxed">
-                                    Get key market and protocol reports.
-                                </p>
+                                    <span className="flex items-center gap-2">
+                                        <ShieldCheck size={16} className="text-gold" />
+                                        <span>Terms & Privacy Policy</span>
+                                    </span>
+                                    <ExternalLink size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                                </a>
                             </div>
+
+                            {/* Column 4: Connect with WA, Telegram & Instagram (3 Circle Icons in Single Row) */}
+                            <div className="space-y-3">
+                                <h4 className="font-serif font-bold text-burgundy text-sm sm:text-base uppercase tracking-wider flex items-center gap-2">
+                                    <MessageCircle size={14} className="text-gold" />
+                                    <span>Connect & Community</span>
+                                </h4>
+                                <p className="text-[11px] text-taupe font-medium">Join our channels on WhatsApp, Telegram & Instagram</p>
+                                
+                                <div className="flex items-center gap-3 pt-1">
+                                    {/* WhatsApp Circle Logo */}
+                                    <a
+                                        href="https://wa.me/"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        title="Connect on WhatsApp"
+                                        className="relative group cursor-pointer"
+                                    >
+                                        <div className="w-11 h-11 rounded-full bg-[#25D366] text-white border-2 border-ivory shadow-md flex items-center justify-center font-bold text-sm group-hover:scale-110 group-hover:shadow-lg transition-all">
+                                            <MessageCircle size={20} />
+                                        </div>
+                                        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-max px-2.5 py-1 bg-ink text-ivory text-[10px] font-bold rounded-lg shadow-xl opacity-0 group-hover:opacity-100 pointer-events-none transition-all duration-200 z-50 whitespace-nowrap">
+                                            WhatsApp
+                                        </div>
+                                    </a>
+
+                                    {/* Telegram Circle Logo */}
+                                    <a
+                                        href="https://t.me/"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        title="Join Telegram Channel"
+                                        className="relative group cursor-pointer"
+                                    >
+                                        <div className="w-11 h-11 rounded-full bg-[#0088cc] text-white border-2 border-ivory shadow-md flex items-center justify-center font-bold text-sm group-hover:scale-110 group-hover:shadow-lg transition-all">
+                                            <Send size={18} />
+                                        </div>
+                                        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-max px-2.5 py-1 bg-ink text-ivory text-[10px] font-bold rounded-lg shadow-xl opacity-0 group-hover:opacity-100 pointer-events-none transition-all duration-200 z-50 whitespace-nowrap">
+                                            Telegram
+                                        </div>
+                                    </a>
+
+                                    {/* Instagram Circle Logo */}
+                                    <a
+                                        href="https://instagram.com/"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        title="Follow on Instagram"
+                                        className="relative group cursor-pointer"
+                                    >
+                                        <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] text-white border-2 border-ivory shadow-md flex items-center justify-center font-bold text-sm group-hover:scale-110 group-hover:shadow-lg transition-all">
+                                            <InstagramIcon size={20} />
+                                        </div>
+                                        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-max px-2.5 py-1 bg-ink text-ivory text-[10px] font-bold rounded-lg shadow-xl opacity-0 group-hover:opacity-100 pointer-events-none transition-all duration-200 z-50 whitespace-nowrap">
+                                            Instagram
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+
                         </div>
 
-                        <div className="sm:col-span-2 flex flex-col sm:items-end gap-4 sm:gap-6 justify-between text-left sm:text-right">
-                            <div className="flex flex-wrap gap-2">
-                                {['LinkedIn', 'Telegram', 'X'].map(social => (
-                                    <button
-                                        key={social}
-                                        className="px-4 sm:px-5 py-1.5 sm:py-2 border border-beige/40 rounded-full font-bold text-[8.5px] sm:text-[9px] tracking-widest hover:bg-ink hover:text-ivory transition-all uppercase cursor-pointer"
-                                    >
-                                        {social}
-                                    </button>
-                                ))}
-                            </div>
-                            <p className="text-[9px] sm:text-[9.5px] font-mono text-taupe uppercase tracking-widest">© 2026 FINEXA_AI</p>
-                        </div>
                     </footer>
                 </div>
             </div>

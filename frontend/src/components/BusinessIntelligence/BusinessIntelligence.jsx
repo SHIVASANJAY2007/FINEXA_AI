@@ -19,7 +19,7 @@ import { marked } from 'marked';
 import {
   ArrowLeft, AlertTriangle, RotateCcw,
   MapPin, Check, ChevronRight, Shield, MessageSquare,
-  Sparkles, Map, Building2, Coins, Briefcase, Layers,
+  Sparkles, Building2, Coins, Briefcase, Layers,
   Globe, Loader2, Download, Printer, CheckCircle2, RefreshCw,
   AlertCircle, Copy, ExternalLink, Minus,
 } from 'lucide-react';
@@ -283,7 +283,7 @@ function Wizard({ goIdleTick = 0, hardResetTick = 0, onLangSelect }) {
   const scrollRef = useRef(null);
 
   const [currentStep,   setCurrentStep]   = useState(() => { const s = ss(SK.STEP); return s ? parseInt(s, 10) : 1; });
-  const [locationMode,  setLocationMode]  = useState(() => ss(SK.LOC_MODE) || 'auto');
+  const [locationMode,  setLocationMode]  = useState(() => { const s = ss(SK.LOC_MODE); return (s === 'manual' || s === 'pin') ? s : 'pin'; });
   const [pinCodeInput,  setPinCodeInput]  = useState(() => ss(SK.PIN)       || '');
   const [manualInput,   setManualInput]   = useState(() => ss(SK.LOC_INPUT) || '');
   const [customInputs,  setCustomInputs]  = useState(() => { const s = ss(SK.CUSTOM); return s ? JSON.parse(s) : { language: '', scale: '', business: '', investment: '', experience: '' }; });
@@ -346,7 +346,7 @@ function Wizard({ goIdleTick = 0, hardResetTick = 0, onLangSelect }) {
     setSelections({ language: 'English', location: '', scale: '', business: '', investment: '', experience: '' });
     setPinCodeInput(''); setManualInput('');
     setCustomInputs({ language: '', scale: '', business: '', investment: '', experience: '' });
-    setLocationMode('auto');
+    setLocationMode('pin');
     scrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hardResetTick]);
@@ -652,21 +652,7 @@ REMEMBER: The entire report MUST be written 100% in ${targetLanguage}.`;
           {currentStep === 2 && (
             <div className="space-y-5">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {[
-                  { mode: 'auto',   title: t(lang, 'locAutoTitle'), sub: t(lang, 'locAutoSub'), badge: t(lang, 'recommended'), onSelect: () => { setLocationMode('auto'); updateSel('location', 'Coimbatore, Tamil Nadu'); } },
-                  { mode: 'map',    title: t(lang, 'locMapTitle'),  sub: t(lang, 'locMapSub'), onSelect: () => { setLocationMode('map'); updateSel('location', 'Selected on Interactive Map'); } },
-                ].map(({ mode, title, sub, badge, onSelect }) => (
-                  <div key={mode} onClick={onSelect} className={`p-5 rounded-2xl border cursor-pointer transition-all flex flex-col gap-4 ${locationMode === mode ? 'border-teal bg-teal/8 ring-2 ring-teal/15 shadow-md' : 'border-beige bg-white hover:border-camel/60'}`}>
-                    <div className="flex items-start gap-3">
-                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 mt-0.5 ${locationMode === mode ? 'border-teal bg-teal' : 'border-beige'}`}>
-                        {locationMode === mode && <span className="w-2 h-2 rounded-full bg-ivory" />}
-                      </div>
-                      <div><h3 className="font-bold text-base text-ink">{title}</h3><p className="text-sm text-taupe mt-0.5">{sub}</p></div>
-                    </div>
-                    {badge && <div className="flex items-center justify-between"><span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-gold/15 text-camel border border-gold/20 font-mono">{badge}</span><MapPin size={20} className="text-teal" /></div>}
-                  </div>
-                ))}
-                <div onClick={() => setLocationMode('pin')} className={`p-5 rounded-2xl border cursor-pointer transition-all ${locationMode === 'pin' ? 'border-teal bg-teal/8 ring-2 ring-teal/15 shadow-md' : 'border-beige bg-white hover:border-camel/60'}`}>
+                <div onClick={() => { setLocationMode('pin'); if (pinCodeInput.length === 6) updateSel('location', `PIN: ${pinCodeInput}`); }} className={`p-5 rounded-2xl border cursor-pointer transition-all ${locationMode === 'pin' ? 'border-teal bg-teal/8 ring-2 ring-teal/15 shadow-md' : 'border-beige bg-white hover:border-camel/60'}`}>
                   <div className="flex items-start gap-3">
                     <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 mt-0.5 ${locationMode === 'pin' ? 'border-teal bg-teal' : 'border-beige'}`}>{locationMode === 'pin' && <span className="w-2 h-2 rounded-full bg-ivory" />}</div>
                     <div className="w-full">
@@ -676,7 +662,7 @@ REMEMBER: The entire report MUST be written 100% in ${targetLanguage}.`;
                     </div>
                   </div>
                 </div>
-                <div onClick={() => setLocationMode('manual')} className={`p-5 rounded-2xl border cursor-pointer transition-all ${locationMode === 'manual' ? 'border-teal bg-teal/8 ring-2 ring-teal/15 shadow-md' : 'border-beige bg-white hover:border-camel/60'}`}>
+                <div onClick={() => { setLocationMode('manual'); if (manualInput) updateSel('location', manualInput); }} className={`p-5 rounded-2xl border cursor-pointer transition-all ${locationMode === 'manual' ? 'border-teal bg-teal/8 ring-2 ring-teal/15 shadow-md' : 'border-beige bg-white hover:border-camel/60'}`}>
                   <div className="flex items-start gap-3">
                     <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 mt-0.5 ${locationMode === 'manual' ? 'border-teal bg-teal' : 'border-beige'}`}>{locationMode === 'manual' && <span className="w-2 h-2 rounded-full bg-ivory" />}</div>
                     <div className="w-full">
@@ -687,9 +673,12 @@ REMEMBER: The entire report MUST be written 100% in ${targetLanguage}.`;
                   </div>
                 </div>
               </div>
-              <div className="p-4 rounded-xl border border-teal/20 bg-teal/6 flex items-center gap-3 text-sm text-taupe">
-                <Shield size={18} className="text-teal shrink-0" />
-                <div><strong className="text-ink block font-semibold">{t(lang, 'privacyTitle')}</strong><span>{t(lang, 'privacySub')}</span></div>
+              <div className="p-4 rounded-xl border border-teal/20 bg-teal/6 flex flex-col items-center justify-center text-center gap-1.5 text-sm text-taupe">
+                <div className="flex items-center justify-center gap-2">
+                  <Shield size={18} className="text-teal shrink-0" />
+                  <strong className="text-ink font-semibold">{t(lang, 'privacyTitle')}</strong>
+                </div>
+                <span>{t(lang, 'privacySub')}</span>
               </div>
             </div>
           )}

@@ -1,56 +1,9 @@
 import React, { useEffect, useRef, memo } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import DecryptedText from './DecryptedText';
 
 gsap.registerPlugin(ScrollTrigger);
-
-const SectionWipe = ({ containerRef }) => {
-    const { scrollYProgress } = useScroll({
-        target: containerRef,
-        offset: ["start 100%", "start 0%"]
-    });
-
-    // Smooth spring physics to slow down and enrich the ribbon transition
-    const smoothProgress = useSpring(scrollYProgress, {
-        stiffness: 55,
-        damping: 18,
-        restDelta: 0.001
-    });
-
-    const sweepX = useTransform(smoothProgress, [0, 1], ["-130%", "130%"]);
-    const sweepY = useTransform(smoothProgress, [0, 1], ["-12%", "12%"]);
-
-    // Remapped editorial brand colors with the prominent Burgundy red ribbon
-    const layers = [
-        { color: '#6B1E2B' }, // Burgundy (Main Red Ribbon)
-        { color: '#C9A227' }, // Gold
-        { color: '#C2A56D' }, // Camel
-        { color: '#F6F3EB' }, // Cream
-        { color: '#FDF6ED' }, // Ivory
-    ];
-
-    return (
-        <div className="absolute inset-0 pointer-events-none z-[50] overflow-hidden">
-            {layers.map((layer, i) => (
-                <motion.div
-                    key={i}
-                    style={{
-                        x: sweepX,
-                        y: sweepY,
-                        backgroundColor: layer.color,
-                        clipPath: 'polygon(0% 0%, 85% 0%, 100% 100%, 0% 100%)',
-                        zIndex: 100 - i,
-                        rotate: -15,
-                        scaleY: 1.6,
-                    }}
-                    className="absolute inset-0 w-[150vw] h-[125vh] -top-[12vh] left-[-10vw]"
-                />
-            ))}
-        </div>
-    );
-};
 
 const WhyFINEXA = () => {
     const sectionRef = useRef(null);
@@ -196,8 +149,6 @@ return (
         ref={sectionRef}
         className="w-full min-h-screen bg-gold relative overflow-hidden flex flex-col justify-center py-12 sm:py-16 px-4 sm:px-6 md:px-12 lg:px-20"
     >
-            {/* The Slowed & Smoothed Diagonal Ribbon Wipe Transition */}
-            <SectionWipe containerRef={sectionRef} />
 
             <div ref={contentRef} className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center max-w-7xl mx-auto w-full">
                 {/* Left Column (Span 7) */}

@@ -159,7 +159,7 @@ const HowItWorks = () => {
             <div className="px-4 sm:px-8 md:px-16 mb-6 sm:mb-10 relative z-10 text-left">
                 <h2 className="text-ivory text-[clamp(2.2rem,5vw,7rem)] font-serif font-bold uppercase tracking-tight leading-[0.9] select-none">
                     Agent <br />
-                    <span className="text-cream/10 uppercase italic">Architecture</span>
+                    <span className="text-[#C9A227] uppercase italic">Architecture</span>
                 </h2>
             </div>
 

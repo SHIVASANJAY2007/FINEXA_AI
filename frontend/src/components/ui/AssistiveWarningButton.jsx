@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { AlertCircle, ExternalLink, ShieldAlert, X, Info, CheckCircle2 } from 'lucide-react';
+import { AlertCircle, AlertTriangle, ExternalLink, ShieldAlert, X, Info, CheckCircle2 } from 'lucide-react';
 import { useScrollLock } from '../../hooks/useScrollLock';
 
 const DISCLAIMER_LINK = "https://finexa-privacy-policy.vercel.app/";
@@ -107,13 +107,15 @@ const AssistiveWarningButton = () => {
             {/* Warning Popup Modal Dialog */}
             <AnimatePresence>
                 {isOpen && (
-                    <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+                    <div
+                        className="fixed inset-0 z-[99999] flex items-center justify-center p-4 sm:p-6 overflow-y-auto"
+                        onClick={() => setIsOpen(false)}
+                    >
                         {/* Backdrop Blur overlay */}
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
-                            onClick={() => setIsOpen(false)}
                             className="fixed inset-0 bg-ink/65 backdrop-blur-md"
                         />
 
@@ -123,6 +125,7 @@ const AssistiveWarningButton = () => {
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.9, y: 20 }}
                             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+                            onClick={(e) => e.stopPropagation()}
                             className="relative w-full max-w-2xl max-h-[85vh] bg-ivory border border-beige/60 rounded-3xl shadow-2xl overflow-hidden flex flex-col z-10 linen-noise"
                         >
                             {/* Modal Header */}

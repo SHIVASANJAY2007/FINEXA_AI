@@ -52,7 +52,7 @@
   color: inherit;
 }
 
-.marquee {
+.menu-wrap .marquee {
   position: absolute;
   top: 0;
   left: 0;
@@ -84,7 +84,7 @@
   flex-shrink: 0;
 }
 
-.marquee span {
+.menu-wrap .marquee span {
   white-space: nowrap;
   text-transform: uppercase;
   font-weight: 700;

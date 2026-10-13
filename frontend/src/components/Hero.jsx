@@ -2,8 +2,9 @@ import React, { useEffect, useRef, useState, useCallback, memo } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { EncryptedText } from './EncryptedText';
-import { TrendingUp, Target, Receipt, PiggyBank, ArrowRight, UserCheck } from 'lucide-react';
+import { TrendingUp, Target, Receipt, PiggyBank, ArrowRight, UserCheck, Hand } from 'lucide-react';
 import { motion } from 'framer-motion';
+import MarqueeButton from './ui/MarqueeButton';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -231,19 +232,16 @@ const Hero = () => {
                     </p>
 
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 sm:gap-4 w-full">
-                        <button
+                        <MarqueeButton
+                            text="Explore Features"
                             onClick={scrollToFeatures}
-                            className="w-full sm:w-auto bg-burgundy text-ivory px-8 py-4 rounded-full font-semibold text-sm sm:text-base uppercase tracking-wider hover:bg-burgundy/90 transition-all active:scale-95 shadow-[0_4px_16px_rgba(107,30,43,0.25)] flex items-center justify-center gap-2 group pointer-events-auto cursor-pointer"
-                        >
-                            <span>Explore Features</span>
-                            <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-                        </button>
-                        <a
-                            href="/signup"
-                            className="w-full sm:w-auto bg-transparent border border-beige hover:border-ink text-ink px-8 py-4 rounded-full font-semibold text-sm sm:text-base uppercase tracking-wider transition-all text-center flex items-center justify-center pointer-events-auto"
-                        >
-                            Start Free
-                        </a>
+                            className="pointer-events-auto"
+                        />
+                        <MarqueeButton
+                            text="Start Free"
+                            to="/signup"
+                            className="pointer-events-auto"
+                        />
                     </div>
 
                     {/* Trust Line */}
@@ -331,7 +329,7 @@ const Hero = () => {
                                     >
                                         <div className="w-6.5 h-6.5 rounded-xl bg-burgundy flex items-center justify-center text-[10.5px] font-extrabold text-gold flex-shrink-0">F</div>
                                         <div className="bg-burgundy text-ivory p-3 rounded-2xl rounded-tl-xs text-[11.5px] leading-normal shadow-[0_4px_12px_rgba(107,30,43,0.12)]">
-                                            Hi Aanya 👋 I noticed you have ₹18,400 sitting idle this month.
+                                            Hi Aanya <Hand className="inline-block w-3.5 h-3.5 mb-0.5 ml-0.5 text-gold" strokeWidth={2.2} aria-hidden="true" /> I noticed you have ₹18,400 sitting idle this month.
                                         </div>
                                     </motion.div>
                                 )}
@@ -375,9 +373,7 @@ const Hero = () => {
                                             <span>Projection Card</span>
                                             <span className="text-gold font-bold">8.2% Return</span>
                                         </div>
-                                        <div className="text-sm font-bold tracking-tight text-ink">
-                                            ₹18,400 today → ₹31,200
-                                        </div>
+                                        <div className="text-sm font-bold tracking-tight text-ink flex items-center gap-1.5">₹18,400 <ArrowRight className="w-3.5 h-3.5 text-burgundy" strokeWidth={2.5} aria-hidden="true" /> ₹31,200</div>
                                         <div className="text-[9px] text-taupe font-medium">
                                             Projected value in 5 years compound
                                         </div>

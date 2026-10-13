@@ -89,6 +89,139 @@ section {
   background-size: 24px 24px;
 }
 
+/* ═══════════════════════════════════════════════════════════
+   btn-23 — Marquee hover pill button
+   Inspired by Uiverse.io (doniaskima). Reworked into a clean,
+   seamless ribbon so variable-length labels never overlap.
+   ═══════════════════════════════════════════════════════════ */
+.btn-23,
+.btn-23 *,
+.btn-23 :after,
+.btn-23 :before,
+.btn-23:after,
+.btn-23:before {
+  box-sizing: border-box;
+}
+
+.btn-23 {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-appearance: none;
+  appearance: none;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-color: #000;
+  background-image: none;
+  color: #fff;
+  cursor: pointer;
+  border: 2px solid currentColor;
+  border-radius: 99rem;
+  font-family: var(--font-sans);
+  font-weight: 900;
+  line-height: 1.5;
+  text-transform: uppercase;
+  text-decoration: none;
+  text-align: center;
+  white-space: nowrap;
+  margin: 0;
+  padding: 0;
+}
+
+.btn-23.btn-23--borderless {
+  border-color: transparent;
+}
+
+.btn-23:disabled {
+  cursor: default;
+}
+
+.btn-23:focus-visible {
+  outline: 3px solid var(--color-gold);
+  outline-offset: 3px;
+}
+
+.btn-23 svg {
+  display: block;
+  vertical-align: middle;
+}
+
+.btn-23 [hidden] {
+  display: none;
+}
+
+/* Invisible sizer — gives the button its natural (one label + padding) size */
+.btn-23__sizer {
+  display: block;
+  padding: 0.8rem 2.75rem;
+  visibility: hidden;
+}
+
+/* Scrolling ribbon of repeated labels */
+.btn-23__marquee {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  transform: translateX(-50%);
+  transition: transform 0.45s ease;
+  will-change: transform;
+}
+
+.btn-23__text {
+  display: block;
+  padding: 0 2.75rem;
+}
+
+.btn-23:hover .btn-23__marquee {
+  animation: btn23-marquee 2.5s linear infinite;
+}
+
+@keyframes btn23-marquee {
+  from {
+    transform: translateX(-50%);
+  }
+
+  /* Shift left by exactly one label (there are 7 labels) — seamless loop */
+  to {
+    transform: translateX(calc(-50% - 100% / 7));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-23:hover .btn-23__marquee {
+    animation: none;
+  }
+}
+
+/* Human figure: subtle two-frame sway (rotation in place, quick & continuous) */
+@keyframes human-shake {
+  0%,
+  45% {
+    transform: rotate(-2deg);
+  }
+  50%,
+  95% {
+    transform: rotate(2deg);
+  }
+  100% {
+    transform: rotate(-2deg);
+  }
+}
+
+.animate-human-shake {
+  animation: human-shake 0.5s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-human-shake {
+    animation: none;
+  }
+}
+
 /* Linen noise texture */
 .linen-noise {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.02'/%3E%3C/svg%3E");

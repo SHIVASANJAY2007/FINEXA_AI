@@ -4,6 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { StickyScrollReveal } from './StickyScrollReveal';
 import TextType from './TextType';
 import FloatingElements from './FloatingElements';
+import { ArrowDown } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -343,7 +344,7 @@ const Features = () => {
                 {/* SCROLL HINT */}
                 <div className="mt-5 sm:mt-7 flex items-center justify-center gap-2 opacity-60 animate-bounce">
                     <span className="text-ivory font-semibold text-[9px] sm:text-[10px] tracking-widest uppercase">Syncing Wealth Nodes</span>
-                    <span className="text-ivory text-xs leading-none">↓</span>
+                    <ArrowDown className="text-ivory w-4 h-4" strokeWidth={3} aria-hidden="true" />
                 </div>
             </div>
         </section>

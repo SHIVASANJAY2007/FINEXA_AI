@@ -2,6 +2,8 @@ import React, { useRef, useState, useEffect, memo } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import MarqueeButton from './ui/MarqueeButton';
+import { Check } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -42,23 +44,16 @@ const PricingCard = memo(({ title, price, billingCycle, features, buttonText, is
             <ul className="mb-8 flex-grow space-y-4">
                 {features.map((feature, i) => (
                     <li key={i} className="flex items-start text-xs font-semibold text-taupe leading-relaxed">
-                        <span className="mr-2 text-burgundy text-[11px]">✦</span>
+                        <Check className="mr-2 mt-0.5 text-burgundy w-3 h-3 flex-shrink-0" strokeWidth={3.5} aria-hidden="true" />
                         <span>{feature}</span>
                     </li>
                 ))}
             </ul>
-            <motion.a
-                href="/signup"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className={`w-full py-3.5 rounded-full font-bold uppercase text-[10.5px] tracking-widest text-center transition-all cursor-pointer ${
-                    isPopular
-                        ? 'bg-burgundy text-ivory shadow-[0_4px_16px_rgba(107,30,43,0.25)] hover:bg-burgundy/90'
-                        : 'bg-transparent border border-burgundy text-burgundy hover:bg-burgundy/5'
-                }`}
-            >
-                {buttonText}
-            </motion.a>
+            <MarqueeButton
+                text={buttonText}
+                to="/signup"
+                className="self-center"
+            />
         </motion.div>
     );
 });

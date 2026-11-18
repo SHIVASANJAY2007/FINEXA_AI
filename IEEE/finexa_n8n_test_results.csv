@@ -1,0 +1,11 @@
+Test_Number,Question,Chat_HTTP_Status,Chat_API_Duration_ms,n8n_Execution_Status,n8n_Duration_ms,Usable_Response,Observations
+1,"Explain the difference between SIP and a lump-sum investment.",200,15789,Success,15200,Yes,"Detailed explanation with rupee-cost averaging and risk disclosures; initial cold-start workflow invocation."
+2,"What is the Sharpe ratio, and what does it measure?",200,1190,Success,520,Yes,"Accurate risk-adjusted return metric definition and volatility formula explanation."
+3,"How does inflation affect the purchasing power of money?",200,9700,Success,810,Yes,"Erosion of purchasing power explained with practical consumer goods illustration."
+4,"What is CAGR, and how is it used?",200,9283,Success,750,Yes,"Compound Annual Growth Rate formula and annualized returns explanation."
+5,"Why is diversification important in a portfolio?",200,8620,Success,690,Yes,"Mitigation of unsystematic risk and multi-asset class allocation principles."
+6,"What factors should someone consider when planning for retirement?",200,9310,Success,780,Yes,"Comprehensive retirement planning covering inflation, longevity, and debt-to-equity ratio."
+7,"What is the role of debt assets in a diversified portfolio?",200,10550,Success,850,Yes,"Capital preservation, periodic yields, and portfolio shock absorption."
+8,"What is the difference between expected investment returns and guaranteed returns?",200,1163,Success,480,Yes,"Market volatility risk vs contractual/sovereign yield differentiation."
+9,"What is working capital, and why is it important for an MSME?",200,948,Success,410,Yes,"Current assets vs current liabilities, liquidity preservation for MSME operations."
+10,"Explain the difference between simple interest and compound interest.",200,1322,Success,500,Yes,"Linear growth on principal vs exponential compounding growth."

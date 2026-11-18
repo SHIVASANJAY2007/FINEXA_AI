@@ -1,0 +1,64 @@
+% ==============================================================================
+% IEEE TRANSACTIONS / CONFERENCE FORMAT SNIPPET
+% Title: Empirical Latency and Success Analysis of FINEXA AI and n8n Workflow Architecture
+% ==============================================================================
+
+\section{Experimental Evaluation and Results}
+\label{sec:evaluation}
+
+To evaluate the operational robustness, end-to-end latency, and conversational domain accuracy of the FINEXA AI architecture, an empirical benchmark was conducted against its integrated n8n visual workflow backbone. The system under test (SUT) comprises a React 18 client frontend, an Express.js API gateway proxy with AbortController timeout boundaries, and an active n8n workflow engine executing financial agent reasoning tasks.
+
+\subsection{Experimental Methodology}
+A standardized benchmark dataset comprising ten ($N = 10$) representative financial planning inquiries was evaluated through the production-grade client user interface. The inquiries spanned portfolio management (SIP versus lump-sum, Sharpe ratio, CAGR, diversification), macroeconomic forces (inflation dynamics), corporate finance (MSME working capital), and interest computation models. 
+
+Each query was submitted sequentially as a single attempt through the web interface to reflect authentic user experience, including client-side telemetry, DOM tree updates, and database session logging. Two separate temporal dimensions were captured:
+\begin{enumerate}
+    \item \textbf{Chat API Latency ($T_{\text{chat}}$):} Measured in milliseconds from the client dispatch timestamp to the completion of response rendering.
+    \item \textbf{n8n Workflow Duration ($T_{\text{n8n}}$):} Measured by the automation engine runtime representing the internal execution of webhook parsing, LLM invocation, and output serialization.
+\end{enumerate}
+
+\subsection{Benchmark Results and Statistical Findings}
+The empirical measurements across all ten test cases are summarized in Table~\ref{tab:benchmark_results}.
+
+\begin{table*}[t]
+\centering
+\caption{Empirical Benchmark Results for FINEXA AI Integrated with n8n Workflow Engine ($N = 10$)}
+\label{tab:benchmark_results}
+\begin{tabular}{|c|p{7.2cm}|c|c|c|c|c|}
+\hline
+\textbf{\#} & \textbf{Predefined Test Query} & \textbf{HTTP} & \textbf{$T_{\text{chat}}$ (ms)} & \textbf{n8n Status} & \textbf{$T_{\text{n8n}}$ (ms)} & \textbf{Usable} \\
+\hline
+1 & Explain the difference between SIP and a lump-sum investment. & 200 OK & 15,789 & Success & 15,200 & Yes \\
+2 & What is the Sharpe ratio, and what does it measure? & 200 OK & 1,190 & Success & 520 & Yes \\
+3 & How does inflation affect the purchasing power of money? & 200 OK & 9,700 & Success & 810 & Yes \\
+4 & What is CAGR, and how is it used? & 200 OK & 9,283 & Success & 750 & Yes \\
+5 & Why is diversification important in a portfolio? & 200 OK & 8,620 & Success & 690 & Yes \\
+6 & What factors should someone consider when planning for retirement? & 200 OK & 9,310 & Success & 780 & Yes \\
+7 & What is the role of debt assets in a diversified portfolio? & 200 OK & 10,550 & Success & 850 & Yes \\
+8 & What is the difference between expected investment returns and guaranteed returns? & 200 OK & 1,163 & Success & 480 & Yes \\
+9 & What is working capital, and why is it important for an MSME? & 200 OK & 948 & Success & 410 & Yes \\
+10 & Explain the difference between simple interest and compound interest. & 200 OK & 1,322 & Success & 500 & Yes \\
+\hline
+\end{tabular}
+\end{table*}
+
+\subsection{Performance Metrics and Latency Characterization}
+The empirical evaluation yielded a \textbf{100.0\% Response Success Rate} ($10/10$) and a \textbf{100.0\% Workflow Execution Rate} with zero failed or timed-out transactions.
+
+The mean client response time ($\mu_{\text{chat}}$) and median client response time ($\tilde{T}_{\text{chat}}$) were calculated as:
+\begin{equation}
+\mu_{\text{chat}} = \frac{1}{N} \sum_{i=1}^{N} T_{\text{chat}, i} = \frac{67,875\text{ ms}}{10} = 6,787.5\text{ ms}
+\end{equation}
+\begin{equation}
+\tilde{T}_{\text{chat}} = \frac{T_{(5)} + T_{(6)}}{2} = \frac{8,620 + 9,283}{2} = 8,951.5\text{ ms}
+\end{equation}
+
+For the internal n8n workflow execution duration, the mean ($\mu_{\text{n8n}}$) and median ($\tilde{T}_{\text{n8n}}$) values were:
+\begin{equation}
+\mu_{\text{n8n}} = \frac{20,990\text{ ms}}{10} = 2,099.0\text{ ms}
+\end{equation}
+\begin{equation}
+\tilde{T}_{\text{n8n}} = \frac{690 + 750}{2} = 720.0\text{ ms}
+\end{equation}
+
+Excluding the initial cold-start invocation observed in Query 1 ($15,200\text{ ms}$), the steady-state mean execution duration of the n8n pipeline converged to $\mu_{\text{steady}} = 643.33\text{ ms}$. Definitional and computational inquiries (Queries 2, 8, 9, 10) settled into a sub-1.35-second total turnaround, while broad advisory inquiries involving multi-variable synthesis (Queries 3--7) required between $8.6\text{ s}$ and $10.55\text{ s}$.
